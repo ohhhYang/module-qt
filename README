@@ -1,0 +1,32 @@
+qt modules for Qore
+version 0.0.1 by David Nichols
+
+Requires qore 0.7.0 headers and libraries to build.
+qt-opengl requires also OpenGL headers and libraries to build and the qore "opengl" module to run
+
+modules:
+* qt-core
+* qt-gui
+* qt-opengl
+* qt-svg
+
+Documentation in docs/
+
+test/example script directory: test/
+
+BUILD AND INSTALL
+-----------------
+
+configure
+make
+sudo make install
+
+The configure script will find out where your qore module directory is found and set this for the install directory.
+
+BUILD FROM SVN
+--------------
+
+reconf.sh
+configure
+make
+sudo make install
