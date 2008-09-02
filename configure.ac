@@ -186,12 +186,12 @@ AC_ARG_ENABLE([scu],
 
 AC_ARG_ENABLE([single-compilation-unit-gui],
   [AS_HELP_STRING([--enable-single-compilation-unit-gui],
-		  [enable compilation as a single unit for qt-gui - only if you have at least 1 Gig of RAM! (default: off)])],
+		  [enable compilation as a single unit for qt-gui - only if you have at least 1 Gig of RAM! (default: on)])],
   [case "${enable_single_compilation_unit_gui}" in
        yes|no) ;;
        *)      AC_MSG_ERROR(bad value ${enable_single_compilation_unit_gui} for --enable-single-compilation-unit-gui) ;;
       esac],
-  [enable_single_compilation_unit_gui=no])
+  [enable_single_compilation_unit_gui=yes])
 
 AC_ARG_ENABLE([scu-gui],
   [AS_HELP_STRING([--enable-scu-gui],
@@ -199,7 +199,8 @@ AC_ARG_ENABLE([scu-gui],
   [case "${enable_scu_gui}" in
        yes|no) enable_single_compilation_unit_gui=$enable_scu_gui;;
        *)      AC_MSG_ERROR(bad value ${enable_scu_gui} for --enable-scu-gui) ;;
-      esac])
+      esac],
+  [enable_scu_gui=yes])
 
 set_qore_cppflags()
 {
@@ -286,7 +287,9 @@ else
       qore_version=`grep QORE_VERSION.\" $QORE_INC_DIR/qore/qore-version.h|cut -f3 -d\ |sed s/\"//g 2>/dev/null`
       AC_MSG_RESULT([${qore_version} OK])
 
-      libdir=`qore --module-dir`
+      libdir=`qore --module-dir|sed "s/\/qore-.*//"`
+      mypkglibdir=`qore --module-dir`
+      AC_SUBST([mypkglibdir])
    fi
 fi
 
@@ -1246,10 +1249,11 @@ AC_DEFINE_UNQUOTED([MODULE_TARGET_BITS], $bits, [32 or 64 bit build])
 
 AM_CONDITIONAL([COND_DEBUG],      [test "$enable_debug" = yes])
 AM_CONDITIONAL([COND_PROFILE],    [test "$enable_profile" = yes])
+AM_CONDITIONAL([COND_MACOSX],     [test "$darwin" = true])
 AM_CONDITIONAL([COND_SINGLE_COMPILATION_UNIT], [test "$enable_single_compilation_unit" = yes])
 AM_CONDITIONAL([COND_SINGLE_COMPILATION_UNIT_GUI], [test "$enable_single_compilation_unit_gui" = yes])
 
-AC_CONFIG_FILES([Makefile src/Makefile])
+AC_CONFIG_FILES([Makefile qt-core/Makefile qt-gui/Makefile qt-svg/Makefile qt-opengl/Makefile])
 AC_OUTPUT
 
 echo "*** MODULE FEATURES ***"

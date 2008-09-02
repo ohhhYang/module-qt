@@ -1,9 +1,8 @@
-libdir = ${exec_prefix}/lib${LIBSUFFIX}
-pkglibdir = $(libdir)/@PACKAGE@-@VERSION@
+pkglibdir = $(mypkglibdir)
 
 QT_SOURCES = qt-gui-module.cc
 
-if COND_SINGLE_COMPILATION_UNIT_QT
+if COND_SINGLE_COMPILATION_UNIT_GUI
 QORE_QT_GUI_SOURCES = single-compilation-unit.cc
 else
 QORE_QT_GUI_SOURCES = qt-gui-util.cc QC_QApplication.cc QC_QPushButton.cc \
@@ -181,11 +180,6 @@ endif
 
 endif
 
-if COND_MONOLITHIC
-noinst_LTLIBRARIES = libqt-gui.la
-libqt_gui_la_SOURCES = $(QT_SOURCES) $(QORE_QT_GUI_SOURCES)
-libqt_gui_la_LDFLAGS = ${QT_CORE_LIBS} ${QT_GUI_LIBS} -static
-else
 lib_LTLIBRARIES = libqore-qt-gui.la
 libqore_qt_gui_la_SOURCES = $(QORE_QT_GUI_SOURCES)
 libqore_qt_gui_la_LDFLAGS = ${QT_CORE_LIBS} ${QT_GUI_LIBS}
@@ -193,7 +187,6 @@ pkglib_LTLIBRARIES = qt-gui.la
 qt_gui_la_SOURCES = $(QT_SOURCES)
 qt_gui_la_LDFLAGS = -module -avoid-version -lqore-qt-gui
 qt_gui_la_LIBADD = ../qt-core/libqore-qt-core.la
-endif
 
 INCLUDES = -I$(top_srcdir)/include $(QT_CORE_INCLUDES) $(QT_GUI_INCLUDES) -I ../qt-core
 
@@ -207,13 +200,6 @@ AM_CXXFLAGS += -g
 endif
 endif
 
-BUILT_SOURCES = dummy
-
-dummy:
-	$(top_srcdir)/next_build.sh
-
-if !COND_MONOLITHIC
 install-exec-hook:
 	mv $(pkglibdir)/qt-gui.$(MODULE_SUFFIX) $(pkglibdir)/qt-gui.qmod
 	rm -f $(pkglibdir)/qt-gui.la $(pkglibdir)/qt-gui.a
-endif

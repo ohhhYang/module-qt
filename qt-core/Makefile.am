@@ -1,5 +1,4 @@
-libdir = ${exec_prefix}/lib${LIBSUFFIX}
-pkglibdir = $(libdir)/@PACKAGE@-@VERSION@
+pkglibdir = $(mypkglibdir)
 
 QT_SOURCES = qt-core-module.cc
 
@@ -43,18 +42,12 @@ QORE_QT_SOURCES = qt-core-util.cc \
 	QC_QMetaObject.cc
 endif
 
-if COND_MONOLITHIC
-noinst_LTLIBRARIES = libqt-core.la
-libqt_core_la_SOURCES = $(QT_SOURCES)
-libqt_core_la_LDFLAGS = ${QT_CORE_LIBS} -static
-else
 lib_LTLIBRARIES = libqore-qt-core.la
 libqore_qt_core_la_SOURCES = $(QORE_QT_SOURCES)
 libqore_qt_core_la_LDFLAGS = ${QT_CORE_LIBS}
 pkglib_LTLIBRARIES = qt-core.la
 qt_core_la_SOURCES = $(QT_SOURCES)
 qt_core_la_LDFLAGS = -module -avoid-version -lqore-qt-core
-endif
 
 INCLUDES = -I$(top_srcdir)/include $(QT_CORE_INCLUDES)
 
@@ -68,13 +61,6 @@ AM_CXXFLAGS += -g
 endif
 endif
 
-BUILT_SOURCES = dummy
-
-dummy:
-	$(top_srcdir)/next_build.sh
-
-if !COND_MONOLITHIC
 install-exec-hook:
 	mv $(pkglibdir)/qt-core.$(MODULE_SUFFIX) $(pkglibdir)/qt-core.qmod
 	rm -f $(pkglibdir)/qt-core.la $(pkglibdir)/qt-core.a
-endif
