@@ -2,6 +2,7 @@ qt modules for Qore
 version 0.0.1 by David Nichols
 
 Requires qore 0.7.0 headers and libraries to build.
+Requires QT 4.3 or newer headers and libraries to build.
 qt-opengl requires also OpenGL headers and libraries to build and the qore "opengl" module to run
 
 modules:
