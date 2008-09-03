@@ -51,6 +51,7 @@ qt_core_la_LDFLAGS = -module -avoid-version -lqore-qt-core
 
 INCLUDES = -I$(top_srcdir)/include $(QT_CORE_INCLUDES)
 
+AM_CPPFLAGS = $(QORE_CPPFLAGS)
 AM_CXXFLAGS = ${PTHREAD_CFLAGS}
 
 if COND_PROFILE

@@ -190,6 +190,7 @@ qt_gui_la_LIBADD = ../qt-core/libqore-qt-core.la
 
 INCLUDES = -I$(top_srcdir)/include $(QT_CORE_INCLUDES) $(QT_GUI_INCLUDES) -I ../qt-core
 
+AM_CPPFLAGS = $(QORE_CPPFLAGS)
 AM_CXXFLAGS = ${PTHREAD_CFLAGS}
 
 if COND_PROFILE

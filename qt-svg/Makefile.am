@@ -16,6 +16,7 @@ qt_svg_la_LIBADD = ../qt-core/libqore-qt-core.la ../qt-gui/libqore-qt-gui.la
 
 INCLUDES = -I$(top_srcdir)/include $(QT_CORE_INCLUDES) $(QT_GUI_INCLUDES) $(QT_SVG_INCLUDES) -I ../qt-core -I ../qt-gui
 
+AM_CPPFLAGS = $(QORE_CPPFLAGS)
 AM_CXXFLAGS = ${PTHREAD_CFLAGS}
 
 if COND_PROFILE
