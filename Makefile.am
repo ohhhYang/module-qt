@@ -297,7 +297,7 @@ noinst_HEADERS = qt-core/QC_QObject.h \
 	qt-svg/QC_QSvgGenerator.h \
 	qt-svg/QC_QSvgWidget.h
 
-EXTRA_DIST = ChangeLog AUTHORS README test/ \
+EXTRA_DIST = COPYING ChangeLog AUTHORS README test/ \
 	test/desktop/images/bad.svg \
 	test/desktop/images/heart.svg \
 	test/desktop/images/trash.svg \
@@ -358,5 +358,7 @@ EXTRA_DIST = ChangeLog AUTHORS README test/ \
 	test/widgets/tetrix.q \
 	test/widgets/tooltips.q \
 	test/widgets/wiggly.q \
-	test/widgets/windowflags.q
+	test/widgets/windowflags.q \
+	qore-qt.spec
+
 
