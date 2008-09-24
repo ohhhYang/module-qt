@@ -40,8 +40,7 @@ class T {
       }
 
    public:
-      DLLLOCAL virtual ~MYQOREQTYPE()
-      {
+      DLLLOCAL virtual ~MYQOREQTYPE() {
 	 //printd(5, "destructor() this=%08p (%s) qore_obj=%08p this=%08p parent=%08p obj_ref=%d\n", this, metaObject()->className(), qore_obj, this, QOREQTYPE::parent(), obj_ref);
 	 
 	 if (obj_ref) {
@@ -56,13 +55,14 @@ class T {
 	 qore_obj->tDeref();
       }
 
-      DLLLOCAL virtual bool deleteBlocker()
-      {
+      DLLLOCAL virtual bool deleteBlocker() {
 	 //printd(5, "deleteBlocker() %s returning %s\n", metaObject()->className(), QOREQTYPE::parent() ? "true" : "false");
 	 if (QOREQTYPE::parent() || externally_owned) {
 	    if (!obj_ref) {
 	       obj_ref = true;
-	       qore_obj->ref();
+
+	       // note that if we call QoreObject::ref() here, it will cause an immediate deadlock!
+	       qore_obj->deleteBlockerRef();
 	    }
 	    return true;
 	 }

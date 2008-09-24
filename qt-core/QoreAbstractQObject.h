@@ -305,8 +305,7 @@ class QoreQObjectBase : public V
       {
 	 qobj->parent_childEvent(event);
       }
-      DLLLOCAL virtual bool deleteBlocker() 
-      {
+      DLLLOCAL virtual bool deleteBlocker() {
 	 //printd(5, "deleteBlocker() this=%08p qobj=%08p parent=%08p\n", this, &(*qobj), qobj ? qobj->parent() : 0);
 	 return qobj ? qobj->deleteBlocker() : false;
       }

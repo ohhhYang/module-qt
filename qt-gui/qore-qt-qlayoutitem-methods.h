@@ -4,8 +4,7 @@ class T {
 #endif
 
    public:
-      DLLLOCAL virtual bool layoutItemDeleteBlocker()
-      {
+      DLLLOCAL virtual bool layoutItemDeleteBlocker() {
 	 if (item_externally_owned) {
 	    manual_delete = true;
 	    return true;

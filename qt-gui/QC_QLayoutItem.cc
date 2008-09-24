@@ -30,8 +30,7 @@
 qore_classid_t CID_QLAYOUTITEM;
 QoreClass *QC_QLayoutItem = 0;
 
-bool qlayoutitem_delete_blocker(QoreObject *self, QoreAbstractQLayoutItemData *qli)
-{
+bool qlayoutitem_delete_blocker(QoreObject *self, QoreAbstractQLayoutItemData *qli) {
    bool rc = qli->layoutItemDeleteBlocker();
    //printd(5, "qlayoutitem_delete_blocker() self=%08p, qo=%08p rc=%d\n", self, qli, rc);
    return rc;

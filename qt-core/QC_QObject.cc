@@ -28,8 +28,7 @@
 qore_classid_t CID_QOBJECT;
 QoreClass *QC_QObject = 0;
 
-bool qobject_delete_blocker(QoreObject *self, QoreAbstractQObject *qo)
-{
+bool qobject_delete_blocker(QoreObject *self, QoreAbstractQObject *qo) {
    bool rc = qo->deleteBlocker();
    //printd(5, "qobject_delete_blocker() self=%08p, qo=%08p rc=%d\n", self, qo, rc);
    return rc;

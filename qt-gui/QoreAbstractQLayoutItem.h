@@ -136,8 +136,7 @@ class QoreQtQLayoutItemImplBase : public V
          return qobj;
       }
 
-      DLLLOCAL virtual bool layoutItemDeleteBlocker()
-      {
+      DLLLOCAL virtual bool layoutItemDeleteBlocker() {
 	 return false;
       }
 

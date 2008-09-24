@@ -88,8 +88,7 @@ class QoreQLayoutBase : public QoreQObjectBase<T, V>
          return &(*this->qobj);
       }
 
-      DLLLOCAL virtual bool layoutItemDeleteBlocker()
-      {
+      DLLLOCAL virtual bool layoutItemDeleteBlocker() {
 	 return this->qobj ? this->qobj->layoutItemDeleteBlocker() : false;
       }
 
@@ -212,8 +211,7 @@ class QoreQtQLayoutBase : public QoreQtQObjectBase<T, V>
          return this->qobj;
       }
 
-      DLLLOCAL virtual bool layoutItemDeleteBlocker()
-      {
+      DLLLOCAL virtual bool layoutItemDeleteBlocker() {
 	 return false;
       }
 
