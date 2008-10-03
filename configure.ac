@@ -664,7 +664,7 @@ if test "${with_qt}" != "no"; then
       	 fi
       	 with_qt=yes
       else
-	 AC_MSG_RESULT([not found])
+	 AC_MSG_ERROR([not found])
          unset with_qt
       fi
    fi
@@ -706,7 +706,7 @@ if test "${with_qt}" = yes; then
         with_qt=yes
      fi
   else
-     AC_MSG_WARN([no QT Core libraries or includes found, disabling QT Core support])
+     AC_MSG_ERROR([no QT Core libraries or includes found])
      unset with_qt
   fi
 fi
