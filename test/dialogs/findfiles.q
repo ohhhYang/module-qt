@@ -24,7 +24,7 @@ class Window inherits QDialog
     constructor($parent) : QDialog($parent)
     {
 	$.browseButton = $.createButton(TR("&Browse..."), SLOT("browse()"));
-	$.findButton = $.createButton(TR("&Find"), SLOT("find()"));
+	$.findButton = $.createButton(TR("&Find"), SLOT("find_files()"));
 
 	$.fileComboBox = $.createComboBox(TR("*"));
 	$.textComboBox = $.createComboBox("");
@@ -67,7 +67,8 @@ class Window inherits QDialog
 	}
     }
 
-    find()
+    # cannot name method "find" because it conflicts with a keyword
+    find_files()
     {
 	$.filesTable.setRowCount(0);
 
