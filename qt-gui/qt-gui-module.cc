@@ -1984,15 +1984,16 @@ class QoreQtQWidgetPtr : public QoreQtAbstractDynamicTypeHelper
       }
 };
 
-class QoreQtActivateReasonEnum : public QoreQtInt
+class QoreQtActivationReasonEnum : public QoreQtInt
 {
    public:
-      DLLLOCAL QoreQtActivateReasonEnum() : QoreQtInt("QSystemTrayIcon::ActivationReason") {}
+      DLLLOCAL QoreQtActivationReasonEnum() : QoreQtInt("QSystemTrayIcon::ActivationReason") {}
 };
 
 DLLLOCAL QoreQtQFont qqt_qfont;
 DLLLOCAL QoreQtQListWidgetItemPtr qqt_qlistwidgetitem_ptr;
 DLLLOCAL QoreQtQWidgetPtr qqt_qwidget_ptr;
+DLLLOCAL QoreQtActivationReasonEnum qqt_qactivationreason_ptr;
 
 static class QoreStringNode *qt_module_init()
 {
@@ -2000,6 +2001,7 @@ static class QoreStringNode *qt_module_init()
    register_qqt_dynamic_type(&qqt_qfont);
    register_qqt_dynamic_type(&qqt_qlistwidgetitem_ptr);
    register_qqt_dynamic_type(&qqt_qwidget_ptr);
+   register_qqt_dynamic_type(&qqt_qactivationreason_ptr);
 
    // add hooks to qt-core functionality
    register_return_qvariant_hook(return_gui_qvariant);
