@@ -91,6 +91,7 @@
 #ifdef WINDOWS
 #include "QC_QWindowsXPStyle.h"
 #endif
+#include "QC_QUrl.h"
 
 #include <QPalette>
 #include <QToolTip>
@@ -101,8 +102,39 @@
 
 AbstractQoreNode *C_Clipboard = 0;
 
-int get_qkeysequence(const AbstractQoreNode *n, QKeySequence &ks, class ExceptionSink *xsink, bool suppress_exception)
-{
+int get_qurl(const AbstractQoreNode *n, QUrl &url, ExceptionSink *xsink, bool suppress_exception) {
+   qore_type_t ntype = n ? n->getType() : 0;
+
+   if (ntype == NT_OBJECT) {
+      const QoreObject *o = reinterpret_cast<const QoreObject *>(n);
+      QoreQUrl *qurl = (QoreQUrl *)o->getReferencedPrivateData(CID_QURL, xsink);
+      if (*xsink)
+	 return 0;
+      if (!qurl) {
+	 if (!suppress_exception)
+	    xsink->raiseException("QURL-ERROR", "class '%s' is not derived from QUrl", o->getClass()->getName());
+	 return -1;
+      }
+      ReferenceHolder<QoreQUrl> qurlHolder(qurl, xsink);
+      url = *qurl;
+      return 0;
+   }
+
+   if (ntype == NT_STRING) {
+      QString str;
+      if (get_qstring(n, str, xsink))
+	 return -1;
+
+      url.setUrl(str);
+      return 0;
+   }
+   
+   if (!suppress_exception)
+      xsink->raiseException("QURL-ERROR", "cannot convert type '%s' to QUrl", n ? n->getTypeName() : "NOTHING");
+   return -1;
+}
+
+int get_qkeysequence(const AbstractQoreNode *n, QKeySequence &ks, class ExceptionSink *xsink, bool suppress_exception) {
    qore_type_t ntype = n ? n->getType() : 0;
 
    if (ntype == NT_OBJECT) {
@@ -135,6 +167,7 @@ int get_qkeysequence(const AbstractQoreNode *n, QKeySequence &ks, class Exceptio
       ks = key;
       return 0;
    }
+
    if (!suppress_exception)
       xsink->raiseException("QKEYSEQUENCE-ERROR", "cannot convert type '%s' to QKeySequence", n ? n->getTypeName() : "NOTHING");
    return -1;

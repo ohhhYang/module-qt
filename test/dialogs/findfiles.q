@@ -162,8 +162,7 @@ class Window inherits QDialog {
 
     openFileOfItem($row, $column) {
 	my $item = $.filesTable.item($row, 0);
-	# here we have to explicitly create a QUrl object for openUrl()
-	QDesktopServices::openUrl(new QUrl($item.text()));
+	QDesktopServices::openUrl($item.text());
     }
 }
 

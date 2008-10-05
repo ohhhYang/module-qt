@@ -944,10 +944,7 @@ QoreClass *QC_%s = 0;
 
     foreach my $p in (keys $proto) {	
 	if ($p != $cn)
-            if ($o.static)
-	        $of.printf("   %sbuiltinFunctions.add(\"%s_%-30s %s);\n", $proto.$p.ok ? "" : "//", $cn, $p+"\",", $proto.$p.funcname);
-            else
-	        $of.printf("   %sQC_%s->addMethod(%-30s (q_method_t)%s);\n", $proto.$p.ok ? "" : "//", $cn, "\""+$p+"\",", $proto.$p.funcname);
+	    $of.printf("   %sQC_%s->add%sMethod(%-30s (q_method_t)%s);\n", $proto.$p.ok ? "" : "//", $cn, $o.static ? "Static" : "", "\""+$p+"\",", $proto.$p.funcname);
     }
 
     if (exists $o.file) {
@@ -1366,6 +1363,18 @@ sub do_single_arg($offset, $name, $arg, $i, $ok, $const) {
 		}
 		else {
 		    $lo += sprintf("if (get_qstring(p, %s, xsink))", $arg.name);
+		    $lo += $const ? "   return;" : "   return 0;";
+		}
+	    }
+	    break;
+	    case "QUrl": {
+		$lo += sprintf("QUrl %s;", $arg.name);
+		if (exists $arg.def) {
+		    $lo += sprintf("if (get_qurl(p, %s, xsink, true))", $arg.name);
+		    $lo += sprintf("   %s = %s;", $arg.name, trim($arg.def));
+		}
+		else {
+		    $lo += sprintf("if (get_qurl(p, %s, xsink))", $arg.name);
 		    $lo += $const ? "   return;" : "   return 0;";
 		}
 	    }

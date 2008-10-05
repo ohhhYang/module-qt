@@ -27,6 +27,7 @@
 
 #include <QKeySequence>
 #include <QBrush>
+#include <QUrl>
 
 #include "BrushStyleNode.h"
 #include "PenStyleNode.h"
@@ -46,7 +47,7 @@ class QWidget;
 
 DLLEXPORT int get_qkeysequence(const AbstractQoreNode *n, QKeySequence &qks, ExceptionSink *xsink, bool suppress_exception = false);
 DLLEXPORT int get_qbrush(const AbstractQoreNode *n, QBrush &brush, class ExceptionSink *xsink);
-
+DLLEXPORT int get_qurl(const AbstractQoreNode *n, QUrl &url, ExceptionSink *xsink, bool suppress_exception = false);
 DLLEXPORT QoreObject *return_qabstractbutton(QAbstractButton *button);
 DLLEXPORT QoreObject *return_qstyle(const QString &style, QStyle *qs, ExceptionSink *xsink);
 DLLEXPORT QoreObject *return_qstyleoption(const QStyleOption *qso);

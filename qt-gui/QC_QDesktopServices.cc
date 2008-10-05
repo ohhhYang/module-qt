@@ -46,14 +46,10 @@ static AbstractQoreNode *f_QDesktopServices_displayName(const QoreListNode *para
 //bool openUrl ( const QUrl & url )
 static AbstractQoreNode *f_QDesktopServices_openUrl(const QoreListNode *params, ExceptionSink *xsink) {
    const AbstractQoreNode *p = get_param(params, 0);
-   QoreQUrl *url = (p && p->getType() == NT_OBJECT) ? (QoreQUrl *)reinterpret_cast<const QoreObject *>(p)->getReferencedPrivateData(CID_QURL, xsink) : 0;
-   if (!url) {
-      if (!xsink->isException())
-         xsink->raiseException("QDESKTOPSERVICES-OPENURL-PARAM-ERROR", "expecting a QUrl object as first argument to QDesktopServices::openUrl()");
+   QUrl url;
+   if (get_qurl(p, url, xsink))
       return 0;
-   }
-   ReferenceHolder<AbstractPrivateData> urlHolder(static_cast<AbstractPrivateData *>(url), xsink);
-   return get_bool_node(QDesktopServices::openUrl(*(static_cast<QUrl *>(url))));
+   return get_bool_node(QDesktopServices::openUrl(url));
 }
 
 //void setUrlHandler ( const QString & scheme, QObject * receiver, const char * method )
