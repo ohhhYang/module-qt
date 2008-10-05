@@ -36,13 +36,11 @@ const colorArray = (170, 202, 0, 255,
 		    83, 102, 0, 255,
 		    120, 143, 0, 255);
 
-class GLWidget inherits QGLWidget
-{
+class GLWidget inherits QGLWidget {
     private $.rot, $.xOffs, $.yOffs, $.xInc, $.pbufferList, 
     $.cubeTexture, $.timerId, $.fbo;
     
-    constructor($parent) : QGLWidget(new QGLFormat(QGL::SampleBuffers), $parent)
-    {
+    constructor($parent) : QGLWidget(new QGLFormat(QGL::SampleBuffers), $parent) {
 	# create the framebuffer object - make sure to have a current
 	# context before creating it
 	$.makeCurrent();
@@ -51,13 +49,11 @@ class GLWidget inherits QGLWidget
 	$.setWindowTitle(TR("OpenGL framebuffer objects 2"));
     }
 
-    destructor()
-    {
+    destructor() {
         glDeleteLists($.pbufferList, 1);
     }
 
-    initializeGL()
-    {
+    initializeGL() {
 	glMatrixMode(GL_MODELVIEW);
 
 	glEnable(GL_CULL_FACE);
@@ -117,8 +113,7 @@ class GLWidget inherits QGLWidget
 	glPushMatrix(); # push to avoid stack underflow in the first paintGL() call
     }
 
-    resizeGL($w, $h)
-    {
+    resizeGL($w, $h) {
 	glViewport(0, 0, $w, $h);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
@@ -128,8 +123,7 @@ class GLWidget inherits QGLWidget
 	glTranslatef(0.0, 0.0, -15.0);
     }
 
-    paintGL()
-    {
+    paintGL() {
 	glPopMatrix(); # pop the matrix pushed in the $.pbuffer list
 
 	# push the projection matrix and the entire GL state before
@@ -191,8 +185,7 @@ class GLWidget inherits QGLWidget
 	glPopMatrix();
     }
 
-    drawCube($i, $z, $rotation, $jmp, $amp)
-    {
+    drawCube($i, $z, $rotation, $jmp, $amp) {
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	glTranslatef($.xOffs[$i], $.yOffs[$i], $z);
@@ -216,8 +209,7 @@ class GLWidget inherits QGLWidget
     
 }
 
-class framebufferobject2 inherits QApplication 
-{
+class framebufferobject2 inherits QApplication {
     constructor() {
         if (!QGLFormat::hasOpenGL()) {
             QMessageBox::information(0, "OpenGL framebuffer objects",

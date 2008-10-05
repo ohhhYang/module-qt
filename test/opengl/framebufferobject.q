@@ -19,13 +19,11 @@
 
 const AMP = 5;
 
-class GLWidget inherits QGLWidget
-{
+class GLWidget inherits QGLWidget {
     private $.anchor, $.scale, $.rot_x, $.rot_y, $.rot_z,
     $.tile_list, $.wave, $.logo, $.anim, $.svg_renderer;
     
-    constructor($parent) : QGLWidget(new QGLFormat(QGL::SampleBuffers|QGL::AlphaChannel), $parent)
-    {
+    constructor($parent) : QGLWidget(new QGLFormat(QGL::SampleBuffers|QGL::AlphaChannel), $parent) {
 	$.anchor = new QPoint();
 
 	$.setWindowTitle(TR("OpenGL framebuffer objects"));
@@ -95,18 +93,15 @@ class GLWidget inherits QGLWidget
 	$.startTimer(30); # $.wave timer
     }
 
-    destructor()
-    {
+    destructor() {
 	glDeleteLists($.tile_list, 1);
     }
 
-    paintEvent()
-    {
+    paintEvent() {
 	$.draw();
     }
 
-    draw()
-    {
+    draw() {
 	my $p = new QPainter($self); # used for text overlay
 	
 	# save the GL state set for QPainter
@@ -189,13 +184,11 @@ class GLWidget inherits QGLWidget
 	$.show();
     }
 
-    mousePressEvent($e)
-    {
+    mousePressEvent($e) {
 	$.anchor = $e.pos();
     }
 
-    mouseMoveEvent($e)
-    {
+    mouseMoveEvent($e) {
 	my $diff = $e.pos().subtract($.anchor);
 	if ($e.buttons() & Qt::LeftButton) {
 	    $.rot_x += $diff.y
@@ -209,8 +202,7 @@ class GLWidget inherits QGLWidget
 	$.draw();
     }
 
-    wheelEvent($e)
-    {
+    wheelEvent($e) {
 	if ($e.delta() > 0)
 	    $.scale += $.scale * 0.1;
 	else
@@ -218,27 +210,23 @@ class GLWidget inherits QGLWidget
 	$.draw();
     }
 
-    mouseDoubleClickEvent()
-    {
+    mouseDoubleClickEvent() {
 	$.anim.start();
     }
 
-    animate($val)
-    {
+    animate($val) {
 	$.rot_y = $val * 180;
 	$.draw();
     }
 
-    animFinished()
-    {
+    animFinished() {
 	if ($.anim.direction() == QTimeLine::Forward)
 	    $.anim.setDirection(QTimeLine::Backward);
 	else
 	    $.anim.setDirection(QTimeLine::Forward);
     }
 
-    saveGLState()
-    {
+    saveGLState() {
 	glPushAttrib(GL_ALL_ATTRIB_BITS);
 	glMatrixMode(GL_PROJECTION);
 	glPushMatrix();
@@ -246,8 +234,7 @@ class GLWidget inherits QGLWidget
 	glPushMatrix();
     }
 
-    restoreGLState()
-    {
+    restoreGLState() {
 	glMatrixMode(GL_PROJECTION);
 	glPopMatrix();
 	glMatrixMode(GL_MODELVIEW);
@@ -255,8 +242,7 @@ class GLWidget inherits QGLWidget
 	glPopAttrib();
     }
 
-    timerEvent()
-    {
+    timerEvent() {
 	if (QApplication::mouseButtons() != 0)
 	    return;
 
@@ -288,25 +274,24 @@ class GLWidget inherits QGLWidget
 		    $.wave[$i*$width + $j] = AMP * sin(2 * M_PI * $W * ($wt[$i][$j] + $t)) / (0.2*($s + 2));
 		else
 		    $.wave[$i*$width + $j] = AMP * sin(2 * M_PI * $W * ($wt[$i][$j] + $t));
-         }
-     }
- }
+	    }
+	}
+    }
 }
 
-class framebufferobject inherits QApplication 
-{
+class framebufferobject inherits QApplication {
     constructor() {
         our $dir = get_script_dir();
 	our $scale_in = True;
 
 	if (!QGLFormat::hasOpenGL()) {
 	    QMessageBox::information(0, "OpenGL framebuffer objects",
-				    "this system does not support OpenGL");
+				     "this system does not support OpenGL");
 	    return -1;
 	}
 	if (!QGLFramebufferObject::hasOpenGLFramebufferObjects()) {
 	    QMessageBox::information(0, "OpenGL framebuffer objects",
-				    "this system does not support framebuffer objects.");
+				     "this system does not support framebuffer objects.");
 	    return -1;
 	}
 
