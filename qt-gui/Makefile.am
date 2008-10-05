@@ -173,7 +173,8 @@ QORE_QT_GUI_SOURCES = qt-gui-util.cc QC_QApplication.cc QC_QPushButton.cc \
 	QC_QGraphicsPixmapItem.cc \
 	QC_QTextLine.cc \
 	QC_QTextOption.cc \
-	QC_QTextLayout.cc
+	QC_QTextLayout.cc \
+	QC_QDesktopServices.cc
 if COND_MACOSX
 QORE_QT_GUI_SOURCES += QC_QMacStyle.cc
 endif

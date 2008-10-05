@@ -15,16 +15,14 @@
 # enable all parse warnings
 %enable-all-warnings
 
-class Window inherits QDialog
-{
+class Window inherits QDialog {
     private $.fileComboBox, $.textComboBox, $.directoryComboBox, $.fileLabel, 
             $.textLabel, $.directoryLabel, $.filesFoundLabel, 
             $.browseButton, $.findButton, $.filesTable;
 
-    constructor($parent) : QDialog($parent)
-    {
+    constructor($parent) : QDialog($parent) {
 	$.browseButton = $.createButton(TR("&Browse..."), SLOT("browse()"));
-	$.findButton = $.createButton(TR("&Find"), SLOT("find_files()"));
+	$.findButton = $.createButton(TR("&Find"), SLOT("find_it()"));
 
 	$.fileComboBox = $.createComboBox(TR("*"));
 	$.textComboBox = $.createComboBox("");
@@ -58,8 +56,7 @@ class Window inherits QDialog
 	$.resize(700, 300);
     }
 
-    browse()
-    {
+    browse() {
 	my $directory = QFileDialog::getExistingDirectory($self, TR("Find Files"), QDir::currentPath());
 	if (strlen($directory)) {
 	    $.directoryComboBox.addItem($directory);
@@ -68,8 +65,7 @@ class Window inherits QDialog
     }
 
     # cannot name method "find" because it conflicts with a keyword
-    find_files()
-    {
+    find_it() {
 	$.filesTable.setRowCount(0);
 
 	my $fileName = $.fileComboBox.currentText();
@@ -87,8 +83,7 @@ class Window inherits QDialog
 	$.showFiles($directory, $files);
     }
 
-    findFiles($directory, $files, $text)
-    {
+    findFiles($directory, $files, $text) {
 	my $progressDialog = new QProgressDialog($self);
 	$progressDialog.setCancelButtonText(TR("&Cancel"));
 	$progressDialog.setRange(0, elements $files - 1);
@@ -121,8 +116,7 @@ class Window inherits QDialog
 	return $foundFiles;
     }
 
-    showFiles($directory, $files)
-    {
+    showFiles($directory, $files) {
 	foreach my $file in ($files) {
 	    my $size = hstat($directory.absoluteFilePath($file)).size;
 
@@ -140,15 +134,13 @@ class Window inherits QDialog
 	$.filesFoundLabel.setText(sprintf(TR("%d file%s found"), elements $files, elements $files == 1 ? "" : "s"));
     }
 
-    createButton($text, $member)
-    {
+    createButton($text, $member) {
 	my $button = new QPushButton($text);
 	$.connect($button, SIGNAL("clicked()"), $member);
 	return $button;
     }
 
-    createComboBox($text)
-    {
+    createComboBox($text) {
 	my $comboBox = new QComboBox();
 	$comboBox.setEditable(True);
 	$comboBox.addItem($text);
@@ -156,21 +148,27 @@ class Window inherits QDialog
 	return $comboBox;
     }
 
-    createFilesTable()
-    {
+    createFilesTable() {
 	$.filesTable = new QTableWidget(0, 2);
 	my $labels = (TR("File Name"), TR("Size"));
 	$.filesTable.setHorizontalHeaderLabels($labels);
 	$.filesTable.horizontalHeader().setResizeMode(0, QHeaderView::Stretch);
 	$.filesTable.verticalHeader().hide();
 	$.filesTable.setShowGrid(False);
+
+	$.connect($.filesTable, SIGNAL("cellActivated(int, int)"),
+		  SLOT("openFileOfItem(int, int)"));
+    }
+
+    openFileOfItem($row, $column) {
+	my $item = $.filesTable.item($row, 0);
+	# here we have to explicitly create a QUrl object for openUrl()
+	QDesktopServices::openUrl(new QUrl($item.text()));
     }
 }
 
-class findfiles_example inherits QApplication
-{
-    constructor()
-    {      
+class findfiles_example inherits QApplication {
+    constructor() {      
         my $window = new Window();
         $window.show();
         

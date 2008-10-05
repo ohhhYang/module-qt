@@ -167,6 +167,7 @@
 #include "QC_QGraphicsSceneHoverEvent.h"
 #include "QC_QGraphicsSceneMouseEvent.h"
 #include "QC_QGraphicsSceneWheelEvent.h"
+#include "QC_QDesktopServices.h"
 
 #include "qore-qt-gui.h"
 
@@ -683,7 +684,7 @@ static void init_namespace()
    qt_ns.addInitialNamespace(initQTextLayoutNS());
 
    // add QBoxLayout namespace and constants
-   class QoreNamespace *qbl = new QoreNamespace("QBoxLayout");
+   QoreNamespace *qbl = new QoreNamespace("QBoxLayout");
 
    // Direction enum
    qbl->addConstant("LeftToRight",    new QoreBigIntNode(QBoxLayout::LeftToRight));
@@ -1144,6 +1145,9 @@ static void init_namespace()
    qt_ns.addSystemClass(QC_QStyleFactory);
 
    qt_ns.addInitialNamespace(qslider);
+   qt_ns.addSystemClass(initQDesktopServicesClass());
+
+   // add here
 
    // CheckState enum
    qt_ns.addConstant("Unchecked",                new QoreBigIntNode(Qt::Unchecked));
@@ -1884,7 +1888,6 @@ static void init_namespace()
    qt_ns.addConstant("NonModal",                 new QoreBigIntNode(Qt::NonModal));
    qt_ns.addConstant("WindowModal",              new QoreBigIntNode(Qt::WindowModal));
    qt_ns.addConstant("ApplicationModal",         new QoreBigIntNode(Qt::ApplicationModal));
-
 }
 
 class QoreQtQFont : public QoreQtAbstractDynamicTypeHelper

@@ -186,3 +186,4 @@
 #include "QC_QTextLine.cc"
 #include "QC_QTextOption.cc"
 #include "QC_QTextLayout.cc"
+#include "QC_QDesktopServices.cc"

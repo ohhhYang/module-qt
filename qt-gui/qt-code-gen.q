@@ -3,6 +3,21 @@
 %require-our
 %enable-all-warnings
 
+const module_info = (
+    ( "file" : "qt-core-module.cc",
+      "ns"   : "qt_ns",
+      "mf"   : "qt-core" ),
+    ( "file" : "qt-gui-module.cc",
+      "ns"   : "qt_ns",
+      "mf"   : "qt-gui" ),
+    ( "file" : "qt-opengl.cc",
+      "ns"   : "gl_ns",
+      "mf"   : "qt-opengl" ),
+    ( "file" : "qt-svg.cc",
+      "ns"   : "svg_ns",
+      "mf"   : "qt-svg" )
+    );
+
 const opts = (
     "abstract"        : "a,abstract",
     "abstract_class"  : "n,name=s",
@@ -157,8 +172,7 @@ const copyright = " Qore Programming Language\n\n Copyright (C) 2003 - 2008 Davi
 
 our ($o, $if, $cn);
 
-sub usage()
-{
+sub usage() {
     printf(
 "usage: %s input_file class_name
   -f,--file                create cc and header file(s)
@@ -180,12 +194,10 @@ sub usage()
     exit(1);
 }
 
-sub command_line()
-{
+sub command_line() {
     my $g = new GetOpt(opts);
     $o = $g.parse(\$ARGV);
-    if (exists $o."_ERRORS_")
-    {
+    if (exists $o."_ERRORS_") {
         printf("%s\n", $o."_ERRORS_"[0]);
         exit(1);
     }
@@ -226,32 +238,28 @@ sub command_line()
 
 }
 
-sub dl($l)
-{
+sub dl($l) {
     my $str;
     foreach my $e in ($l)
 	$str += $e + ", ";
     return substr($str, 0, -2);
 }
 
-sub dlh($l)
-{
+sub dlh($l) {
     my $str;
     foreach my $e in ($l)
 	$str += sprintf("(%s) %s, ", $e.type, $e.name);
     return substr($str, 0, -2);
 }
 
-sub inlist($val, $list)
-{
+sub inlist($val, $list) {
     foreach my $v in ($list)
         if ($val == $v)
             return True;
     return False;
 }
 
-sub do_return_qobject($type, $callstr)
-{
+sub do_return_qobject($type, $callstr) {
     if ($type == "QObject")
 	return sprintf("return return_qobject(%s);", $callstr);
     if ($type == "QAction")
@@ -275,8 +283,7 @@ sub do_return_qobject($type, $callstr)
     return $lo;
 }
 
-sub do_return_class($type, $callstr)
-{
+sub do_return_class($type, $callstr) {
     $type =~ s/&//g;
     $type =~ s/\*//g;
     my $cl = $type;
@@ -310,8 +317,7 @@ sub do_return_class($type, $callstr)
     return $lo;
 }
 
-sub do_class($arg, $name, $cn, $i, $d, $const)
-{
+sub do_class($arg, $name, $cn, $i, $d, $const) {
     my $lo = ();
     
     my $type = $arg.type;
@@ -350,8 +356,7 @@ sub do_class($arg, $name, $cn, $i, $d, $const)
     return $lo;
 }
 
-sub do_dynamic_class($arg, $name, $cn, $i, $const)
-{
+sub do_dynamic_class($arg, $name, $cn, $i, $const) {
     my $lo = ();
     
     my $type = $arg.type;
@@ -384,8 +389,7 @@ sub do_dynamic_class($arg, $name, $cn, $i, $const)
     return $lo;
 }
 
-sub get_file($fn)
-{
+sub get_file($fn) {
     #return stdout;
     if ($o.test)
 	return stdout;
@@ -408,8 +412,7 @@ sub get_file($fn)
     return $of;
 }
 
-sub add_new_build_files($fp)
-{
+sub add_new_build_files($fp) {
     my $cc = $fp + ".cc";
     my $hh = $fp + ".h";
 
@@ -420,7 +423,16 @@ sub add_new_build_files($fp)
 	    system("printf '#include \\\"" + $cc + "\\\"\\n'>> single-compilation-unit.cc");
     }
 
-    # add to qt/Makefile.am
+    my $f;
+    # find module info
+    foreach $f in (module_info) {
+	if (is_file($f.file))
+	    break;
+    }
+    if (!exists $f)
+	throw "MODULE-NOT-FOUND";
+
+    # add to Makefile.am
     if (!$o.test && !strlen(trim(backquote("grep " + $cc + " Makefile.am")))) {
 	my $lines = split("\n", `cat Makefile.am`);
 	my $of = get_file("Makefile.am");
@@ -439,19 +451,21 @@ sub add_new_build_files($fp)
     }    
 
     # add to root Makefile.am
-    if (!$o.test && !strlen(trim(backquote("grep " + $hh + " ../../Makefile.am")))) {
-	my $lines = split("\n", `cat ../../Makefile.am`);
-	my $of = get_file("../../Makefile.am");
+    if (!$o.test && !strlen(trim(backquote("grep " + $hh + " ../Makefile.am")))) {
+	my $lines = split("\n", `cat ../Makefile.am`);
+	my $of = get_file("../Makefile.am");
 	my ($found, $done);
+	my $str = $f.mf + "/";
 	for (my $i = 0; $i < elements $lines; ++$i) {
 	    if (!$done) {
-		if (!$found && $lines[$i] =~ /modules\/qt/) {
+		#printf("(%s): %n: %s\n", $str, regex($lines[$i], $str), $lines[$i]);
+		if (!$found && regex($lines[$i], $str)) {
 		    $found = True;
 		}
-		else if ($found && $lines[$i] !~ /modules\/qt/) {
-		    $of.printf("\tmodules/qt/%s \\\n", $hh);
+		else if ($found && !regex($lines[$i], $str)) {
+		    $of.printf("\t%s/%s \\\n", $f.mf, $hh);
 		    if ($o.abstract) 
-			$of.printf("\tmodules/qt/QoreAbstract%s.h \\\n", $cn);
+			$of.printf("\%s/QoreAbstract%s.h \\\n", $f.mf, $cn);
 		    $done = True;
 		}
 	    }
@@ -459,10 +473,13 @@ sub add_new_build_files($fp)
 	}
     }
 
-    # add to qt.cc
-    if (!$o.test && !strlen(trim(backquote("grep " + $hh + " qt.cc")))) {
-	my $lines = split("\n", `cat qt.cc`);
-	my $of = get_file("qt.cc");
+    # add to module file
+    if ($o.test)
+	return;
+
+    if (!strlen(trim(backquote("grep " + $hh + " " + $f.file)))) {
+	my $lines = split("\n", backquote("cat " + $f.file));
+	my $of = get_file($f.file);
 	my ($found, $done);
 	for (my $i = 0; $i < elements $lines; ++$i) {
 	    if (!$done) {
@@ -474,20 +491,21 @@ sub add_new_build_files($fp)
 		    $done = True;
 		}
 	    }
-	    else if ($lines[$i + 1] =~ /add QBoxLayout namespace/) {
-		my $ns = $o.dialog ? "qdialog_ns" : "qt_ns";
-		if ($o.ns)
-		    $of.printf("   %s->addInitialNamespace(init%sNS(%s));\n", $ns, $cn, exists $o.parent ? "QC_" + $o.parent : "");
-		else
-		    $of.printf("   %s->addSystemClass(init%sClass(%s));\n", $ns, $cn, exists $o.parent ? "QC_" + $o.parent : "");
+	    else {
+		if ($lines[$i + 1] =~ /\/\/ add here/) {
+		    my $ns = $o.dialog ? "qdialog_ns" : module_info.ns;
+		    if ($o.ns)
+			$of.printf("   %s.addInitialNamespace(init%sNS(%s));\n", $f.ns, $cn, exists $o.parent ? "QC_" + $o.parent : "");
+		    else
+			$of.printf("   %s.addSystemClass(init%sClass(%s));\n", $f.ns, $cn, exists $o.parent ? "QC_" + $o.parent : "");
+		}
 	    }
 	    $of.printf("%s\n", $lines[$i]);
 	}	
     }
 }
-
-sub do_abstract($of, $proto, $qt)
-{
+	    
+sub do_abstract($of, $proto, $qt) {
     my $class_name = "Qore" + ($qt ? "Qt" : "") + $cn;
 
     my $ptr_name = sprintf("%s%s", $qt ? "" : "my", $cn);
@@ -505,8 +523,8 @@ sub do_abstract($of, $proto, $qt)
     
     $of.printf("typedef %s<%s, QoreAbstract%s> %s;\n\n", $base_class, $ptr_name, $o.abstract_class, $impl_class);
 
-    $of.printf("class %s : public %s\n", $class_name, $impl_class);
-    $of.printf("{\n   public:\n");
+    $of.printf("class %s : public %s {\n", $class_name, $impl_class);
+    $of.printf("   public:\n");
     
     if ($qt) {
 	my $qtparam = sprintf("%s%s *%s%s", 
@@ -517,7 +535,7 @@ sub do_abstract($of, $proto, $qt)
 			    $o.gitem ? "" : "obj, ", 
 			    $lcn,
 			    $o.gitem ? ", managed" : "");
-	$of.printf("      DLLLOCAL %s(%s) : %s(%s)\n      {\n      }\n", $class_name, $qtparam, $impl_class, $qtarg);
+	$of.printf("      DLLLOCAL %s(%s) : %s(%s) { }\n", $class_name, $qtparam, $impl_class, $qtarg);
     }
     else {
 	if (exists $proto.$cn) {
@@ -534,14 +552,13 @@ sub do_abstract($of, $proto, $qt)
 		    $str += ", " + $i.orig_args;
 		if ($str =~ /^, /)
 		    $str = substr($str, 2);
-		$of.printf("      DLLLOCAL %s(%s) : %s(new my%s(obj%s))\n      {\n      }\n", $class_name, $str, $impl_class, $cn, $arg_names);
+		$of.printf("      DLLLOCAL %s(%s) : %s(new my%s(obj%s)) { }\n", $class_name, $str, $impl_class, $cn, $arg_names);
 	    }
 	}
     }
     
     foreach my $ac in ($o.abstract_list)
-	$of.printf("      DLLLOCAL virtual %s *get%s() const
-      {
+	$of.printf("      DLLLOCAL virtual %s *get%s() const {
          return static_cast<%s *>(&(*qobj));
       }
 ", $ac, $ac, $ac);
@@ -549,8 +566,7 @@ sub do_abstract($of, $proto, $qt)
     $of.printf("};\n");
 }
 
-sub main()
-{
+sub main() {
     command_line();
 
     my $func_prefix = toupper($cn);
@@ -602,8 +618,7 @@ sub main()
 	my $orig_args = trim($args);
 	$args = split(",", $args);
 	trim $args;
-	foreach my $arg in (\$args)
-	{
+	foreach my $arg in (\$args) {
 	    my $is_const = ($arg =~ /const[ ^]/ && $arg !~ /\*/);
 	    $arg =~ s/const[ ^]//;
 
@@ -700,13 +715,13 @@ sub main()
 	    if (exists $o.parent)
 		$of.printf("#include \"QoreAbstract%s.h\"\n\n", $o.parent);
 
-	    $of.printf("class QoreAbstract%s%s\n{\n   public:\n      DLLLOCAL virtual %s *get%s() const = 0;\n};\n\n", $cn, exists $o.parent ? " : public QoreAbstract" + $o.parent : "", $cn, $cn, $func_prefix);
+	    $of.printf("class QoreAbstract%s%s {\n   public:\n      DLLLOCAL virtual %s *get%s() const = 0;\n};\n\n", $cn, exists $o.parent ? " : public QoreAbstract" + $o.parent : "", $cn, $cn, $func_prefix);
 
-            $of.printf("template<typename T, typename V>\nclass Qore%sBase : public Qore%sBase<T, V>\n{\n   public:\n      DLLLOCAL Qore%sBase(T *qo) : Qore%sBase<T, V>(qo)\n      {\n      }\n\n      DLLLOCAL virtual %s *get%s() const\n      {\n         return static_cast<%s *>(&(*this->qobj));\n      }\n};\n", $cn, $o.parent, $cn, $o.parent, $cn, $cn, $cn);
+            $of.printf("template<typename T, typename V>\nclass Qore%sBase : public Qore%sBase<T, V> {\n   public:\n      DLLLOCAL Qore%sBase(T *qo) : Qore%sBase<T, V>(qo) {\n      }\n\n      DLLLOCAL virtual %s *get%s() const {\n         return static_cast<%s *>(&(*this->qobj));\n      }\n};\n", $cn, $o.parent, $cn, $o.parent, $cn, $cn, $cn);
 
 	    my $qtparam = $o.gitem ? "T *qo, bool managed = true" : "QoreObject *obj, T *qo";
 	    my $qtarg = $o.gitem ? "qo, managed" : "obj, qo";
-            $of.printf("\ntemplate<typename T, typename V>\nclass QoreQt%sBase : public QoreQt%sBase<T, V>\n{\n   public:\n      DLLLOCAL QoreQt%sBase(%s) : QoreQt%sBase<T, V>(%s)\n      {\n      }\n\n      DLLLOCAL virtual %s *get%s() const\n      {\n         return this->qobj;\n      }\n};\n", $cn, $o.parent, $cn, $qtparam, $o.parent, $qtarg, $cn, $cn);
+            $of.printf("\ntemplate<typename T, typename V>\nclass QoreQt%sBase : public QoreQt%sBase<T, V> {\n   public:\n      DLLLOCAL QoreQt%sBase(%s) : QoreQt%sBase<T, V>(%s) {\n      }\n\n      DLLLOCAL virtual %s *get%s() const {\n         return this->qobj;\n      }\n};\n", $cn, $o.parent, $cn, $qtparam, $o.parent, $qtarg, $cn, $cn);
 
             $of.printf("\n#endif  // _QORE_QT_QOREABSTRACT%s_H\n", $func_prefix);
 	}
@@ -743,11 +758,10 @@ DLLEXPORT extern QoreClass *QC_%s;
 
 	if ($o.indep) {
 	    if ($o.abstract)
-		$of.printf("class Qore%s : public QoreAbstract%s, public %s\n", $cn, $o.abstract_class, $cn);
+		$of.printf("class Qore%s : public QoreAbstract%s, public %s {\n", $cn, $o.abstract_class, $cn);
 	    else
-		$of.printf("class Qore%s : public AbstractPrivateData, public %s\n", $cn, $cn);
-	    $of.printf("{
-   public:
+		$of.printf("class Qore%s : public AbstractPrivateData, public %s {\n", $cn, $cn);
+	    $of.printf("   public:
 ", $cn, $cn);
 	    
 	    if (exists $proto.$cn) {
@@ -757,22 +771,20 @@ DLLEXPORT extern QoreClass *QC_%s;
 			$arg_names += $a.name + ", ";
 		    if (exists $arg_names)
 			splice $arg_names, -2;
-		    $of.printf("      DLLLOCAL Qore%s(%s) : %s(%s)\n      {\n      }\n", $cn, $i.orig_args, $cn, $arg_names);
+		    $of.printf("      DLLLOCAL Qore%s(%s) : %s(%s) { }\n", $cn, $i.orig_args, $cn, $arg_names);
 		}
 	    }
 	    if ($o.abstract)
-		$of.printf("      DLLLOCAL virtual %s *get%s() const\n      {\n      return static_cast<%s *>(this);\n      }\n",
+		$of.printf("      DLLLOCAL virtual %s *get%s() const {\n      return static_cast<%s *>(this);\n      }\n",
 		$o.abstract_class, $o.abstract_class, $o.abstract_class);
 	    $of.printf("};\n");
 	}
-	else # abstract/dependent class
-	{
-	    $of.printf("class my%s : public %s%s\n", $cn, $cn, $o.dialog ? ", public QoreQDialogExtension" : 
+	else {  # abstract/dependent class
+	    $of.printf("class my%s : public %s%s {\n", $cn, $cn, $o.dialog ? ", public QoreQDialogExtension" : 
 		       $o.widget ? ", public QoreQWidgetExtension" :  
 		       $o.validator ? ", public QoreQValidatorExtension" : 
 		       $o.gitem ? ", public QoreQGraphicsItemExtension" :
 		       ", public QoreQObjectExtension");
-            $of.printf("{\n");
             if ($o.style)
                 $of.printf("      friend class Qore%s;\n\n", $cn);
             $of.printf("#define QOREQTYPE %s\n#define MYQOREQTYPE my%s\n",
@@ -800,7 +812,7 @@ DLLEXPORT extern QoreClass *QC_%s;
 		    if (strlen($i.orig_args))
 			$str += ", " + $i.orig_args;
 		    my $cargs = $o.gitem ? "obj" : "obj, this";
-		    $of.printf("      DLLLOCAL my%s(%s) : %s(%s)%s(%s)\n      {\n", $cn, $str, $cn, $arg_names,
+		    $of.printf("      DLLLOCAL my%s(%s) : %s(%s)%s(%s) {\n", $cn, $str, $cn, $arg_names,
 			       $o.dialog ? ", QoreQDialogExtension" :
 			       $o.widget ? ", QoreQWidgetExtension" :
 			       $o.validator ? ", QoreQValidatorExtension" : 
@@ -843,17 +855,16 @@ DLLEXPORT extern QoreClass *QC_%s;
 	    }
         }
 	if ($p == $cn)
-	    $lo += sprintf("static void %s(QoreObject *self, const QoreListNode *params, ExceptionSink *xsink)", 
+	    $lo += sprintf("static void %s(QoreObject *self, const QoreListNode *params, ExceptionSink *xsink) {", 
 			   $proto.$p.funcname, $cl);
         else {
             if ($o.static)
-                $lo += sprintf("static AbstractQoreNode *%s(const QoreListNode *params, ExceptionSink *xsink)", 
+                $lo += sprintf("static AbstractQoreNode *%s(const QoreListNode *params, ExceptionSink *xsink) {", 
 			       $proto.$p.funcname);
             else
-                $lo += sprintf("static AbstractQoreNode *%s(QoreObject *self, Qore%s *%s, const QoreListNode *params, ExceptionSink *xsink)", 
+                $lo += sprintf("static AbstractQoreNode *%s(QoreObject *self, Qore%s *%s, const QoreListNode *params, ExceptionSink *xsink) {", 
 			       $proto.$p.funcname, $qore_class, $cl);
         }
-	$lo += "{";
 
         my $callstr;
         if ($o.static)
@@ -910,8 +921,7 @@ QoreClass *QC_%s = 0;
 	$of.printf("\n");
 
 	if ($p == $cn) {
-	    $of.printf("static void %s_copy(QoreObject *self, QoreObject *old, Qore%s *%s, ExceptionSink *xsink)
-{
+	    $of.printf("static void %s_copy(QoreObject *self, QoreObject *old, Qore%s *%s, ExceptionSink *xsink) {
    xsink->raiseException(\"%s-COPY-ERROR\", \"objects of this class cannot be copied\");
 }
 
@@ -921,7 +931,7 @@ QoreClass *QC_%s = 0;
 
     # do init function
     if (exists $o.file) {
-	$of.printf("%sQoreClass *init%sClass(%s)\n{\n", $o.ns ? "static " : "", $cn, exists $o.parent ? "QoreClass *" + tolower($o.parent) : "");
+	$of.printf("%sQoreClass *init%sClass(%s) {\n", $o.ns ? "static " : "", $cn, exists $o.parent ? "QoreClass *" + tolower($o.parent) : "");
 	$of.printf("   QC_%s = new QoreClass(\"%s\", QDOM_GUI);\n", $cn, $cn);
 	$of.printf("   CID_%s = QC_%s->getID();\n\n", $func_prefix, $cn);
 
@@ -945,13 +955,12 @@ QoreClass *QC_%s = 0;
 
         if ($o.ns) {
             # print out namespace initializer
-            $of.printf("\nQoreNamespace *init%sNS(%s)\n{\n   QoreNamespace *ns = new QoreNamespace(\"%s\");\n   ns->addSystemClass(init%sClass(%s));\n\n   return ns;\n}\n", $cn, exists $o.parent ? "QoreClass *" + tolower($o.parent) : "", $cn, $cn, exists $o.parent ? "QC_" + $o.parent : ""); 
+            $of.printf("\nQoreNamespace *init%sNS(%s) {\n   QoreNamespace *ns = new QoreNamespace(\"%s\");\n   ns->addSystemClass(init%sClass(%s));\n\n   return ns;\n}\n", $cn, exists $o.parent ? "QoreClass *" + tolower($o.parent) : "", $cn, $cn, exists $o.parent ? "QC_" + $o.parent : ""); 
         }
     }
 }
 
-sub get_class($name, $type)
-{
+sub get_class($name, $type) {
     if (inlist($type, abstract_class_list))
 	return sprintf("%s->get%s()", $name, $type);
     if (inlist($type, qobject_list))
@@ -959,8 +968,7 @@ sub get_class($name, $type)
     return $name;
 }
 
-sub do_multi_class_header($offset, $final, $arg, $name, $i, $const, $last)
-{
+sub do_multi_class_header($offset, $final, $arg, $name, $i, $const, $last) {
     my $lo = ();
     
     my $os;
@@ -1014,8 +1022,7 @@ sub do_multi_class_header($offset, $final, $arg, $name, $i, $const, $last)
     return $lo;
 }
 
-sub do_multi_class_trailer($offset, $arg)
-{
+sub do_multi_class_trailer($offset, $arg) {
     my $lo = ();
     
     my $os = substr(spaces, 0, $offset);
@@ -1031,13 +1038,11 @@ sub do_multi_class_trailer($offset, $arg)
     return $lo;
 }
 
-sub cl_order($l, $r) 
-{
+sub cl_order($l, $r) {
     return elements $l.args < $r.args ? 1 : -1;
 }
 
-sub do_qdate($arg, $const)
-{
+sub do_qdate($arg, $const) {
     my $lo = ();
     
     $lo += sprintf("QDate %s;", $arg.name);
@@ -1046,8 +1051,7 @@ sub do_qdate($arg, $const)
     return $lo;
 }
 
-sub do_qtime($arg, $const)
-{
+sub do_qtime($arg, $const) {
     my $lo = ();
     
     $lo += sprintf("QTime %s;", $arg.name);
@@ -1056,8 +1060,7 @@ sub do_qtime($arg, $const)
     return $lo;
 }
 
-sub do_qdatetime($arg, $const)
-{
+sub do_qdatetime($arg, $const) {
     my $lo = ();
     
     $lo += sprintf("QDateTime %s;", $arg.name);
@@ -1066,8 +1069,7 @@ sub do_qdatetime($arg, $const)
     return $lo;
 }
 
-sub do_qbrush($arg, $const)
-{
+sub do_qbrush($arg, $const) {
     my $lo = ();
     
     $lo += sprintf("QBrush %s;", $arg.name);
@@ -1076,8 +1078,7 @@ sub do_qbrush($arg, $const)
     return $lo;
 }
 
-sub all_default($l)
-{
+sub all_default($l) {
     foreach my $arg in ($l)
 	if (!exists $arg.def)
 	    return False;
@@ -1085,8 +1086,7 @@ sub all_default($l)
     return True;
 }
 
-sub do_multi_function($name, $func, $inst, $callstr, $param, $offset)
-{
+sub do_multi_function($name, $func, $inst, $callstr, $param, $offset) {
     my $lo = ();
 
     my $os = substr(spaces, 0, $offset + 3);
@@ -1286,8 +1286,7 @@ sub do_multi_function($name, $func, $inst, $callstr, $param, $offset)
     return $lo;
 }
 
-sub do_single_arg($offset, $name, $arg, $i, $ok, $const)
-{
+sub do_single_arg($offset, $name, $arg, $i, $ok, $const) {
     my $lo = ();
     my $os = substr(spaces, 0, $offset);
 
@@ -1578,8 +1577,7 @@ sub do_single_arg($offset, $name, $arg, $i, $ok, $const)
     return $lo;
 }
 
-sub append_call($cs, $arg)
-{
+sub append_call($cs, $arg) {
     #if (exists $arg.classname && $arg.type =~ /\*/ && inlist($arg.classname, const_class_list))
 	#$cs += sprintf("*(%s), ", exists $arg.get ? $arg.get : $arg.name);
     #else 
@@ -1590,8 +1588,7 @@ sub append_call($cs, $arg)
 	$cs += sprintf("%s, ", exists $arg.get ? $arg.get : $arg.name);
 }
 
-sub do_single_function($name, $func, $inst, $callstr)
-{
+sub do_single_function($name, $func, $inst, $callstr) {
     my $lo = ();
 
     # do arguments
@@ -1619,8 +1616,7 @@ sub do_single_function($name, $func, $inst, $callstr)
     return $lo;
 }
 
-sub do_constructor_return($callstr)
-{
+sub do_constructor_return($callstr) {
     my $lo = ();
 
     $lo += sprintf("self->setPrivate(CID_%s, %s);", toupper($cn), $callstr);
@@ -1628,8 +1624,7 @@ sub do_constructor_return($callstr)
     return $lo;
 }
 
-sub do_return_value($offset, $rt, $callstr, $ok)
-{
+sub do_return_value($offset, $rt, $callstr, $ok) {
     my $lo = ();
     my $os = substr(spaces, 0, $offset);
 
