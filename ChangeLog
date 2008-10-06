@@ -1,3 +1,57 @@
+2008-10-05 09:49  david_nichols
+
+	* test/opengl/framebufferobject.q,
+	  test/opengl/framebufferobject2.q: cosmetic updates
+
+2008-10-05 09:31  david_nichols
+
+	* test/layouts/borderlayout.q: fixed a bug setting the central
+	  widget's geometry
+
+2008-10-05 07:41  david_nichols
+
+	* qt-gui/QC_QDesktopServices.cc, qt-gui/qore-qt-gui.h,
+	  qt-gui/qt-code-gen.q, qt-gui/qt-gui-util.cc,
+	  test/dialogs/findfiles.q: added get_qurl function so that QUrl
+	  argument can be automatically constructed from a string argument
+
+2008-10-05 07:23  david_nichols
+
+	* Makefile.am, qt-gui/Makefile.am, qt-gui/QC_QDesktopServices.cc,
+	  qt-gui/QC_QDesktopServices.h, qt-gui/qt-code-gen.q,
+	  qt-gui/qt-gui-module.cc, qt-gui/single-compilation-unit.cc,
+	  test/dialogs/findfiles.q: added QDesktopServices class and
+	  updated qt-code-gen.q to be useful with the new module
+
+2008-10-03 07:25  david_nichols
+
+	* configure.ac: abort configure if QT core libraries or headers not
+	  found
+
+2008-10-03 07:17  david_nichols
+
+	* test/dialogs/findfiles.q: renamed "find" method to "find_files"
+	  as it conflicted with a keyword
+
+2008-10-03 07:12  david_nichols
+
+	* qt-gui/qt-gui-module.cc: exported support for qt
+	  QSystemTrayIcon::ActivationReason enum as a dynamic
+	  type, making systray.q work again
+
+2008-09-24 11:12  david_nichols
+
+	* qt-core/QC_QObject.cc, qt-core/QoreAbstractQObject.h,
+	  qt-core/qore-qt-metacode.h, qt-gui/QC_QLayoutItem.cc,
+	  qt-gui/QoreAbstractQLayout.h, qt-gui/QoreAbstractQLayoutItem.h,
+	  qt-gui/qore-qt-qlayoutitem-methods.h: fixed deadlock in
+	  QoreObject delete blocker functions when calling
+	  QoreObject::ref()
+
+2008-09-09 07:16  david_nichols
+
+	* ChangeLog: updated ChangeLog
+
 2008-09-03 08:51  david_nichols
 
 	* configure.ac, m4, m4/acx_pthread.m4, qt-core/Makefile.am,
