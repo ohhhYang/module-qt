@@ -82,7 +82,7 @@ functionality provided by the QT4 core library.
 %{_libdir}/libqore-qt-core.so
 %{_libdir}/libqore-qt-core.la
 %{module_dir}/qt-core.qmod
-%doc COPYING README ChangeLog AUTHORS
+%doc COPYING README ChangeLog AUTHORS docs/qt-modules-doc.html
 
 %package gui-module
 Summary: QT4 GUI module for Qore
@@ -157,7 +157,7 @@ c64=--enable-64bit
 %install
 rm -rf $RPM_BUILD_ROOT
 mkdir -p $RPM_BUILD_ROOT/%{module_dir}
-mkdir -p $RPM_BUILD_ROOT/usr/share/doc/qore-asn1-module
+mkdir -p $RPM_BUILD_ROOT/usr/share/doc/qore-qt
 make install
 
 %clean
