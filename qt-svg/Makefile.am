@@ -28,5 +28,5 @@ endif
 endif
 
 install-exec-hook:
-	mv $(pkglibdir)/qt-svg.$(MODULE_SUFFIX) $(pkglibdir)/qt-svg.qmod
-	rm -f $(pkglibdir)/qt-svg.la $(pkglibdir)/qt-svg.a
+	mv $(DESTDIR)$(pkglibdir)/qt-svg.$(MODULE_SUFFIX) $(DESTDIR)$(pkglibdir)/qt-svg.qmod
+	rm -f $(DESTDIR)$(pkglibdir)/qt-svg.la $(DESTDIR)$(pkglibdir)/qt-svg.a

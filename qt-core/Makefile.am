@@ -63,5 +63,5 @@ endif
 endif
 
 install-exec-hook:
-	mv $(pkglibdir)/qt-core.$(MODULE_SUFFIX) $(pkglibdir)/qt-core.qmod
-	rm -f $(pkglibdir)/qt-core.la $(pkglibdir)/qt-core.a
+	mv $(DESTDIR)$(pkglibdir)/qt-core.$(MODULE_SUFFIX) $(DESTDIR)$(pkglibdir)/qt-core.qmod
+	rm -f $(DESTDIR)$(pkglibdir)/qt-core.la $(DESTDIR)$(pkglibdir)/qt-core.a

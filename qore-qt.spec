@@ -149,20 +149,19 @@ functionality provided by the QT4 SVG library.
 %ifarch x86_64 ppc64 x390x
 c64=--enable-64bit
 %endif
-./configure RPM_OPT_FLAGS="$RPM_OPT_FLAGS" --prefix=$RPM_BUILD_ROOT/usr --disable-debug $c64
+./configure RPM_OPT_FLAGS="$RPM_OPT_FLAGS" --prefix=/usr --disable-debug $c64
 
 %build
 %{__make}
 
 %install
-rm -rf $RPM_BUILD_ROOT
 mkdir -p $RPM_BUILD_ROOT/%{module_dir}
 mkdir -p $RPM_BUILD_ROOT/usr/share/doc/qore-qt
-make install
+make install DESTDIR=$RPM_BUILD_ROOT
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %changelog
 * Tue Sep 2 2008 David Nichols <david_nichols@users.sourceforge.net>
-- initial spec file for separate asn1 release
+- initial spec file for separate qt release

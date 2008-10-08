@@ -31,5 +31,5 @@ endif
 endif
 
 install-exec-hook:
-	mv $(pkglibdir)/qt-opengl.$(MODULE_SUFFIX) $(pkglibdir)/qt-opengl.qmod
-	rm -f $(pkglibdir)/qt-opengl.la $(pkglibdir)/qt-opengl.a
+	mv $(DESTDIR)$(pkglibdir)/qt-opengl.$(MODULE_SUFFIX) $(DESTDIR)$(pkglibdir)/qt-opengl.qmod
+	rm -f $(DESTDIR)$(pkglibdir)/qt-opengl.la $(DESTDIR)$(pkglibdir)/qt-opengl.a
