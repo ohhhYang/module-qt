@@ -1,5 +1,5 @@
-%define module_api 0.4
-%define module_dir %{_libdir}/qore-module-api-%{module_api}
+%define module_api %(qore --module-api 2>/dev/null)
+%define module_dir %(qore --module-dir 2>/dev/null)
 
 %if 0%{?sles_version}
 
@@ -52,7 +52,7 @@ Source: http://prdownloads.sourceforge.net/qore/%{name}-%{version}.tar.gz
 Source0: %{name}-%{version}.tar.gz
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 Requires: /usr/bin/env
-Requires: qore-module-api-0.4
+Requires: qore-module-api-%{module_api}
 BuildRequires: gcc-c++
 BuildRequires: qore-devel
 BuildRequires: qore
@@ -67,7 +67,7 @@ the packages below
 Summary: QT4 core module for Qore
 Group: Development/Languages
 License: GPL
-Requires: qore-module-api-0.4
+Requires: qore-module-api-%{module_api}
 Requires: qt-x11 >= 4.3.1
 
 %description core-module
@@ -88,7 +88,7 @@ functionality provided by the QT4 core library.
 Summary: QT4 GUI module for Qore
 Group: Development/Languages
 License: GPL
-Requires: qore-module-api-0.4
+Requires: qore-module-api-%{module_api}
 Requires: qore-qt-core-module = %{version}-%{release}
 Requires: qt-x11 >= 4.3.1
 
@@ -109,7 +109,7 @@ functionality provided by the QT4 GUI library.
 Summary: QT4 opengl module for Qore
 Group: Development/Languages
 License: GPL
-Requires: qore-module-api-0.4
+Requires: qore-module-api-%{module_api}
 Requires: qore-opengl-module = %{version}-%{release}
 Requires: qore-qt-gui-module = %{version}-%{release}
 Requires: qt-x11 >= 4.3.1
@@ -127,7 +127,7 @@ functionality provided by the QT4 OpenGL library.
 Summary: QT4 SVG module for Qore
 Group: Development/Languages
 License: GPL
-Requires: qore-module-api-0.4
+Requires: qore-module-api-%{module_api}
 Requires: qore-qt-gui-module = %{version}-%{release}
 Requires: qt-x11 >= 4.3.1
 

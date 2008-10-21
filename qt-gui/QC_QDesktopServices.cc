@@ -24,6 +24,7 @@
 #include <qore/Qore.h>
 
 #include "QC_QDesktopServices.h"
+#include "QC_QUrl.h"
 
 qore_classid_t CID_QDESKTOPSERVICES;
 QoreClass *QC_QDesktopServices = 0;
