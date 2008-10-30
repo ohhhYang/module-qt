@@ -23,6 +23,8 @@
 
 #include <qore/Qore.h>
 
+#include "qore-qt-gui.h"
+
 #include "QC_QDesktopServices.h"
 #include "QC_QUrl.h"
 
