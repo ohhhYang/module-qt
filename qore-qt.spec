@@ -43,7 +43,7 @@
 
 Summary: QT Core Module for Qore
 Name: qore-qt
-Version: 0.0.1
+Version: 0.0.2
 Release: 1%{dist}
 License: GPL
 Group: Development/Languages
@@ -81,7 +81,7 @@ functionality provided by the QT4 core library.
 %{_libdir}/libqore-qt-core.so.0
 %{_libdir}/libqore-qt-core.so
 %{_libdir}/libqore-qt-core.la
-%{module_dir}/qt-core.qmod
+%{module_dir}/qt-core-api-%{module_api}.qmod
 %doc COPYING README ChangeLog AUTHORS docs/qt-modules-doc.html
 
 %package gui-module
@@ -99,7 +99,7 @@ functionality provided by the QT4 GUI library.
 
 %files gui-module
 %defattr(-,root,root,-)
-%{module_dir}/qt-gui.qmod
+%{module_dir}/qt-gui-api-%{module_api}.qmod
 %{_libdir}/libqore-qt-gui.so.0.0.0
 %{_libdir}/libqore-qt-gui.so.0
 %{_libdir}/libqore-qt-gui.so
@@ -121,7 +121,7 @@ functionality provided by the QT4 OpenGL library.
 
 %files opengl-module
 %defattr(-,root,root,-)
-%{module_dir}/qt-opengl.qmod
+%{module_dir}/qt-opengl-api-%{module_api}.qmod
 
 %package svg-module
 Summary: QT4 SVG module for Qore
@@ -138,7 +138,7 @@ functionality provided by the QT4 SVG library.
 
 %files svg-module
 %defattr(-,root,root,-)
-%{module_dir}/qt-svg.qmod
+%{module_dir}/qt-svg-api-%{module_api}.qmod
 
 %if 0%{?suse_version}
 %debug_package

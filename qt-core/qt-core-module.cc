@@ -20,7 +20,7 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#include <qore/Qore.h>
+#include "qt-core.h"
 
 #include "QC_QObject.h"
 #include "QC_QRect.h"
@@ -60,7 +60,7 @@ static void qt_core_module_delete();
 
 #ifndef QORE_MONOLITHIC
 DLLEXPORT char qore_module_name[] = "qt-core";
-DLLEXPORT char qore_module_version[] = "0.1";
+DLLEXPORT char qore_module_version[] = PACKAGE_VERSION;
 DLLEXPORT char qore_module_description[] = "QT 4 Core module";
 DLLEXPORT char qore_module_author[] = "David Nichols";
 DLLEXPORT char qore_module_url[] = "http://www.qoretechnologies.com/qore";

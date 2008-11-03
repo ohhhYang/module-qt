@@ -23,6 +23,9 @@
 #ifndef _QORE_QT_CORE_H
 #define _QORE_QT_CORE_H
 
+#include "../config.h"
+#include <qore/Qore.h>
+
 #include <QDate>
 #include <QDateTime>
 #include <QObject>

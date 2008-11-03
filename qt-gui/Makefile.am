@@ -203,5 +203,5 @@ endif
 endif
 
 install-exec-hook:
-	mv $(DESTDIR)$(pkglibdir)/qt-gui.$(MODULE_SUFFIX) $(DESTDIR)$(pkglibdir)/qt-gui.qmod
+	mv $(DESTDIR)$(pkglibdir)/qt-gui.$(MODULE_SUFFIX) $(DESTDIR)$(pkglibdir)/qt-gui-api-$(MODULE_API).qmod
 	rm -f $(DESTDIR)$(pkglibdir)/qt-gui.la $(DESTDIR)$(pkglibdir)/qt-gui.a

@@ -299,6 +299,7 @@ noinst_HEADERS = qt-core/QC_QObject.h \
 	qt-svg/QC_QSvgWidget.h
 
 EXTRA_DIST = COPYING ChangeLog AUTHORS README test/ \
+	RELEASE-NOTES \
 	docs/qt-modules-doc.html \
 	test/desktop/images/bad.svg \
 	test/desktop/images/heart.svg \

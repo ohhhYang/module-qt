@@ -1,3 +1,34 @@
+2008-10-30 17:20  david_nichols
+
+	* qt-gui/QC_QDesktopServices.cc: various fixes
+
+2008-10-23 06:30  david_nichols
+
+	* configure.ac: updated to set 64-bit compile mode by default on
+	  itanium with g++ and aCC
+
+2008-10-21 21:01  david_nichols
+
+	* qore-qt.spec, qt-gui/QC_QDesktopServices.cc: updated spec file
+	  for flexible api determination and added missing include
+
+2008-10-08 20:16  david_nichols
+
+	* qore-qt.spec, qt-core/Makefile.am, qt-gui/Makefile.am,
+	  qt-opengl/Makefile.am, qt-svg/Makefile.am: spec file and module
+	  build fixes using prefix=/usr and make install
+	  DESTDIR=$RPM_BUILD_ROOT
+
+2008-10-06 19:33  david_nichols
+
+	* Makefile.am, qore-qt.spec: updated dist tarball and spec file
+	  with documentation
+
+2008-10-06 19:29  david_nichols
+
+	* ChangeLog, docs/qt-modules-doc.html: added module docs and
+	  updated changelog
+
 2008-10-05 09:49  david_nichols
 
 	* test/opengl/framebufferobject.q,

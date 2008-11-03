@@ -20,8 +20,6 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#include <qore/Qore.h>
-
 #include "qore-qt-gui.h"
 
 #include "QC_QApplication.h"
@@ -181,9 +179,8 @@ static QoreStringNode *qt_module_init();
 static void qt_module_ns_init(QoreNamespace *rns, QoreNamespace *qns);
 static void qt_module_delete();
 
-#ifndef QORE_MONOLITHIC
 DLLEXPORT char qore_module_name[] = "qt-gui";
-DLLEXPORT char qore_module_version[] = "0.1";
+DLLEXPORT char qore_module_version[] = PACKAGE_VERSION;
 DLLEXPORT char qore_module_description[] = "QT 4 module";
 DLLEXPORT char qore_module_author[] = "David Nichols";
 DLLEXPORT char qore_module_url[] = "http://www.qoretechnologies.com/qore";
@@ -194,16 +191,12 @@ DLLEXPORT qore_module_ns_init_t qore_module_ns_init = qt_module_ns_init;
 DLLEXPORT qore_module_delete_t qore_module_delete = qt_module_delete;
 DLLEXPORT qore_license_t qore_module_license = QL_GPL;
 DLLEXPORT const char *qore_module_dependencies[] = { "qt-core", 0 };
-#endif
 
-static class AbstractQoreNode *f_QAPP(const QoreListNode *params, class ExceptionSink *xsink)
-{
+static class AbstractQoreNode *f_QAPP(const QoreListNode *params, class ExceptionSink *xsink) {
    return get_qore_qapp();
 }
 
-
-static AbstractQoreNode *f_QToolTip_font(const QoreListNode *params, ExceptionSink *xsink)
-{
+static AbstractQoreNode *f_QToolTip_font(const QoreListNode *params, ExceptionSink *xsink) {
    QoreObject *o_qf = new QoreObject(QC_QFont, getProgram());
    QoreQFont *q_qf = new QoreQFont(QToolTip::font());
    o_qf->setPrivate(CID_QFONT, q_qf);

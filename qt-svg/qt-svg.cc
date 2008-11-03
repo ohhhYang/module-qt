@@ -20,7 +20,7 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#include <qore/Qore.h>
+#include "qt-core.h"
 
 #include "QC_QSvgRenderer.h"
 #include "QC_QSvgGenerator.h"
@@ -29,13 +29,12 @@
 #include "QC_QObject.h"
 #include "QC_QWidget.h"
 
-static class QoreStringNode *qt_svg_module_init();
+static QoreStringNode *qt_svg_module_init();
 static void qt_svg_module_ns_init(QoreNamespace *rns, QoreNamespace *qns);
 static void qt_svg_module_delete();
 
-#ifndef QORE_MONOLITHIC
 DLLEXPORT char qore_module_name[] = "qt-svg";
-DLLEXPORT char qore_module_version[] = "0.1";
+DLLEXPORT char qore_module_version[] = PACKAGE_VERSION;
 DLLEXPORT char qore_module_description[] = "QT 4 SVG module";
 DLLEXPORT char qore_module_author[] = "David Nichols";
 DLLEXPORT char qore_module_url[] = "http://www.qoretechnologies.com/qore";
@@ -46,30 +45,25 @@ DLLEXPORT qore_module_ns_init_t qore_module_ns_init = qt_svg_module_ns_init;
 DLLEXPORT qore_module_delete_t qore_module_delete = qt_svg_module_delete;
 DLLEXPORT const char *qore_module_dependencies[] = { "qt-gui", 0 };
 DLLEXPORT qore_license_t qore_module_license = QL_GPL;
-#endif
 
 static QoreNamespace svg_ns("QtSvg");
 
-static void init_namespace()
-{
+static void init_namespace() {
    svg_ns.addSystemClass(initQSvgRendererClass(QC_QObject));
    svg_ns.addSystemClass(initQSvgGeneratorClass());
    svg_ns.addSystemClass(initQSvgWidgetClass(QC_QWidget));
 }
 
-static QoreStringNode *qt_svg_module_init()
-{
+static QoreStringNode *qt_svg_module_init() {
    // initialize namespace
    init_namespace();
 
    return 0;
 }
 
-static void qt_svg_module_ns_init(QoreNamespace *rns, QoreNamespace *qns)
-{
+static void qt_svg_module_ns_init(QoreNamespace *rns, QoreNamespace *qns) {
    qns->addInitialNamespace(svg_ns.copy());
 }
 
-static void qt_svg_module_delete()
-{
+static void qt_svg_module_delete() {
 }

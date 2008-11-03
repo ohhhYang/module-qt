@@ -20,7 +20,7 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#include <qore/Qore.h>
+#include "qt-core.h"
 
 #include "QC_QGLWidget.h"
 #include "QC_QGLFormat.h"
@@ -33,13 +33,12 @@
 #include "QC_QPaintDevice.h"
 #include "QC_QObject.h"
 
-static class QoreStringNode *qt_opengl_module_init();
-static void qt_opengl_module_ns_init(class QoreNamespace *rns, class QoreNamespace *qns);
+static QoreStringNode *qt_opengl_module_init();
+static void qt_opengl_module_ns_init(QoreNamespace *rns, QoreNamespace *qns);
 static void qt_opengl_module_delete();
 
-#ifndef QORE_MONOLITHIC
 DLLEXPORT char qore_module_name[] = "qt-opengl";
-DLLEXPORT char qore_module_version[] = "0.1";
+DLLEXPORT char qore_module_version[] = PACKAGE_VERSION;
 DLLEXPORT char qore_module_description[] = "QT 4 OpenGL module";
 DLLEXPORT char qore_module_author[] = "David Nichols";
 DLLEXPORT char qore_module_url[] = "http://www.qoretechnologies.com/qore";
@@ -50,12 +49,10 @@ DLLEXPORT qore_module_ns_init_t qore_module_ns_init = qt_opengl_module_ns_init;
 DLLEXPORT qore_module_delete_t qore_module_delete = qt_opengl_module_delete;
 DLLEXPORT const char *qore_module_dependencies[] = { "qt-gui", "opengl", 0 };
 DLLEXPORT qore_license_t qore_module_license = QL_GPL;
-#endif
 
 static QoreNamespace gl_ns("QtOpenGL");
 
-static void init_namespace()
-{
+static void init_namespace() {
    gl_ns.addSystemClass(initQGLWidgetClass(QC_QWidget));
    gl_ns.addInitialNamespace(initQGLFormatNS());
    gl_ns.addInitialNamespace(initQGLNS());
@@ -65,19 +62,16 @@ static void init_namespace()
    gl_ns.addSystemClass(initQGLPixelBufferClass(QC_QObject));
 }
 
-static QoreStringNode *qt_opengl_module_init()
-{
+static QoreStringNode *qt_opengl_module_init() {
    // initialize namespace
    init_namespace();
 
    return 0;
 }
 
-static void qt_opengl_module_ns_init(class QoreNamespace *rns, class QoreNamespace *qns)
-{
+static void qt_opengl_module_ns_init(QoreNamespace *rns, QoreNamespace *qns) {
    qns->addInitialNamespace(gl_ns.copy());
 }
 
-static void qt_opengl_module_delete()
-{
+static void qt_opengl_module_delete() {
 }
