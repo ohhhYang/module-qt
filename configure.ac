@@ -321,9 +321,11 @@ else
    AC_SUBST(MODULE_API)
 
    if test -z "${prefix}" -o "${prefix}" = "NONE"; then
+      libdir=`qore --module-dir|sed "s/\/qore-.*//"`
       mypkglibdir=`qore --module-dir`
    else
       mypkglibdir="$prefix/lib${LIBSUFFIX}/qore-modules"
+      libdir="$prefix/lib${LIBSUFFIX}"
       qlibdir=`qore --module-dir`
       if test "$mypkglibdir" != "$qlibdir"; then
          AC_MSG_WARN([warning, installed qore's module dir is $qlibdir, this module will be installed in $mypkglibdir])
