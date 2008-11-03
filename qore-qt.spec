@@ -82,7 +82,7 @@ functionality provided by the QT4 core library.
 %{_libdir}/libqore-qt-core.so
 %{_libdir}/libqore-qt-core.la
 %{module_dir}/qt-core-api-%{module_api}.qmod
-%doc COPYING README ChangeLog AUTHORS docs/qt-modules-doc.html
+%doc COPYING README RELEASE-NOTES ChangeLog AUTHORS docs/qt-modules-doc.html
 
 %package gui-module
 Summary: QT4 GUI module for Qore
