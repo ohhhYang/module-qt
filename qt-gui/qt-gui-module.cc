@@ -167,7 +167,6 @@
 #include "QC_QGraphicsSceneWheelEvent.h"
 #include "QC_QDesktopServices.h"
 
-#include "qore-qt-gui.h"
 
 #include <QPalette>
 #include <QToolTip>

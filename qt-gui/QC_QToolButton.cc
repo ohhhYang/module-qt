@@ -20,14 +20,13 @@
  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include <qore/Qore.h>
+#include "qore-qt-gui.h"
 
 #include "QC_QToolButton.h"
 #include "QC_QWidget.h"
 #include "QC_QMenu.h"
 #include "QC_QAction.h"
 
-#include "qore-qt-gui.h"
 
 qore_classid_t CID_QTOOLBUTTON;
 class QoreClass *QC_QToolButton = 0;

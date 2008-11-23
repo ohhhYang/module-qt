@@ -20,7 +20,7 @@
  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include <qore/Qore.h>
+#include "qore-qt-gui.h"
 
 #include "QC_QComboBox.h"
 #include "QC_QWidget.h"
@@ -29,7 +29,6 @@
 #include "QC_QAbstractItemDelegate.h"
 #include "QC_QLineEdit.h"
 
-#include "qore-qt-gui.h"
 
 qore_classid_t CID_QCOMBOBOX;
 class QoreClass *QC_QComboBox = 0;

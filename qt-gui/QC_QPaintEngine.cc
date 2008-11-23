@@ -20,7 +20,7 @@
  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include <qore/Qore.h>
+#include "qore-qt-gui.h"
 
 #include "QC_QPaintEngine.h"
 #include "QC_QLine.h"
@@ -34,7 +34,6 @@
 #include "QC_QImage.h"
 #include "QC_QPaintDevice.h"
 
-#include "qore-qt-gui.h"
 
 qore_classid_t CID_QPAINTENGINE;
 class QoreClass *QC_QPaintEngine = 0;

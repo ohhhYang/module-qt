@@ -20,8 +20,8 @@
  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#ifndef _QORE_QORE_QT_H
-#define _QORE_QORE_QT_H
+#ifndef _QORE_QORE_QT_GUI_H
+#define _QORE_QORE_QT_GUI_H
 
 #include "qt-core.h"
 

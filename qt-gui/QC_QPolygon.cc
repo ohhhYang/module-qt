@@ -20,13 +20,12 @@
  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include <qore/Qore.h>
+#include "qore-qt-gui.h"
 
 #include "QC_QPolygon.h"
 #include "QC_QPoint.h"
 #include "QC_QRect.h"
 
-#include "qore-qt-gui.h"
 
 qore_classid_t CID_QPOLYGON;
 class QoreClass *QC_QPolygon = 0;

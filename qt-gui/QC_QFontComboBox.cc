@@ -20,13 +20,12 @@
  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include <qore/Qore.h>
+#include "qore-qt-gui.h"
 
 #include "QC_QFontComboBox.h"
 #include "QC_QWidget.h"
 #include "QC_QFont.h"
 
-#include "qore-qt-gui.h"
 
 qore_classid_t CID_QFONTCOMBOBOX;
 class QoreClass *QC_QFontComboBox = 0;

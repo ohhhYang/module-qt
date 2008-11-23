@@ -20,7 +20,7 @@
  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include <qore/Qore.h>
+#include "qore-qt-gui.h"
 
 #include "QC_QListWidgetItem.h"
 #include "QC_QIcon.h"
@@ -29,7 +29,6 @@
 #include "QC_QFont.h"
 #include "QC_QSize.h"
 
-#include "qore-qt-gui.h"
 
 qore_classid_t CID_QLISTWIDGETITEM;
 class QoreClass *QC_QListWidgetItem = 0;

@@ -20,13 +20,12 @@
  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include <qore/Qore.h>
+#include "qore-qt-gui.h"
 
 #include "QC_QDial.h"
 #include "QC_QWidget.h"
 #include "QC_QStyleOptionSlider.h"
 
-#include "qore-qt-gui.h"
 
 qore_classid_t CID_QDIAL;
 class QoreClass *QC_QDial = 0;

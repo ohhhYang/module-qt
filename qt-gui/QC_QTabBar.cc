@@ -20,7 +20,7 @@
  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include <qore/Qore.h>
+#include "qore-qt-gui.h"
 
 #include "QC_QTabBar.h"
 #include "QC_QWidget.h"
@@ -30,7 +30,6 @@
 #include "QC_QRect.h"
 #include "QC_QStyleOptionTab.h"
 
-#include "qore-qt-gui.h"
 
 qore_classid_t CID_QTABBAR;
 class QoreClass *QC_QTabBar = 0;

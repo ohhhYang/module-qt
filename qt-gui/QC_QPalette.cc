@@ -20,13 +20,12 @@
  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include <qore/Qore.h>
+#include "qore-qt-gui.h"
 
 #include "QC_QPalette.h"
 #include "QC_QColor.h"
 #include "QC_QBrush.h"
 
-#include "qore-qt-gui.h"
 
 qore_classid_t CID_QPALETTE;
 QoreClass *QC_QPalette = 0;

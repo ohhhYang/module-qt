@@ -20,9 +20,8 @@
  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include <qore/Qore.h>
-#include "QC_QFont.h"
 #include "qore-qt-gui.h"
+#include "QC_QFont.h"
 
 qore_classid_t CID_QFONT;
 QoreClass *QC_QFont = 0;

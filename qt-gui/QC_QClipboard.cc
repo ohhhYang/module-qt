@@ -20,14 +20,13 @@
  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include <qore/Qore.h>
+#include "qore-qt-gui.h"
 
 #include "QC_QClipboard.h"
 #include "QC_QImage.h"
 #include "QC_QPixmap.h"
 #include "QC_QMimeData.h"
 
-#include "qore-qt-gui.h"
 
 qore_classid_t CID_QCLIPBOARD;
 class QoreClass *QC_QClipboard = 0;

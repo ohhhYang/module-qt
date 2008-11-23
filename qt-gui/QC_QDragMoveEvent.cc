@@ -20,14 +20,13 @@
  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include <qore/Qore.h>
+#include "qore-qt-gui.h"
 
 #include "QC_QDragMoveEvent.h"
 #include "QC_QPoint.h"
 #include "QC_QMimeData.h"
 #include "QC_QRect.h"
 
-#include "qore-qt-gui.h"
 
 qore_classid_t CID_QDRAGMOVEEVENT;
 class QoreClass *QC_QDragMoveEvent = 0;

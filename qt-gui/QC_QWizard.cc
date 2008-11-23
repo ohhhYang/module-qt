@@ -20,7 +20,7 @@
  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include <qore/Qore.h>
+#include "qore-qt-gui.h"
 
 #include "QC_QWizard.h"
 #include "QC_QWidget.h"
@@ -28,7 +28,6 @@
 #include "QC_QAbstractButton.h"
 #include "QC_QPixmap.h"
 
-#include "qore-qt-gui.h"
 
 qore_classid_t CID_QWIZARD;
 class QoreClass *QC_QWizard = 0;

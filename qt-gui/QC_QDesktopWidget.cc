@@ -20,14 +20,13 @@
  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include <qore/Qore.h>
+#include "qore-qt-gui.h"
 
 #include "QC_QDesktopWidget.h"
 #include "QC_QWidget.h"
 #include "QC_QPoint.h"
 #include "QC_QRect.h"
 
-#include "qore-qt-gui.h"
 
 qore_classid_t CID_QDESKTOPWIDGET;
 class QoreClass *QC_QDesktopWidget = 0;

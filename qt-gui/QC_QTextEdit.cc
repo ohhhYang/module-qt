@@ -20,7 +20,7 @@
  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include <qore/Qore.h>
+#include "qore-qt-gui.h"
 
 #include "QC_QTextEdit.h"
 #include "QC_QWidget.h"
@@ -33,7 +33,6 @@
 #include "QC_QColor.h"
 #include "QC_QTextBrowser.h"
 
-#include "qore-qt-gui.h"
 
 qore_classid_t CID_QTEXTEDIT;
 class QoreClass *QC_QTextEdit = 0;

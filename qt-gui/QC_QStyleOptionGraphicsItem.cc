@@ -20,9 +20,8 @@
  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include <qore/Qore.h>
-
 #include "qore-qt-gui.h"
+
 
 #include "QC_QStyleOptionGraphicsItem.h"
 #include "QC_QStyleOption.h"

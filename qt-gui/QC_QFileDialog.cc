@@ -20,7 +20,7 @@
  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include <qore/Qore.h>
+#include "qore-qt-gui.h"
 
 #include "QC_QFileDialog.h"
 #include "QC_QWidget.h"
@@ -28,7 +28,6 @@
 #include "QC_QByteArray.h"
 #include "QC_QAbstractItemDelegate.h"
 
-#include "qore-qt-gui.h"
 
 qore_classid_t CID_QFILEDIALOG;
 class QoreClass *QC_QFileDialog = 0;

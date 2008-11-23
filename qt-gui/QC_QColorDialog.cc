@@ -20,13 +20,12 @@
  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include <qore/Qore.h>
+#include "qore-qt-gui.h"
 
 #include "QC_QColorDialog.h"
 #include "QC_QColor.h"
 #include "QC_QWidget.h"
 
-#include "qore-qt-gui.h"
 
 //QRgb customColor ( int i )
 static AbstractQoreNode *f_QColorDialog_customColor(const QoreListNode *params, ExceptionSink *xsink)

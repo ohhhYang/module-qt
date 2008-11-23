@@ -1,3 +1,4 @@
+#include "qore-qt-gui.h"
 #include "qt-gui-util.cc"
 #include "QC_QApplication.cc"
 #include "QC_QPushButton.cc"

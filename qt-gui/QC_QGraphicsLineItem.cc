@@ -21,9 +21,8 @@
 
  */
 
-#include <qore/Qore.h>
-
 #include "qore-qt-gui.h"
+
 
 #include "QC_QGraphicsLineItem.h"
 #include "QC_QGraphicsItem.h"

@@ -20,7 +20,7 @@
  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include <qore/Qore.h>
+#include "qore-qt-gui.h"
 
 #include "QC_QSystemTrayIcon.h"
 #include "QC_QObject.h"
@@ -28,7 +28,6 @@
 #include "QC_QRect.h"
 #include "QC_QIcon.h"
 
-#include "qore-qt-gui.h"
 
 qore_classid_t CID_QSYSTEMTRAYICON;
 class QoreClass *QC_QSystemTrayIcon = 0;

@@ -20,7 +20,7 @@
  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include <qore/Qore.h>
+#include "qore-qt-gui.h"
 
 #include "QC_QAbstractItemView.h"
 #include "QC_QModelIndex.h"
@@ -29,7 +29,6 @@
 #include "QC_QAbstractItemDelegate.h"
 #include "QC_QRect.h"
 
-#include "qore-qt-gui.h"
 
 qore_classid_t CID_QABSTRACTITEMVIEW;
 class QoreClass *QC_QAbstractItemView = 0;

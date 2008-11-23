@@ -20,7 +20,7 @@
  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include <qore/Qore.h>
+#include "qore-qt-gui.h"
 
 #include "QC_QAction.h"
 #include "QC_QIcon.h"
@@ -31,7 +31,6 @@
 #include "QC_QKeySequence.h"
 #include "QC_QWidget.h"
 
-#include "qore-qt-gui.h"
 
 qore_classid_t CID_QACTION;
 class QoreClass *QC_QAction = 0;

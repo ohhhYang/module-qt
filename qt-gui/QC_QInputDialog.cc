@@ -20,12 +20,11 @@
  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include <qore/Qore.h>
+#include "qore-qt-gui.h"
 
 #include "QC_QInputDialog.h"
 #include "QC_QWidget.h"
 
-#include "qore-qt-gui.h"
 
 qore_classid_t CID_QINPUTDIALOG;
 QoreClass *QC_QInputDialog = 0;
