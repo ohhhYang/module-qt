@@ -79,10 +79,14 @@ functionality provided by the QT4 core library.
 %defattr(-,root,root,-)
 %{_libdir}/libqore-qt-core.so.0.0.0
 %{_libdir}/libqore-qt-core.so.0
-%{_libdir}/libqore-qt-core.so
-%{_libdir}/libqore-qt-core.la
 %{module_dir}/qt-core-api-%{module_api}.qmod
 %doc COPYING README RELEASE-NOTES ChangeLog AUTHORS docs/qt-modules-doc.html
+
+%post core-module
+ldconfig %{_libdir}
+
+%postun core-module
+ldconfig %{_libdir}
 
 %package gui-module
 Summary: QT4 GUI module for Qore
@@ -102,8 +106,12 @@ functionality provided by the QT4 GUI library.
 %{module_dir}/qt-gui-api-%{module_api}.qmod
 %{_libdir}/libqore-qt-gui.so.0.0.0
 %{_libdir}/libqore-qt-gui.so.0
-%{_libdir}/libqore-qt-gui.so
-%{_libdir}/libqore-qt-gui.la
+
+%post gui-module
+ldconfig %{_libdir}
+
+%postun gui-module
+ldconfig %{_libdir}
 
 %package opengl-module
 Summary: QT4 opengl module for Qore
@@ -158,10 +166,17 @@ c64=--enable-64bit
 mkdir -p $RPM_BUILD_ROOT/%{module_dir}
 mkdir -p $RPM_BUILD_ROOT/usr/share/doc/qore-qt
 make install DESTDIR=$RPM_BUILD_ROOT
+rm -f $RPM_BUILD_ROOT/%{_libdir}/libqore-qt-core.so
+rm -f $RPM_BUILD_ROOT/%{_libdir}/libqore-qt-core.la
+rm -f $RPM_BUILD_ROOT/%{_libdir}/libqore-qt-gui.so
+rm -f $RPM_BUILD_ROOT/%{_libdir}/libqore-qt-gui.la
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %changelog
+* Wed Dec 3 2008 David Nichols <david_nichols@users.sourceforge.net>
+- updated to v0.0.2, packaging fixes
+
 * Tue Sep 2 2008 David Nichols <david_nichols@users.sourceforge.net>
 - initial spec file for separate qt release
