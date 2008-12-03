@@ -38,12 +38,14 @@ static void QDESKTOPSERVICES_copy(class QoreObject *self, class QoreObject *old,
    xsink->raiseException("QDESKTOPSERVICES-COPY-ERROR", "objects of this class cannot be copied");
 }
 
+#if QT_VERSION >= 0x40400
 //QString displayName ( StandardLocation type )
 static AbstractQoreNode *f_QDesktopServices_displayName(const QoreListNode *params, ExceptionSink *xsink) {
    const AbstractQoreNode *p = get_param(params, 0);
    QDesktopServices::StandardLocation type = (QDesktopServices::StandardLocation)(p ? p->getAsInt() : 0);
    return new QoreStringNode(QDesktopServices::displayName(type).toUtf8().data(), QCS_UTF8);
 }
+#endif
 
 //bool openUrl ( const QUrl & url )
 static AbstractQoreNode *f_QDesktopServices_openUrl(const QoreListNode *params, ExceptionSink *xsink) {
@@ -78,12 +80,14 @@ static AbstractQoreNode *f_QDesktopServices_setUrlHandler(const QoreListNode *pa
    return 0;
 }
 
+#if QT_VERSION >= 0x40400
 //QString storageLocation ( StandardLocation type )
 static AbstractQoreNode *f_QDesktopServices_storageLocation(const QoreListNode *params, ExceptionSink *xsink) {
    const AbstractQoreNode *p = get_param(params, 0);
    QDesktopServices::StandardLocation type = (QDesktopServices::StandardLocation)(p ? p->getAsInt() : 0);
    return new QoreStringNode(QDesktopServices::storageLocation(type).toUtf8().data(), QCS_UTF8);
 }
+#endif
 
 //void unsetUrlHandler ( const QString & scheme )
 static AbstractQoreNode *f_QDesktopServices_unsetUrlHandler(const QoreListNode *params, ExceptionSink *xsink) {
@@ -102,10 +106,14 @@ QoreClass *initQDesktopServicesClass() {
    QC_QDesktopServices->setConstructor(QDESKTOPSERVICES_constructor);
    QC_QDesktopServices->setCopy((q_copy_t)QDESKTOPSERVICES_copy);
 
+#if QT_VERSION >= 0x40400
    QC_QDesktopServices->addStaticMethod("displayName",                  f_QDesktopServices_displayName);
+#endif
    QC_QDesktopServices->addStaticMethod("openUrl",                      f_QDesktopServices_openUrl);
    QC_QDesktopServices->addStaticMethod("setUrlHandler",                f_QDesktopServices_setUrlHandler);
+#if QT_VERSION >= 0x40400
    QC_QDesktopServices->addStaticMethod("storageLocation",              f_QDesktopServices_storageLocation);
+#endif
    QC_QDesktopServices->addStaticMethod("unsetUrlHandler",              f_QDesktopServices_unsetUrlHandler);
 
    return QC_QDesktopServices;
