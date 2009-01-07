@@ -364,4 +364,4 @@ EXTRA_DIST = COPYING ChangeLog AUTHORS README test/ \
 	test/widgets/windowflags.q \
 	qore-qt.spec
 
-
+ACLOCAL_AMFLAGS=-I m4
