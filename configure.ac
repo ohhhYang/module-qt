@@ -1,4 +1,4 @@
-# Process this file with autoconf to produce a configure script.
+s# Process this file with autoconf to produce a configure script.
 
 # AC_PREREQ(2.59)
 AC_INIT([qore-qt], [0.0.3],
@@ -418,8 +418,7 @@ AC_ARG_WITH([opengl-includes],
                     [OpenGL include file parent directory])],
     [if test ! -d "${with_opengl_includes}"; then AC_MSG_ERROR(directory ${with_opengl_includes} does not exist for --with-opengl-includes); unset with_opengl_includes; fi])
 
-check_opengl_include()
-{
+check_opengl_include() {
     if test -f "$1/gl.h"; then
        found_opengl_includes=$1
     elif test -f "$1/GL/gl.h"; then
@@ -433,8 +432,7 @@ check_opengl_include()
     fi
 }
 
-check_opengl_lib()
-{
+check_opengl_lib() {
     if test -f "$1/libGL.${SHLIB_SUFFIX}" -a "$1/libGLU.${SHLIB_SUFFIX}"; then
        found_opengl_libs=$lib
     elif test "$2" = "err"; then
@@ -442,8 +440,7 @@ check_opengl_lib()
     fi
 }
 
-check_opengl_version()
-{
+check_opengl_version() {
     # check opengl version
     opengl_ver=`grep define.*GL_VERSION_1_3.*1 $with_opengl_includes/*.h`
     if test -z "$opengl_ver"; then
@@ -451,8 +448,7 @@ check_opengl_version()
     fi
 }
 
-check_opengl()
-{
+check_opengl() {
     if test -z "$with_opengl_includes"; then
         inc="$1/include"
         if test "$1" = "/"; then
@@ -506,7 +502,7 @@ if test "${with_opengl}" != "no"; then
 	    OPENGL_INCLUDES="-I /System/Library/Frameworks/OpenGL.framework/Headers"
 	    OPENGL_LIBS="-framework OpenGL"
 	 else
-	    for dir in $OPENGL_DIR / /usr /usr/X11 /usr/X11R6 /usr/openwin /usr/local /opt/opengl /usr/opengl /sw /opt/local /opt/sfw /usr/sfw /opt/gnu; do
+	    for dir in $OPENGL_DIR $find_prefix / /usr /usr/X11 /usr/X11R6 /usr/openwin /usr/local /opt/opengl /usr/opengl /sw /opt/local /opt/sfw /usr/sfw /opt/gnu; do
       	       check_opengl $dir
       	       if test -n "$with_opengl_includes"; then
 	          break;
@@ -588,8 +584,7 @@ AC_ARG_WITH([qt-includes],
                     [QT include file parent directory])],
     [if test ! -d "${with_qt_includes}"; then AC_MSG_ERROR(directory ${with_qt_includes} does not exist for --with-qt-includes); unset with_qt_includes; fi])
 
-check_qt_include()
-{
+check_qt_include() {
     if test -f "$1/QtCore/qglobal.h" -a -f "$1/QtGui/QApplication"; then
        found_qt_includes=$1
     elif test "$2" = "err"; then
@@ -597,8 +592,7 @@ check_qt_include()
     fi
 }
 
-check_qt_lib()
-{
+check_qt_lib() {
     if test -f "$1/libQtCore.${SHLIB_SUFFIX}"; then
        found_qt_libs=$lib
     elif test "$2" = "err"; then
@@ -606,10 +600,13 @@ check_qt_lib()
     fi
 }
 
-check_qt_version()
-{
+check_qt_version() {
     # check qt version
-    qt_maj=`grep QT_VERSION_STR $with_qt_includes/QtCore/qglobal.h|cut -f2 -d\"|cut -f1 -d.`
+    if test -n "$qt_framework"; then
+        qt_maj=`grep QT_VERSION_STR $qt_framework/QtCore.framework/Headers/qglobal.h|cut -f2 -d\"|cut -f1 -d.`
+    else
+        qt_maj=`grep QT_VERSION_STR $with_qt_includes/QtCore/qglobal.h|cut -f2 -d\"|cut -f1 -d.`
+    fi
     if test -z "$qt_maj"; then
        AC_MSG_ERROR([can't determine QT version])
     fi
@@ -618,36 +615,40 @@ check_qt_version()
     fi
 }
 
-check_qt()
-{
-    if test -z "$with_qt_includes"; then
-        inc="$1/include"
-        if test "$1" = "/"; then
-       	    inc=/usr/include
+check_qt() {
+    # first check for frameworks on Darwin
+    if test -n "$darwin" -a -d $1/Library/Frameworks/QtCore.framework; then
+	qt_framework="$1/Library/Frameworks"
+    else
+        if test -z "$with_qt_includes"; then
+            inc="$1/include"
+            if test "$1" = "/"; then
+       	        inc=/usr/include
+            fi
+	    check_qt_include $inc
+
+	    if test -z "$found_qt_includes"; then
+	        #echo DBG: qt $1 $inc includes not found
+       	    	return
+    	    fi
+	    with_qt_includes="$found_qt_includes"
+	    unset found_qt_includes
+    	fi
+
+	if test -z "$with_qt_libs"; then
+            lib="$1/lib${LIBSUFFIX}"
+
+	    check_qt_lib $lib
+    	    if test -z "$found_qt_libs"; then
+       	        #echo DBG: qt $1 $lib libs not found
+       	    	unset with_qt_includes
+       	    	return
+    	    fi
+	    with_qt_libs="$found_qt_libs"
+    	fi
+    	if test "$with_qt_libs" != "/lib${LIBSUFFIX}"; then
+            qt_app_libs=true
         fi
-	check_qt_include $inc
-
-	if test -z "$found_qt_includes"; then
-	    #echo DBG: qt $1 $inc includes not found
-       	    return
-    	fi
-	with_qt_includes="$found_qt_includes"
-	unset found_qt_includes
-    fi
-
-    if test -z "$with_qt_libs"; then
-        lib="$1/lib${LIBSUFFIX}"
-
-	check_qt_lib $lib
-    	if test -z "$found_qt_libs"; then
-       	    #echo DBG: qt $1 $lib libs not found
-       	    unset with_qt_includes
-       	    return
-    	fi
-	with_qt_libs="$found_qt_libs"
-    fi
-    if test "$with_qt_libs" != "/lib${LIBSUFFIX}"; then
-        qt_app_libs=true
     fi
 
     check_qt_version
@@ -671,7 +672,7 @@ if test "${with_qt}" != "no"; then
 	 if test -n "$darwin" -a -d /Library/Frameworks/QtCore.framework; then
 	    qt_framework="/Library/Frameworks/QtCore.framework"
 	 else
-	    for dir in $QT_DIR / /usr /usr/local /opt/qt /opt/qt /usr/qt /usr/qt /sw /opt/local /opt/sfw /usr/sfw /opt/gnu; do
+	    for dir in $QT_DIR $find_prefix / /usr /usr/local /opt/qt /opt/qt /usr/qt /usr/qt /sw /opt/local /opt/sfw /usr/sfw /opt/gnu; do
       	       check_qt $dir
       	       if test -n "$with_qt_includes"; then
 	          break;
@@ -683,8 +684,9 @@ if test "${with_qt}" != "no"; then
 
    if test -n "$qt_framework"; then
       AC_MSG_RESULT([using Darwin frameworks in $qt_framework])
-      QT_CORE_INCLUDES="-I $qt_framework/Headers"
-      QT_CORE_LIBS="-framework QtCore"
+      QT_CORE_INCLUDES="-F$qt_framework -I$qt_framework/QtCore.framework/Headers"
+      # libtool seems to be broken in OSX, it's not passing the -F argument to the linker
+      QT_CORE_LIBS="-F$qt_framework -framework QtCore"
       with_qt=yes
    else
       if test -n "$with_qt_includes"; then
@@ -757,8 +759,7 @@ AC_ARG_WITH([qt-gui-includes],
                     [QT 4 Gui include file parent directory])],
     [if test ! -d "${with_qt_gui_includes}"; then AC_MSG_ERROR(directory ${with_qt_gui_includes} does not exist for --with-qt-gui-includes); unset with_qt_gui_includes; fi])
 
-check_qt_gui_include()
-{
+check_qt_gui_include() {
     if test -f "$1/QtGui/QApplication"; then
        found_qt_gui_includes=$1
     elif test "$2" = "err"; then
@@ -766,8 +767,7 @@ check_qt_gui_include()
     fi
 }
 
-check_qt_gui_lib()
-{
+check_qt_gui_lib() {
     if test -f "$1/libQtGui.${SHLIB_SUFFIX}"; then
        found_qt_gui_libs=$lib
     elif test "$2" = "err"; then
@@ -775,8 +775,13 @@ check_qt_gui_lib()
     fi
 }
 
-check_qt_gui()
-{
+check_qt_gui() {
+    # first check for frameworks on Darwin
+    if test -n "$darwin" -a -d $1/Library/Frameworks/QtGui.framework; then
+	qt_gui_framework="$1/Library/Frameworks"
+	return;
+    fi
+
     if test -z "$with_qt_gui_includes"; then
         inc="$1/include"
         if test "$1" = "/"; then
@@ -822,24 +827,19 @@ if test "${with_qt}" = "yes" -a "${with_qt_gui}" != "no"; then
 	    AC_MSG_ERROR([not found in $with_qt_gui])
       	 fi
       else
-         # check for frameworks on darwin
-	 if test -n "$darwin" -a -d /Library/Frameworks/QtGui.framework; then
-	    qt_gui_framework="/Library/Frameworks/QtGui.framework"
-	 else
-	    for dir in $QT_DIR / /usr /usr/local /opt/qt /opt/qt /usr/qt /usr/qt /sw /opt/local /opt/sfw /usr/sfw /opt/gnu; do
-      	       check_qt_gui $dir
-      	       if test -n "$with_qt_gui_includes"; then
+          for dir in $QT_DIR $find_prefix / /usr /usr/local /opt/qt /opt/qt /usr/qt /usr/qt /sw /opt/local /opt/sfw /usr/sfw /opt/gnu; do
+      	      check_qt_gui $dir
+      	      if test -n "$with_qt_gui_includes" -o -n "$qt_gui_framework"; then
 	          break;
-      	       fi
-   	    done
-         fi
+      	      fi
+   	  done
       fi
    fi
 
    if test -n "$qt_gui_framework"; then
       AC_MSG_RESULT([using Darwin frameworks in $qt_gui_framework])
-      QT_GUI_INCLUDES="-I $qt_gui_framework/Headers"
-      QT_GUI_LIBS="-framework QtGui"
+      QT_GUI_INCLUDES="-F$qt_gui_framework -I$qt_gui_framework/QtGui.framework/Headers"
+      QT_GUI_LIBS="-Wl,-F$qt_gui_framework -framework QtGui"
       with_qt_gui=yes
    else
       if test -n "$with_qt_gui_includes"; then
@@ -919,8 +919,7 @@ AC_ARG_WITH([qt-opengl-includes],
                     [QT OpenGL include file parent directory])],
     [if test ! -d "${with_qt_opengl_includes}"; then AC_MSG_ERROR(directory ${with_qt_opengl_includes} does not exist for --with-qt-opengl-includes); unset with_qt_opengl_includes; fi])
 
-check_qt_opengl_include()
-{
+check_qt_opengl_include() {
     if test -f "$1/QtOpenGL/QtOpenGL"; then
        found_qt_opengl_includes=$1
     elif test "$2" = "err"; then
@@ -928,8 +927,7 @@ check_qt_opengl_include()
     fi
 }
 
-check_qt_opengl_lib()
-{
+check_qt_opengl_lib() {
     if test -f $1/libQtOpenGL.${SHLIB_SUFFIX}; then
        found_qt_opengl_libs=$lib
     elif test "$2" = "err"; then
@@ -937,8 +935,13 @@ check_qt_opengl_lib()
     fi
 }
 
-check_qt_opengl()
-{
+check_qt_opengl() {
+    # first check for frameworks on Darwin
+    if test -n "$darwin" -a -d $1/Library/Frameworks/QtOpenGL.framework; then
+	qt_opengl_framework="$1/Library/Frameworks"
+	return;
+    fi
+
     if test -z "$with_qt_opengl_includes"; then
         inc="$1/include"
         if test "$1" = "/"; then
@@ -984,23 +987,18 @@ if test "${with_qt_gui}" = "yes" -a "${with_qt_opengl}" != "no"; then
 	    AC_MSG_ERROR([not found in $with_qt_opengl])
       	 fi
       else
-         # check for frameworks on darwin
-	 if test -n "$darwin" -a -d /Library/Frameworks/QtOpenGL.framework; then
-	    qt_opengl_framework="/Library/Frameworks/QtOpenGL.framework"
-	 else
-	    for dir in $QT_DIR / /usr /usr/local /opt/qt /opt/qt /usr/qt /usr/qt /sw /opt/local /opt/sfw /usr/sfw /opt/gnu; do
-      	       check_qt_opengl $dir
-      	       if test -n "$with_qt_opengl_includes"; then
+	  for dir in $QT_DIR $find_prefix / /usr /usr/local /opt/qt /opt/qt /usr/qt /usr/qt /sw /opt/local /opt/sfw /usr/sfw /opt/gnu; do
+      	      check_qt_opengl $dir
+      	      if test -n "$with_qt_opengl_includes" -o -n "$qt_opengl_framework"; then
 	          break;
-      	       fi
-   	    done
-         fi
+      	      fi
+	  done
       fi
    fi
 
    if test -n "$qt_opengl_framework"; then
-      QT_OPENGL_INCLUDES="-I $qt_opengl_framework/Headers"
-      QT_OPENGL_LIBS="-framework QtOpenGL"
+      QT_OPENGL_INCLUDES="-F$qt_opengl_framework -I$qt_opengl_framework/QtOpenGL.framework/Headers"
+      QT_OPENGL_LIBS="-Wl,-F$qt_opengl_framework -framework QtOpenGL"
       AC_MSG_RESULT([using Darwin frameworks in $qt_opengl_framework])
       with_qt_opengl=yes
    else
@@ -1084,8 +1082,7 @@ AC_ARG_WITH([qt-svg-includes],
                     [QT SVG include file parent directory])],
     [if test ! -d "${with_qt_svg_includes}"; then AC_MSG_ERROR(directory ${with_qt_svg_includes} does not exist for --with-qt-svg-includes); unset with_qt_svg_includes; fi])
 
-check_qt_svg_include()
-{
+check_qt_svg_include() {
     if test -f "$1/QtSvg/QtSvg" -a -f "$1/QtXml/QtXml"; then
        found_qt_svg_includes=$1
     elif test "$2" = "err"; then
@@ -1093,8 +1090,7 @@ check_qt_svg_include()
     fi
 }
 
-check_qt_svg_lib()
-{
+check_qt_svg_lib() {
     if test -f $1/libQtSvg.${SHLIB_SUFFIX} -a -f $1/libQtXml.${SHLIB_SUFFIX}; then
        found_qt_svg_libs=$lib
     elif test "$2" = "err"; then
@@ -1102,8 +1098,13 @@ check_qt_svg_lib()
     fi
 }
 
-check_qt_svg()
-{
+check_qt_svg() {
+    # first check for frameworks on Darwin
+    if test -n "$darwin" -a -d $1/Library/Frameworks/QtSvg.framework; then
+	qt_svg_framework="$1/Library/Frameworks"
+	return;
+    fi
+
     if test -z "$with_qt_svg_includes"; then
         inc="$1/include"
         if test "$1" = "/"; then
@@ -1149,24 +1150,18 @@ if test "${with_qt_gui}" = "yes" -a "${with_qt_svg}" != "no"; then
 	    AC_MSG_ERROR([not found in $with_qt_svg])
       	 fi
       else
-         # check for frameworks on darwin
-	 if test -n "$darwin" -a -d /Library/Frameworks/QtSvg.framework -a -d /Library/Frameworks/QtXml.framework; then
-	    qt_svg_framework="/Library/Frameworks/QtSvg.framework"
-	    qt_xml_framework="/Library/Frameworks/QtXml.framework"
-	 else
-	    for dir in $QT_DIR / /usr /usr/local /opt/qt /opt/qt /usr/qt /usr/qt /sw /opt/local /opt/sfw /usr/sfw /opt/gnu; do
-      	       check_qt_svg $dir
-      	       if test -n "$with_qt_svg_includes"; then
+          for dir in $QT_DIR $find_prefix / /usr /usr/local /opt/qt /opt/qt /usr/qt /usr/qt /sw /opt/local /opt/sfw /usr/sfw /opt/gnu; do
+      	      check_qt_svg $dir
+      	      if test -n "$with_qt_svg_includes" -o -n "$qt_svg_framework"; then
 	          break;
-      	       fi
-   	    done
-         fi
+      	      fi
+   	  done
       fi
    fi
 
    if test -n "$qt_svg_framework"; then
-      QT_SVG_INCLUDES="-I $qt_svg_framework/Headers -I $qt_xml_framework/Headers"
-      QT_SVG_LIBS="-framework QtSvg -framework QtXml"
+      QT_SVG_INCLUDES="-F$qt_svg_framework -I$qt_svg_framework/QtSvg.framework/Headers -I$qt_svg_framework/QtXml.framework/Headers"
+      QT_SVG_LIBS="-Wl,-F$qt_svg_framework -framework QtSvg -framework QtXml"
       AC_MSG_RESULT([using Darwin frameworks in $qt_svg_framework])
       with_qt_svg=yes
    else
