@@ -741,8 +741,7 @@ static AbstractQoreNode *QPAINTER_drawPoint(QoreObject *self, QoreQPainter *qp, 
          QoreQPointF *position = (QoreQPointF *)(reinterpret_cast<const QoreObject *>(p))->getReferencedPrivateData(CID_QPOINTF, xsink);
          if (!position) {
             if (!xsink->isException())
-               xsink->raiseException("QPAINTER-DRAWPOINT-PARAM-ERROR", "QPainter::drawPoint() does not know how to handle arguments of class '%s' as passed as the first argument", 
-(reinterpret_cast<const QoreObject *>(p))->getClassName());
+               xsink->raiseException("QPAINTER-DRAWPOINT-PARAM-ERROR", "QPainter::drawPoint() does not know how to handle arguments of class '%s' as passed as the first argument", (reinterpret_cast<const QoreObject *>(p))->getClassName());
             return 0;
          }
          ReferenceHolder<AbstractPrivateData> positionHolder(static_cast<AbstractPrivateData *>(position), xsink);
@@ -1797,8 +1796,7 @@ static AbstractQoreNode *QPAINTER_translate(QoreObject *self, QoreQPainter *qp, 
          QoreQPointF *offsetf = (QoreQPointF *)(reinterpret_cast<const QoreObject *>(p))->getReferencedPrivateData(CID_QPOINTF, xsink);
          if (!offsetf) {
             if (!xsink->isException())
-               xsink->raiseException("QPAINTER-TRANSLATE-PARAM-ERROR", "QPainter::translate() does not know how to handle arguments of class '%s' as passed as the first argument", 
-(reinterpret_cast<const QoreObject *>(p))->getClassName());
+               xsink->raiseException("QPAINTER-TRANSLATE-PARAM-ERROR", "QPainter::translate() does not know how to handle arguments of class '%s' as passed as the first argument", (reinterpret_cast<const QoreObject *>(p))->getClassName());
             return 0;
          }
          ReferenceHolder<AbstractPrivateData> offsetHolder(static_cast<AbstractPrivateData *>(offsetf), xsink);

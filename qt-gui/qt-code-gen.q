@@ -80,7 +80,7 @@ const const_class_list =
       "QStyleOptionViewItemV2", "QLocale", "QUrl", "QByteArray", "QVariant", 
       "QRect", "QRectF", "QFontInfo", "QFontMetrics", "QDir", "QRegExp",
       "QFileInfo", "QPainterPath", "QMatrix", "QTransform", "QTextBlock",
-      "QTextLine", "QTextOption", 
+      "QTextLine", "QTextOption", "QItemSelectionRange", 
     );
 
 const class_list = ( "QRegion",
@@ -168,7 +168,7 @@ const dynamic_class_list = ( "QPaintDevice", "QPixmap",
 
 const spaces = "                                                                        ";
 
-const copyright = " Qore Programming Language\n\n Copyright (C) 2003 - 2008 David Nichols\n\n This library is free software; you can redistribute it and/or\n modify it under the terms of the GNU Lesser General Public\n License as published by the Free Software Foundation; either\n version 2.1 of the License, or (at your option) any later version.\n\n This library is distributed in the hope that it will be useful,\n but WITHOUT ANY WARRANTY; without even the implied warranty of\n MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n Lesser General Public License for more details.\n\n You should have received a copy of the GNU Lesser General Public\n License along with this library; if not, write to the Free Software\n Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA\n";
+const copyright = "Qore Programming Language\n\n Copyright (C) 2003 - 2009 David Nichols\n\n This library is free software; you can redistribute it and/or\n modify it under the terms of the GNU Lesser General Public\n License as published by the Free Software Foundation; either\n version 2.1 of the License, or (at your option) any later version.\n\n This library is distributed in the hope that it will be useful,\n but WITHOUT ANY WARRANTY; without even the implied warranty of\n MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n Lesser General Public License for more details.\n\n You should have received a copy of the GNU Lesser General Public\n License along with this library; if not, write to the Free Software\n Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA\n";
 
 our ($o, $if, $cn);
 
@@ -901,7 +901,7 @@ DLLEXPORT extern QoreClass *QC_%s;
  %s
  */
 
-#include <qore/Qore.h>
+#include \"qt-gui.h\"
 
 #include \"QC_%s.h\"
 
@@ -996,15 +996,13 @@ sub do_multi_class_header($offset, $final, $arg, $name, $i, $const, $last) {
 	    $lo += sprintf("%s   if (!xsink->isException())", $os);
 	    my $str;
 	    if (!$last) {
-		$str = sprintf("%s      xsink->raiseException(\"%s-%s-PARAM-ERROR\", \"%s::%s() does not know how to handle arguments of class '%s' as passed as the ", 
-			       $os, toupper($cn), toupper($name), $cn, $name);
+		$str = sprintf("%s      xsink->raiseException(\"%s-%s-PARAM-ERROR\", \"%s::%s() does not know how to handle arguments of class '%%s' as passed as the %s argument\", reinterpret_cast<const QoreObject *>(p)->getClassName());", 
+			       $os, toupper($cn), toupper($name), $cn, $name, ordinal[$i]);
 	    }
 	    else {
-		$str = sprintf("%s      xsink->raiseException(\"%s-%s-PARAM-ERROR\", \"this version of %s::%s() expects an object derived from %s as the ",
-			       $os, toupper($cn), toupper($name), $cn, $name, $type);
+		$str = sprintf("%s      xsink->raiseException(\"%s-%s-PARAM-ERROR\", \"this version of %s::%s() expects an object derived from %s as the %s argument\");",
+			       $os, toupper($cn), toupper($name), $cn, $name, $type, ordinal[$i]);
 	    }
-	    
-	    $str += sprintf("%s argument\");", ordinal[$i]);
 	    $lo += $str;
 	    $lo += sprintf("%s   return%s;", $os, $const ? "" : " 0");
 	}

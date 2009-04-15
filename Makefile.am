@@ -288,6 +288,7 @@ noinst_HEADERS = qt-core/QC_QObject.h \
 	qt-gui/QC_QTextOption.h \
 	qt-gui/QC_QTextLayout.h \
 	qt-gui/QC_QDesktopServices.h \
+	qt-gui/QC_QItemSelectionRange.h \
 	qt-opengl/QC_QGLWidget.h \
 	qt-opengl/QC_QGLFormat.h \
 	qt-opengl/QC_QGLContext.h \

@@ -174,7 +174,8 @@ QORE_QT_GUI_SOURCES = qt-gui-util.cc QC_QApplication.cc QC_QPushButton.cc \
 	QC_QTextLine.cc \
 	QC_QTextOption.cc \
 	QC_QTextLayout.cc \
-	QC_QDesktopServices.cc
+	QC_QDesktopServices.cc \
+	QC_QItemSelectionRange.cc
 if COND_MACOSX
 QORE_QT_GUI_SOURCES += QC_QMacStyle.cc
 endif
@@ -183,10 +184,10 @@ endif
 
 lib_LTLIBRARIES = libqore-qt-gui.la
 libqore_qt_gui_la_SOURCES = $(QORE_QT_GUI_SOURCES)
-libqore_qt_gui_la_LDFLAGS = ${QT_CORE_LIBS} ${QT_GUI_LIBS}
+libqore_qt_gui_la_LDFLAGS = 
 pkglib_LTLIBRARIES = qt-gui.la
 qt_gui_la_SOURCES = $(QT_SOURCES)
-qt_gui_la_LDFLAGS = -module -avoid-version -lqore-qt-gui
+qt_gui_la_LDFLAGS = -module -avoid-version -lqore-qt-gui ${QT_CORE_LIBS} ${QT_GUI_LIBS}
 qt_gui_la_LIBADD = ../qt-core/libqore-qt-core.la
 
 INCLUDES = -I$(top_srcdir)/include $(QT_CORE_INCLUDES) $(QT_GUI_INCLUDES) -I ../qt-core

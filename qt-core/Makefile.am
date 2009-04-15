@@ -44,10 +44,10 @@ endif
 
 lib_LTLIBRARIES = libqore-qt-core.la
 libqore_qt_core_la_SOURCES = $(QORE_QT_SOURCES)
-libqore_qt_core_la_LDFLAGS = ${QT_CORE_LIBS}
+libqore_qt_core_la_LDFLAGS = 
 pkglib_LTLIBRARIES = qt-core.la
 qt_core_la_SOURCES = $(QT_SOURCES)
-qt_core_la_LDFLAGS = -module -avoid-version -lqore-qt-core
+qt_core_la_LDFLAGS = -module -avoid-version -lqore-qt-core ${QT_CORE_LIBS}
 
 INCLUDES = -I$(top_srcdir)/include $(QT_CORE_INCLUDES)
 

@@ -166,6 +166,7 @@
 #include "QC_QGraphicsSceneMouseEvent.h"
 #include "QC_QGraphicsSceneWheelEvent.h"
 #include "QC_QDesktopServices.h"
+#include "QC_QItemSelectionRange.h"
 
 
 #include <QPalette>
@@ -1138,6 +1139,7 @@ static void init_namespace()
 
    qt_ns.addInitialNamespace(qslider);
    qt_ns.addSystemClass(initQDesktopServicesClass());
+   qt_ns.addSystemClass(initQItemSelectionRangeClass());
 
    // add here
 
