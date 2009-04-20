@@ -44,7 +44,12 @@ DLLEXPORT qore_module_init_t qore_module_init = qt_svg_module_init;
 DLLEXPORT qore_module_ns_init_t qore_module_ns_init = qt_svg_module_ns_init;
 DLLEXPORT qore_module_delete_t qore_module_delete = qt_svg_module_delete;
 DLLEXPORT const char *qore_module_dependencies[] = { "qt-gui", 0 };
+// assume LGPL for qt >= 4.5
+#if QT_VERSION >= 0x040500
+DLLEXPORT qore_license_t qore_module_license = QL_LGPL;
+#else
 DLLEXPORT qore_license_t qore_module_license = QL_GPL;
+#endif
 
 static QoreNamespace svg_ns("QtSvg");
 

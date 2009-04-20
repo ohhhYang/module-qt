@@ -189,7 +189,12 @@ DLLEXPORT int qore_module_api_minor = QORE_MODULE_API_MINOR;
 DLLEXPORT qore_module_init_t qore_module_init = qt_module_init;
 DLLEXPORT qore_module_ns_init_t qore_module_ns_init = qt_module_ns_init;
 DLLEXPORT qore_module_delete_t qore_module_delete = qt_module_delete;
+// assume LGPL for qt >= 4.5
+#if QT_VERSION >= 0x040500
+DLLEXPORT qore_license_t qore_module_license = QL_LGPL;
+#else
 DLLEXPORT qore_license_t qore_module_license = QL_GPL;
+#endif
 DLLEXPORT const char *qore_module_dependencies[] = { "qt-core", 0 };
 
 static class AbstractQoreNode *f_QAPP(const QoreListNode *params, class ExceptionSink *xsink) {

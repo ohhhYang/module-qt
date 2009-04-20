@@ -69,15 +69,18 @@ DLLEXPORT int qore_module_api_minor = QORE_MODULE_API_MINOR;
 DLLEXPORT qore_module_init_t qore_module_init = qt_core_module_init;
 DLLEXPORT qore_module_ns_init_t qore_module_ns_init = qt_core_module_ns_init;
 DLLEXPORT qore_module_delete_t qore_module_delete = qt_core_module_delete;
+// assume LGPL for qt >= 4.5
+#if QT_VERSION >= 0x040500
+DLLEXPORT qore_license_t qore_module_license = QL_LGPL;
+#else
 DLLEXPORT qore_license_t qore_module_license = QL_GPL;
 #endif
+#endif
 
-static class AbstractQoreNode *f_SLOT(const QoreListNode *params, class ExceptionSink *xsink)
-{
+static class AbstractQoreNode *f_SLOT(const QoreListNode *params, class ExceptionSink *xsink) {
    // get slot name
    const QoreStringNode *p = test_string_param(params, 0);
-   if (!p || !p->strlen())
-   {
+   if (!p || !p->strlen()) {
       xsink->raiseException("SLOT-ERROR", "missing slot name");
       return 0;
    }
@@ -90,12 +93,10 @@ static class AbstractQoreNode *f_SLOT(const QoreListNode *params, class Exceptio
    return str;
 }
 
-static class AbstractQoreNode *f_SIGNAL(const QoreListNode *params, class ExceptionSink *xsink)
-{
+static class AbstractQoreNode *f_SIGNAL(const QoreListNode *params, class ExceptionSink *xsink) {
    // get slot name
    const QoreStringNode *p = test_string_param(params, 0);
-   if (!p || !p->strlen())
-   {
+   if (!p || !p->strlen()) {
       xsink->raiseException("SIGNAL-ERROR", "missing signal name");
       return 0;
    }
