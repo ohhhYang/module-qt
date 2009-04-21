@@ -33,6 +33,7 @@ const opts = (
     "static"          : "S,static",
     "test"            : "t,test",
     "ns"              : "N,namespace",
+    "core"            : "C,core",
     "help"            : "h,help"
     );
 
@@ -189,6 +190,7 @@ sub usage() {
   -S,--static              assume prototypes are static functions
   -N,--namespace           add class as namespace
   -t,--test                do not create files (use with -f)
+  -C,--core                assume qt-core module
   -h,--help                this help text
 ", basename($ENV."_"));
     exit(1);
@@ -236,6 +238,10 @@ sub command_line() {
     if (!$o.indep && !exists $o.parent)
 	$o.parent = $o.dialog ? "QDialog" : $o.widget ? "QWidget" : "QObject";
 
+    if ($o.core)
+	$o.module = "core";
+    else
+	$o.module = "gui";
 }
 
 sub dl($l) {
@@ -743,7 +749,7 @@ sub main() {
 
 	if (exists $o.abstract_class) {
 	    $of.printf("#include \"QoreAbstract%s.h\"\n", $o.abstract_class);
-	    if (!$o.indep)
+	    if (!$o.indep && $o.module != "core")
 		$of.printf("#include \"qore-qt-events.h\"\n");
         }
 
@@ -834,7 +840,6 @@ DLLEXPORT extern QoreClass *QC_%s;
     else
 	$of = stdout;
 
-
     foreach my $p in (keys $proto) {	
 	# do function header
 	$proto.$p.ok = True;
@@ -901,14 +906,14 @@ DLLEXPORT extern QoreClass *QC_%s;
  %s
  */
 
-#include \"qt-gui.h\"
+#include \"qt-%s.h\"
 
 #include \"QC_%s.h\"
 
 qore_classid_t CID_%s;
 QoreClass *QC_%s = 0;
 
-", $cn, copyright, $cn, $func_prefix, $cn);
+", $cn, copyright, $o.module, $cn, $func_prefix, $cn);
     }
 
     foreach my $p in (keys $proto) {

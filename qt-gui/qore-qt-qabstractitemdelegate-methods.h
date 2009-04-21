@@ -4,8 +4,7 @@ class T {
 #endif
 
    protected:
-      virtual QWidget * createEditor ( QWidget * parent, const QStyleOptionViewItem & option, const QModelIndex & index ) const
-      {
+      virtual QWidget * createEditor ( QWidget * parent, const QStyleOptionViewItem & option, const QModelIndex & index ) const {
 	 if (!m_createEditor)
 	    return QOREQTYPE::createEditor(parent, option, index);
 
@@ -42,8 +41,7 @@ class T {
 	 return qqw->getQWidget();
       }
 
-      virtual bool editorEvent ( QEvent * event, QAbstractItemModel * model, const QStyleOptionViewItem & option, const QModelIndex & index )
-      {
+      virtual bool editorEvent ( QEvent * event, QAbstractItemModel * model, const QStyleOptionViewItem & option, const QModelIndex & index ) {
 	 if (!m_editorEvent)
 	    return QOREQTYPE::editorEvent(event, model, option, index);
 
@@ -68,8 +66,7 @@ class T {
 	 return dispatch_event_bool(qore_obj, m_editorEvent, args);
       }
 
-      virtual void paint ( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const
-      {
+      virtual void paint ( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const {
 	 if (!m_paint) {
 	    QOREQTYPE::paint(painter, option, index);
 	    return;
@@ -91,8 +88,7 @@ class T {
 	 dispatch_event(qore_obj, m_paint, args);
       }
 
-      virtual void setEditorData ( QWidget * editor, const QModelIndex & index ) const
-      {
+      virtual void setEditorData ( QWidget * editor, const QModelIndex & index ) const {
 	 if (!m_setEditorData)
 	    return QOREQTYPE::setEditorData(editor, index);
 
@@ -107,8 +103,7 @@ class T {
 	 dispatch_event(qore_obj, m_setEditorData, args);
       }
 
-      virtual void setModelData ( QWidget * editor, QAbstractItemModel * model, const QModelIndex & index ) const
-      {
+      virtual void setModelData ( QWidget * editor, QAbstractItemModel * model, const QModelIndex & index ) const {
 	 if (!m_setModelData) {
 	    QOREQTYPE::setModelData(editor, model, index);
 	    return;
@@ -137,8 +132,7 @@ class T {
 	 dispatch_event(qore_obj, m_setModelData, args);
       }
 
-      virtual QSize sizeHint ( const QStyleOptionViewItem & option, const QModelIndex & index ) const
-      {
+      virtual QSize sizeHint ( const QStyleOptionViewItem & option, const QModelIndex & index ) const {
 	 if (!m_sizeHint)
 	    return QOREQTYPE::sizeHint(option, index);
 
@@ -174,8 +168,7 @@ class T {
          return rv_qs;
       }
 
-      virtual void updateEditorGeometry ( QWidget * editor, const QStyleOptionViewItem & option, const QModelIndex & index ) const
-      {
+      virtual void updateEditorGeometry ( QWidget * editor, const QStyleOptionViewItem & option, const QModelIndex & index ) const {
 	 if (!m_updateEditorGeometry) {
 	    QOREQTYPE::updateEditorGeometry(editor, option, index);
 	    return;
@@ -202,44 +195,6 @@ class T {
 
 	 dispatch_event(qore_obj, m_updateEditorGeometry, args);
       }
-
-   public:
-      virtual QWidget * parent_createEditor ( QWidget * parent, const QStyleOptionViewItem & option, const QModelIndex & index ) const
-      {
-	 return QOREQTYPE::createEditor(parent, option, index);
-      }
-
-      virtual bool parent_editorEvent ( QEvent * event, QAbstractItemModel * model, const QStyleOptionViewItem & option, const QModelIndex & index )
-      {
-	 return QOREQTYPE::editorEvent(event, model, option, index);
-      }
-
-      virtual void parent_paint ( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const
-      {
-	 QOREQTYPE::paint(painter, option, index);
-      }
-
-      virtual void parent_setEditorData ( QWidget * editor, const QModelIndex & index ) const
-      {
-	 QOREQTYPE::setEditorData(editor, index);
-      }
-
-      virtual void parent_setModelData ( QWidget * editor, QAbstractItemModel * model, const QModelIndex & index ) const
-      {
-	 QOREQTYPE::setModelData(editor, model, index);
-      }
-
-      virtual QSize parent_sizeHint ( const QStyleOptionViewItem & option, const QModelIndex & index ) const
-      {
-	 return QOREQTYPE::sizeHint(option, index);
-      }
-
-      virtual void parent_updateEditorGeometry ( QWidget * editor, const QStyleOptionViewItem & option, const QModelIndex & index ) const
-      {
-	 QOREQTYPE::updateEditorGeometry(editor, option, index);
-      }
-
-
 #if 0
 }
 #endif
