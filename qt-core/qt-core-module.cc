@@ -3,7 +3,7 @@
   
   Qore Programming Language
 
-  Copyright 2003 - 2008 David Nichols
+  Copyright 2003 - 2009 David Nichols
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -53,6 +53,8 @@
 #include "QC_QTimer.h"
 #include "QC_QModelIndex.h"
 #include "QC_QTranslator.h"
+#include "QC_QAbstractTableModel.h"
+#include "QC_QAbstractListModel.h"
 
 static QoreStringNode *qt_core_module_init();
 static void qt_core_module_ns_init(QoreNamespace *rns, QoreNamespace *qns);
@@ -77,7 +79,7 @@ DLLEXPORT qore_license_t qore_module_license = QL_GPL;
 #endif
 #endif
 
-static class AbstractQoreNode *f_SLOT(const QoreListNode *params, class ExceptionSink *xsink) {
+static AbstractQoreNode *f_SLOT(const QoreListNode *params, class ExceptionSink *xsink) {
    // get slot name
    const QoreStringNode *p = test_string_param(params, 0);
    if (!p || !p->strlen()) {
@@ -93,7 +95,7 @@ static class AbstractQoreNode *f_SLOT(const QoreListNode *params, class Exceptio
    return str;
 }
 
-static class AbstractQoreNode *f_SIGNAL(const QoreListNode *params, class ExceptionSink *xsink) {
+static AbstractQoreNode *f_SIGNAL(const QoreListNode *params, class ExceptionSink *xsink) {
    // get slot name
    const QoreStringNode *p = test_string_param(params, 0);
    if (!p || !p->strlen()) {
@@ -109,20 +111,17 @@ static class AbstractQoreNode *f_SIGNAL(const QoreListNode *params, class Except
    return str;
 }
 
-static class AbstractQoreNode *f_TR(const QoreListNode *params, class ExceptionSink *xsink)
-{
+static AbstractQoreNode *f_TR(const QoreListNode *params, class ExceptionSink *xsink) {
    // get slot name
    const QoreStringNode *p = test_string_param(params, 0);
-   if (!p || !p->strlen())
-   {
+   if (!p || !p->strlen()) {
       xsink->raiseException("TR-ERROR", "missing string argument to TR()");
       return 0;
    }
    return new QoreStringNode(QObject::tr(p->getBuffer()).toUtf8().data(), QCS_UTF8);
 }
 
-static class AbstractQoreNode *f_qDebug(const QoreListNode *params, class ExceptionSink *xsink)
-{
+static AbstractQoreNode *f_qDebug(const QoreListNode *params, class ExceptionSink *xsink) {
    QoreStringNodeHolder str(q_sprintf(params, 0, 0, xsink));
    if (*xsink)
       return 0;
@@ -131,8 +130,7 @@ static class AbstractQoreNode *f_qDebug(const QoreListNode *params, class Except
    return 0;
 }
 
-static class AbstractQoreNode *f_qWarning(const QoreListNode *params, class ExceptionSink *xsink)
-{
+static AbstractQoreNode *f_qWarning(const QoreListNode *params, class ExceptionSink *xsink) {
    QoreStringNodeHolder str(q_sprintf(params, 0, 0, xsink));
    if (*xsink)
       return 0;
@@ -141,8 +139,7 @@ static class AbstractQoreNode *f_qWarning(const QoreListNode *params, class Exce
    return 0;
 }
 
-static class AbstractQoreNode *f_qCritical(const QoreListNode *params, class ExceptionSink *xsink)
-{
+static AbstractQoreNode *f_qCritical(const QoreListNode *params, class ExceptionSink *xsink) {
    QoreStringNodeHolder str(q_sprintf(params, 0, 0, xsink));
    if (*xsink)
       return 0;
@@ -151,8 +148,7 @@ static class AbstractQoreNode *f_qCritical(const QoreListNode *params, class Exc
    return 0;
 }
 
-static class AbstractQoreNode *f_qFatal(const QoreListNode *params, class ExceptionSink *xsink)
-{
+static AbstractQoreNode *f_qFatal(const QoreListNode *params, class ExceptionSink *xsink) {
    QoreStringNodeHolder str(q_sprintf(params, 0, 0, xsink));
    if (*xsink)
       return 0;
@@ -161,26 +157,22 @@ static class AbstractQoreNode *f_qFatal(const QoreListNode *params, class Except
    return 0;
 }
 
-static class AbstractQoreNode *f_qRound(const QoreListNode *params, class ExceptionSink *xsink)
-{
+static AbstractQoreNode *f_qRound(const QoreListNode *params, class ExceptionSink *xsink) {
    const AbstractQoreNode *p = get_param(params, 0);
    return new QoreBigIntNode(qRound(p ? p->getAsFloat() : 0.0));
 }
 
-static class AbstractQoreNode *f_qsrand(const QoreListNode *params, class ExceptionSink *xsink)
-{
+static AbstractQoreNode *f_qsrand(const QoreListNode *params, class ExceptionSink *xsink) {
    const AbstractQoreNode *p = get_param(params, 0);
    qsrand(p ? p->getAsInt() : 0);
    return 0;
 }
 
-static class AbstractQoreNode *f_qrand(const QoreListNode *params, class ExceptionSink *xsink)
-{
+static AbstractQoreNode *f_qrand(const QoreListNode *params, class ExceptionSink *xsink) {
    return new QoreBigIntNode(qrand());
 }
 
-static class AbstractQoreNode *f_qSwap(const QoreListNode *params, class ExceptionSink *xsink)
-{
+static AbstractQoreNode *f_qSwap(const QoreListNode *params, class ExceptionSink *xsink) {
    const ReferenceNode *r0 = test_reference_param(params, 0);
    if (!r0) {
       xsink->raiseException("QSWAP-ERROR", "first argument must be a reference");
@@ -206,16 +198,16 @@ static class AbstractQoreNode *f_qSwap(const QoreListNode *params, class Excepti
    return 0;
 }
 
-
 static QoreNamespace qt_ns("Qt");
 
-static void init_namespace()
-{
+DLLLOCAL void add_core_constants(QoreNamespace &qt_ns);
+
+static void init_namespace() {
     // the order is sensitive here as child classes need the parent IDs
-   QoreClass *qobject, *qcoreapplication;
+   QoreClass *qobject, *qabstractitemmodel;
 
    qt_ns.addSystemClass((qobject = initQObjectClass()));
-   qt_ns.addSystemClass((qcoreapplication = initQCoreApplicationClass(qobject)));
+   qt_ns.addInitialNamespace(initQCoreApplicationNS(qobject));
    qt_ns.addSystemClass(initQRectClass());
    qt_ns.addSystemClass(initQRectFClass());
 
@@ -238,7 +230,7 @@ static void init_namespace()
    qt_ns.addSystemClass(initQMetaObjectClass());
    qt_ns.addSystemClass(initQRegExpClass());
 
-   qt_ns.addSystemClass(initQAbstractItemModelClass(QC_QObject));
+   qt_ns.addSystemClass((qabstractitemmodel = initQAbstractItemModelClass(QC_QObject)));
 
    qt_ns.addSystemClass(initQBasicTimerClass());
 
@@ -264,11 +256,21 @@ static void init_namespace()
 
    qt_ns.addSystemClass(initQTranslatorClass(QC_QObject));
 
+   qt_ns.addSystemClass(initQAbstractTableModelClass(qabstractitemmodel));
+   qt_ns.addSystemClass(initQAbstractListModelClass(QC_QAbstractItemModel));
+
+   // add here
+
+   add_core_constants(qt_ns);
+
    QtNS = &qt_ns;
 }
 
-static QoreStringNode *qt_core_module_init()
-{
+static QoreStringNode *qt_core_module_init() {
+   // add new types
+   addBrushStyleType();
+   addPenStyleType();
+
    init_namespace();
 
    builtinFunctions.add("SLOT",                       f_SLOT, QDOM_GUI);
@@ -286,11 +288,9 @@ static QoreStringNode *qt_core_module_init()
    return 0;
 }
 
-static void qt_core_module_ns_init(QoreNamespace *rns, QoreNamespace *qns)
-{
+static void qt_core_module_ns_init(QoreNamespace *rns, QoreNamespace *qns) {
    qns->addInitialNamespace(qt_ns.copy());
 }
 
-static void qt_core_module_delete()
-{
+static void qt_core_module_delete() {
 }

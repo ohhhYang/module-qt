@@ -36,6 +36,7 @@
 #include "QC_QLocale.h"
 #include "QC_QByteArray.h"
 #include "QC_QBitmap.h"
+#include "QC_QPaintEngine.h"
 
 qore_classid_t CID_QWIDGET;
 QoreClass *QC_QWidget = 0;
@@ -850,9 +851,9 @@ static AbstractQoreNode *QWIDGET_overrideWindowFlags(QoreObject *self, QoreAbstr
 }
 
 //virtual QPaintEngine * paintEngine () const
-//static AbstractQoreNode *QWIDGET_paintEngine(class QoreObject *self, QoreAbstractQWidget *qw, const QoreListNode *params, ExceptionSink *xsink)
-//{
-//}
+static AbstractQoreNode *QWIDGET_paintEngine(QoreObject *self, QoreAbstractQWidget *qw, const QoreListNode *params, ExceptionSink *xsink) {
+   return return_object(QC_QPaintEngine, new QoreQtQPaintEngine(qw->getQWidget()->paintEngine()));
+}
 
 //const QPalette & palette () const
 static AbstractQoreNode *QWIDGET_palette(QoreObject *self, QoreAbstractQWidget *qw, const QoreListNode *params, ExceptionSink *xsink)
@@ -865,8 +866,7 @@ static AbstractQoreNode *QWIDGET_palette(QoreObject *self, QoreAbstractQWidget *
 
 
 //QWidget * parentWidget () const
-static AbstractQoreNode *QWIDGET_parentWidget(QoreObject *self, QoreAbstractQWidget *qw, const QoreListNode *params, ExceptionSink *xsink)
-{
+static AbstractQoreNode *QWIDGET_parentWidget(QoreObject *self, QoreAbstractQWidget *qw, const QoreListNode *params, ExceptionSink *xsink) {
    QWidget *qt_qobj = qw->getQWidget()->parentWidget();
    if (!qt_qobj)
       return 0;
@@ -1285,13 +1285,26 @@ static AbstractQoreNode *QWIDGET_setForegroundRole(class QoreObject *self, QoreA
 
 //void setGeometry ( const QRect & )
 //void setGeometry ( int x, int y, int w, int h )
-static AbstractQoreNode *QWIDGET_setGeometry(class QoreObject *self, QoreAbstractQWidget *qw, const QoreListNode *params, ExceptionSink *xsink)
-{
+static AbstractQoreNode *QWIDGET_setGeometry(class QoreObject *self, QoreAbstractQWidget *qw, const QoreListNode *params, ExceptionSink *xsink) {
    const AbstractQoreNode *p = get_param(params, 0);
-   if (is_nothing(p)) {
-      xsink->raiseException("QWIDGET-SETGEOMETRY-ERROR", "missing first argument: x size");
+
+   if (p && p->getType() == NT_OBJECT) {
+      QoreQRect *qrect = (QoreQRect *)reinterpret_cast<const QoreObject *>(p)->getReferencedPrivateData(CID_QRECT, xsink);
+      if (!qrect) {
+         if (!xsink->isException())
+            xsink->raiseException("QWIDGET-SETGEOMETRY-PARAM-ERROR", "QWidget::setGeometry() does not know how to handle arguments of class '%s' as passed as the first argument", reinterpret_cast<const QoreObject *>(p)->getClassName());
+         return 0;
+      }
+      ReferenceHolder<AbstractPrivateData> qrectHolder(static_cast<AbstractPrivateData *>(qrect), xsink);
+      qw->getQWidget()->setGeometry(*(static_cast<QRect *>(qrect)));
       return 0;
    }
+
+   if (is_nothing(p)) {
+      xsink->raiseException("QWIDGET-SETGEOMETRY-ERROR", "missing first argument: x size or QRect object");
+      return 0;
+   }
+
    int x = p->getAsInt();
    
    p = get_param(params, 1);
@@ -1560,14 +1573,21 @@ static AbstractQoreNode *QWIDGET_setShortcutEnabled(QoreObject *self, QoreAbstra
 }
 
 //void setSizeIncrement ( const QSize & )
-//static AbstractQoreNode *QWIDGET_setSizeIncrement(class QoreObject *self, QoreAbstractQWidget *qw, const QoreListNode *params, ExceptionSink *xsink)
-//{
-//}
-
 //void setSizeIncrement ( int w, int h )
-static AbstractQoreNode *QWIDGET_setSizeIncrement(QoreObject *self, QoreAbstractQWidget *qw, const QoreListNode *params, ExceptionSink *xsink)
-{
+static AbstractQoreNode *QWIDGET_setSizeIncrement(QoreObject *self, QoreAbstractQWidget *qw, const QoreListNode *params, ExceptionSink *xsink) {
    const AbstractQoreNode *p = get_param(params, 0);
+   if (p && p->getType() == NT_OBJECT) {
+      QoreQSize *qsize = (QoreQSize *)reinterpret_cast<const QoreObject *>(p)->getReferencedPrivateData(CID_QSIZE, xsink);
+      if (!qsize) {
+         if (!xsink->isException())
+            xsink->raiseException("QWIDGET-SETSIZEINCREMENT-PARAM-ERROR", "QWidget::setSizeIncrement() does not know how to handle arguments of class '%s' as passed as the first argument", reinterpret_cast<const QoreObject *>(p)->getClassName());
+         return 0;
+      }
+      ReferenceHolder<AbstractPrivateData> qsizeHolder(static_cast<AbstractPrivateData *>(qsize), xsink);
+      qw->getQWidget()->setSizeIncrement(*(static_cast<QSize *>(qsize)));
+      return 0;
+   }
+
    int w = p ? p->getAsInt() : 0;
    p = get_param(params, 1);
    int h = p ? p->getAsInt() : 0;
@@ -2689,7 +2709,7 @@ class QoreClass *initQWidgetClass(class QoreClass *qobject, class QoreClass *qpa
    QC_QWidget->addMethod("nextInFocusChain",             (q_method_t)QWIDGET_nextInFocusChain);
    QC_QWidget->addMethod("normalGeometry",               (q_method_t)QWIDGET_normalGeometry);
    QC_QWidget->addMethod("overrideWindowFlags",          (q_method_t)QWIDGET_overrideWindowFlags);
-   //QC_QWidget->addMethod("paintEngine",                  (q_method_t)QWIDGET_paintEngine);
+   QC_QWidget->addMethod("paintEngine",                  (q_method_t)QWIDGET_paintEngine);
    QC_QWidget->addMethod("palette",                      (q_method_t)QWIDGET_palette);
    QC_QWidget->addMethod("parentWidget",                 (q_method_t)QWIDGET_parentWidget);
    QC_QWidget->addMethod("pos",                          (q_method_t)QWIDGET_pos);

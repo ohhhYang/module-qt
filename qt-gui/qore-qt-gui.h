@@ -29,14 +29,7 @@
 #include <QBrush>
 #include <QUrl>
 
-#include "BrushStyleNode.h"
-#include "PenStyleNode.h"
-
 DLLEXPORT extern AbstractQoreNode *C_Clipboard;
-
-#include <map>
-
-typedef std::map<int, const char *> qt_enum_map_t;
 
 class QAbstractButton;
 class QStyle;

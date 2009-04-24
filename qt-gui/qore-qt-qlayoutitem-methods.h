@@ -173,7 +173,7 @@ class T {
 	    return;
 	 }
 	 
-         dispatch_event(qore_obj, m_invalidate, 0);
+         dispatch_event(qore_obj, m_invalidate);
       }
 
       DLLLOCAL virtual QLayout * layout ()
@@ -188,7 +188,7 @@ class T {
 	 if (xsink)
 	    return QOREQTYPE::layout();
 	    
-	 if (!rv)
+	 if (is_nothing(*rv))
 	    return 0;
 	 
 	 if (rv->getType() != NT_OBJECT) {
@@ -237,7 +237,7 @@ class T {
 	 if (xsink)
 	    return QOREQTYPE::widget();
 	 
-	 if (!rv)
+	 if (is_nothing(*rv))
 	    return 0;
 	 
 	 if (rv->getType() != NT_OBJECT) {

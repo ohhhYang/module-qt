@@ -32,8 +32,7 @@ DLLEXPORT extern QoreClass *QC_QMimeData;
 
 DLLEXPORT QoreClass *initQMimeDataClass(QoreClass *);
 
-class myQMimeData : public QMimeData, public QoreQObjectExtension
-{
+class myQMimeData : public QMimeData, public QoreQObjectExtension {
 #define QOREQTYPE QMimeData
 #define MYQOREQTYPE myQMimeData
 #include "qore-qt-metacode.h"
@@ -41,29 +40,36 @@ class myQMimeData : public QMimeData, public QoreQObjectExtension
 #undef QOREQTYPE
 
    public:
-      DLLLOCAL myQMimeData(QoreObject *obj) : QMimeData(), QoreQObjectExtension(obj, this)
-      {
-         
+      DLLLOCAL myQMimeData(QoreObject *obj) : QMimeData(), QoreQObjectExtension(obj, this) {         
       }
 };
 
-typedef QoreQObjectBase<myQMimeData, QoreAbstractQObject> QoreQMimeDataImpl;
+class QoreAbstractQMimeData : public QoreAbstractQObject {
+  public:
+   DLLLOCAL virtual QMimeData *getQMimeData() const = 0;
+};
 
-class QoreQMimeData : public QoreQMimeDataImpl
-{
+typedef QoreQObjectBase<myQMimeData, QoreAbstractQMimeData> QoreQMimeDataImpl;
+
+class QoreQMimeData : public QoreQMimeDataImpl {
    public:
-      DLLLOCAL QoreQMimeData(QoreObject *obj) : QoreQMimeDataImpl(new myQMimeData(obj))
-      {
+      DLLLOCAL QoreQMimeData(QoreObject *obj) : QoreQMimeDataImpl(new myQMimeData(obj)) {
+      }
+
+      DLLLOCAL virtual QMimeData *getQMimeData() const {
+	 return &(*this->qobj);
       }
 };
 
-typedef QoreQtQObjectBase<QMimeData, QoreAbstractQObject> QoreQtQMimeDataImpl;
+typedef QoreQtQObjectBase<QMimeData, QoreAbstractQMimeData> QoreQtQMimeDataImpl;
 
-class QoreQtQMimeData : public QoreQtQMimeDataImpl
-{
+class QoreQtQMimeData : public QoreQtQMimeDataImpl {
    public:
-      DLLLOCAL QoreQtQMimeData(QoreObject *o, QMimeData *qm, bool managed = true) : QoreQtQMimeDataImpl(o, qm, managed)
-      {
+      DLLLOCAL QoreQtQMimeData(QoreObject *o, QMimeData *qm, bool managed = true) : QoreQtQMimeDataImpl(o, qm, managed) {
+      }
+
+      DLLLOCAL virtual QMimeData *getQMimeData() const {
+	 return this->qobj;
       }
 };
 

@@ -26,42 +26,135 @@
 
 #include "QoreAbstractQObject.h"
 
+#include "QC_QModelIndex.h"
+#include "QC_QMimeData.h"
+
 extern qore_classid_t CID_QWIDGET;
 
-class QoreAbstractQAbstractItemModel : public QoreAbstractQObject
-{
+#define QORE_MAGIC_DATA 0xbadee1deadbeef59ll
+
+class qore_magic_holder {
+   private:
+      unsigned long long magic;
+      AbstractQoreNode *data;
+
+      DLLLOCAL void deref_intern() {
+	 if (data) {
+	    ExceptionSink xsink;
+	    data->deref(&xsink);
+	 } 
+      }
+
    public:
-      DLLLOCAL virtual QAbstractItemModel *getQAbstractItemModel() const = 0;
+      DLLLOCAL qore_magic_holder() : magic(QORE_MAGIC_DATA), data(0) {
+      }
+      DLLLOCAL ~qore_magic_holder() {
+	 deref_intern();
+      }
+      DLLLOCAL void assign(const AbstractQoreNode *d) {
+	 deref_intern();
+	 data = d ? d->refSelf() : 0;
+      }
+      DLLLOCAL AbstractQoreNode *get() {
+	 if (!this || magic != QORE_MAGIC_DATA || !data)
+	    return 0;
+	 return data->refSelf();
+      }
+};
+
+class QoreAbstractQAbstractItemModel : public QoreAbstractQObject {
+   private:
+      mutable qore_magic_holder holder;
+      
+   public:
+      DLLLOCAL QoreAbstractQAbstractItemModel() {}
+
+      DLLLOCAL QModelIndex qoreCreateIndex(int row, int column, const AbstractQoreNode *data) const {
+	 holder.assign(data);
+	 return createIndex(row, column, &holder);
+      }
+
+      virtual QAbstractItemModel *getQAbstractItemModel() const = 0;
 
       // protected methods
-      DLLLOCAL virtual void beginInsertColumns ( const QModelIndex & parent, int first, int last ) = 0;
-      DLLLOCAL virtual void beginInsertRows ( const QModelIndex & parent, int first, int last ) = 0;
-      DLLLOCAL virtual void beginRemoveColumns ( const QModelIndex & parent, int first, int last ) = 0;
-      DLLLOCAL virtual void beginRemoveRows ( const QModelIndex & parent, int first, int last )  = 0;
-      DLLLOCAL virtual void changePersistentIndex ( const QModelIndex & from, const QModelIndex & to ) = 0; 
-      DLLLOCAL virtual void changePersistentIndexList ( const QModelIndexList & from, const QModelIndexList & to ) = 0; 
-      DLLLOCAL virtual QModelIndex createIndex ( int row, int column, void * ptr = 0 ) const = 0;
-      DLLLOCAL virtual QModelIndex createIndex ( int row, int column, quint32 id ) const = 0;
-      DLLLOCAL virtual void endInsertColumns () = 0;
-      DLLLOCAL virtual void endInsertRows () = 0;
-      DLLLOCAL virtual void endRemoveColumns () = 0;
-      DLLLOCAL virtual void endRemoveRows () = 0;
-      DLLLOCAL virtual QModelIndexList persistentIndexList () const = 0;
-      DLLLOCAL virtual void reset () = 0;
+      virtual void beginInsertColumns ( const QModelIndex & parent, int first, int last ) = 0;
+      virtual void beginInsertRows ( const QModelIndex & parent, int first, int last ) = 0;
+      virtual void beginRemoveColumns ( const QModelIndex & parent, int first, int last ) = 0;
+      virtual void beginRemoveRows ( const QModelIndex & parent, int first, int last )  = 0;
+      virtual void changePersistentIndex ( const QModelIndex & from, const QModelIndex & to ) = 0; 
+      virtual void changePersistentIndexList ( const QModelIndexList & from, const QModelIndexList & to ) = 0; 
+      virtual QModelIndex createIndex ( int row, int column, void *ptr = 0 ) const = 0;
+      virtual QModelIndex createIndex ( int row, int column, quint32 id ) const = 0;
+      virtual void endInsertColumns () = 0;
+      virtual void endInsertRows () = 0;
+      virtual void endRemoveColumns () = 0;
+      virtual void endRemoveRows () = 0;
+      virtual QModelIndexList persistentIndexList () const = 0;
+      virtual void reset () = 0;
 };
 
 template<typename T, typename V>
-class QoreQtQAbstractItemModelBase : public QoreQtQObjectBase<T, V>
-{
+class QoreQAbstractItemModelBase : public QoreQObjectBase<T, V> {
    public:
-      DLLLOCAL QoreQtQAbstractItemModelBase(QoreObject *obj, T *qo) : QoreQtQObjectBase<T, V>(obj, qo)
-      {
+      DLLLOCAL QoreQAbstractItemModelBase(T *qo) : QoreQObjectBase<T, V>(qo) {
+      }
+      DLLLOCAL virtual QAbstractItemModel *getQAbstractItemModel() const {
+	 return &(*this->qobj);
       }
 
-      DLLLOCAL virtual QAbstractItemModel *getQAbstractItemModel() const
-      {
-         return this->qobj;
+      // protected methods
+      DLLLOCAL virtual void beginInsertColumns ( const QModelIndex & parent, int first, int last ) {
+	 this->qobj->parent_beginInsertColumns(parent, first, last);
       }
+      DLLLOCAL virtual void beginInsertRows ( const QModelIndex & parent, int first, int last ) {
+	 this->qobj->parent_beginInsertRows(parent, first, last);
+      }
+      DLLLOCAL virtual void beginRemoveColumns ( const QModelIndex & parent, int first, int last ) {
+	 this->qobj->parent_beginRemoveColumns(parent, first, last);
+      }
+      DLLLOCAL virtual void beginRemoveRows ( const QModelIndex & parent, int first, int last )  {
+	 this->qobj->parent_beginRemoveRows(parent, first, last);
+      }
+      DLLLOCAL virtual void changePersistentIndex ( const QModelIndex & from, const QModelIndex & to ) {
+	 this->qobj->parent_changePersistentIndex(from, to);
+      }
+      DLLLOCAL virtual void changePersistentIndexList ( const QModelIndexList & from, const QModelIndexList & to ) {
+	 this->qobj->parent_changePersistentIndexList(from, to);
+      }
+      DLLLOCAL virtual QModelIndex createIndex ( int row, int column, void * ptr = 0 ) const { 
+	 return this->qobj->parent_createIndex(row, column, ptr);
+      }
+      DLLLOCAL virtual QModelIndex createIndex ( int row, int column, quint32 id ) const {
+	 return this->qobj->parent_createIndex(row, column, id);
+      }
+      DLLLOCAL virtual void endInsertColumns () {
+	 this->qobj->parent_endInsertColumns();
+      }
+      DLLLOCAL virtual void endInsertRows () {
+	 this->qobj->parent_endInsertRows();
+      }
+      DLLLOCAL virtual void endRemoveColumns () {
+	 this->qobj->parent_endRemoveColumns();
+      }
+      DLLLOCAL virtual void endRemoveRows () {
+	 this->qobj->parent_endRemoveRows();
+      }
+      DLLLOCAL virtual QModelIndexList persistentIndexList () const {
+	 return this->qobj->parent_persistentIndexList();
+      }
+      DLLLOCAL virtual void reset () {
+	 this->qobj->parent_reset();
+      }
+
+};
+
+template<typename T, typename V, typename P = T>
+class QoreQtQAbstractItemModelBase : public QoreQtQObjectBase<T, V, P> {
+   public:
+      DLLLOCAL QoreQtQAbstractItemModelBase(QoreObject *obj, T *qo) : QoreQtQObjectBase<T, V, P>(obj, qo) {
+      }
+
+      // protected methods
       DLLLOCAL virtual void beginInsertColumns ( const QModelIndex & parent, int first, int last ) {}
       DLLLOCAL virtual void beginInsertRows ( const QModelIndex & parent, int first, int last ) {}
       DLLLOCAL virtual void beginRemoveColumns ( const QModelIndex & parent, int first, int last ) {}
@@ -76,7 +169,49 @@ class QoreQtQAbstractItemModelBase : public QoreQtQObjectBase<T, V>
       DLLLOCAL virtual void endRemoveRows () {}
       DLLLOCAL virtual QModelIndexList persistentIndexList () const { return QModelIndexList(); }
       DLLLOCAL virtual void reset () {}
+
+      DLLLOCAL virtual QAbstractItemModel *getQAbstractItemModel() const {
+         return this->qobj;
+      }
 };
 
+class QoreQAbstractItemModelExtension : public QoreQObjectExtension {
+   protected:
+      const QoreMethod *m_buddy, *m_canFetchMore, *m_columnCount, *m_data, *m_dropMimeData, *m_fetchMore,
+	 *m_flags, *m_hasChildren, *m_headerData, *m_index, *m_insertColumns, *m_insertRows, *m_itemData,
+	 *m_match, *m_mimeData, *m_mimeTypes, *m_parent, *m_removeColumns, *m_removeRows, *m_rowCount,
+	 *m_setData, *m_setHeaderData, *m_setItemData, *m_sort, *m_span, *m_supportedDropActions;
+
+      DLLLOCAL QoreQAbstractItemModelExtension(QoreObject *obj, QObject *qo) : QoreQObjectExtension(obj, qo) {
+         const QoreClass *qc = obj->getClass();
+
+	 m_buddy                = findMethod(qc, "buddy");
+	 m_canFetchMore         = findMethod(qc, "canFetchMore");
+	 m_columnCount          = findMethod(qc, "columnCount");
+	 m_data                 = findMethod(qc, "data");
+	 m_dropMimeData         = findMethod(qc, "dropMimeData");
+	 m_fetchMore            = findMethod(qc, "fetchMore");
+	 m_flags                = findMethod(qc, "flags");
+	 m_hasChildren          = findMethod(qc, "hasChildren");
+	 m_headerData           = findMethod(qc, "headerData");
+	 m_index                = findMethod(qc, "index");
+	 m_insertColumns        = findMethod(qc, "insertColumns");
+	 m_insertRows           = findMethod(qc, "insertRows");
+	 m_itemData             = findMethod(qc, "itemData");
+	 m_match                = findMethod(qc, "match");
+	 m_mimeData             = findMethod(qc, "mimeData");
+	 m_mimeTypes            = findMethod(qc, "mimeTypes");
+	 m_parent               = findMethod(qc, "parent");
+	 m_removeColumns        = findMethod(qc, "removeColumns");
+	 m_removeRows           = findMethod(qc, "removeRows");
+	 m_rowCount             = findMethod(qc, "rowCount");
+	 m_setData              = findMethod(qc, "setData");
+	 m_setHeaderData        = findMethod(qc, "setHeaderData");
+	 m_setItemData          = findMethod(qc, "setItemData");
+	 m_sort                 = findMethod(qc, "sort");
+	 m_span                 = findMethod(qc, "span");
+	 m_supportedDropActions = findMethod(qc, "supportedDropActions");
+      }
+};
 
 #endif

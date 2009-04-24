@@ -32,8 +32,7 @@ DLLEXPORT extern qore_classid_t CID_QTOOLBAR;
 DLLEXPORT extern QoreClass *QC_QToolBar;
 DLLEXPORT QoreNamespace *initQToolBarNS(QoreClass *);
 
-class myQToolBar : public QToolBar, public QoreQWidgetExtension
-{
+class myQToolBar : public QToolBar, public QoreQWidgetExtension {
 #define QOREQTYPE QToolBar
 #define MYQOREQTYPE myQToolBar
 #include "qore-qt-metacode.h"
@@ -42,27 +41,27 @@ class myQToolBar : public QToolBar, public QoreQWidgetExtension
 #undef QOREQTYPE
 
    public:
-      DLLLOCAL myQToolBar(QoreObject *obj, const QString& title, QWidget* parent = 0) : QToolBar(title, parent), QoreQWidgetExtension(obj, this)
-      {
-         
+      DLLLOCAL myQToolBar(QoreObject *obj, const QString& title, QWidget* parent = 0) : QToolBar(title, parent), QoreQWidgetExtension(obj, this) { 
       }
-      DLLLOCAL myQToolBar(QoreObject *obj, QWidget* parent = 0) : QToolBar(parent), QoreQWidgetExtension(obj, this)
-      {
-         
+      DLLLOCAL myQToolBar(QoreObject *obj, QWidget* parent = 0) : QToolBar(parent), QoreQWidgetExtension(obj, this) {
       }
 };
 
 typedef QoreQWidgetBase<myQToolBar, QoreAbstractQWidget> QoreQToolBarImpl;
 
-class QoreQToolBar : public QoreQToolBarImpl
-{
+class QoreQToolBar : public QoreQToolBarImpl {
    public:
-      DLLLOCAL QoreQToolBar(QoreObject *obj, const QString& title, QWidget* parent = 0) : QoreQToolBarImpl(new myQToolBar(obj, title, parent))
-      {
+      DLLLOCAL QoreQToolBar(QoreObject *obj, const QString& title, QWidget* parent = 0) : QoreQToolBarImpl(new myQToolBar(obj, title, parent)) {
       }
-      DLLLOCAL QoreQToolBar(QoreObject *obj, QWidget* parent = 0) : QoreQToolBarImpl(new myQToolBar(obj, parent))
-      {
+      DLLLOCAL QoreQToolBar(QoreObject *obj, QWidget* parent = 0) : QoreQToolBarImpl(new myQToolBar(obj, parent)) {
       }
+};
+
+typedef QoreQtQWidgetBase<QToolBar, QoreAbstractQWidget> QoreQtQToolBarImpl;
+
+class QoreQtQToolBar : public QoreQtQToolBarImpl {
+   public:
+      DLLLOCAL QoreQtQToolBar(QoreObject *obj, QToolBar *qtoolbar) : QoreQtQToolBarImpl(obj, qtoolbar) { }
 };
 
 #endif // _QORE_QT_QC_QTOOLBAR_H

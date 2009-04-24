@@ -12,9 +12,9 @@ QORE_QT_GUI_SOURCES = qt-gui-util.cc QC_QApplication.cc QC_QPushButton.cc \
 	QC_QBrush.cc \
 	QC_QPainter.cc QC_QPalette.cc QC_QRegion.cc \
 	QC_QLabel.cc \
-	QC_QMovie.cc BrushStyleNode.cc \
+	QC_QMovie.cc \
 	QC_QKeySequence.cc \
-	QC_QAction.cc QC_QActionGroup.cc PenStyleNode.cc \
+	QC_QAction.cc QC_QActionGroup.cc \
 	QC_QMatrix.cc QC_QShortcut.cc \
 	QC_QAbstractButton.cc \
 	QC_QWidget.cc \
@@ -175,7 +175,15 @@ QORE_QT_GUI_SOURCES = qt-gui-util.cc QC_QApplication.cc QC_QPushButton.cc \
 	QC_QTextOption.cc \
 	QC_QTextLayout.cc \
 	QC_QDesktopServices.cc \
-	QC_QItemSelectionRange.cc
+	QC_QItemSelectionRange.cc \
+	QC_QFileIconProvider.cc \
+	QC_QDirModel.cc \
+	QC_QStatusBar.cc \
+	QC_QItemSelection.cc \
+	QC_QItemSelectionModel.cc \
+	QC_QStyleOptionDockWidget.cc \
+	QC_QDockWidget.cc \
+	QC_QTreeView.cc
 if COND_MACOSX
 QORE_QT_GUI_SOURCES += QC_QMacStyle.cc
 endif

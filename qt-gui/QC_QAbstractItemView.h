@@ -31,6 +31,6 @@
 DLLEXPORT extern qore_classid_t CID_QABSTRACTITEMVIEW;
 DLLEXPORT extern QoreClass *QC_QAbstractItemView;
 
-DLLEXPORT class QoreClass *initQAbstractItemViewClass(QoreClass *);
+DLLEXPORT QoreNamespace *initQAbstractItemViewNS(QoreClass *);
 
 #endif // _QORE_QT_QC_QABSTRACTITEMVIEW_H

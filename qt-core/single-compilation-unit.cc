@@ -1,5 +1,7 @@
 #include "qt-core-util.cc"
 #include "QoreQtDynamicMethod.cc"
+#include "BrushStyleNode.cc"
+#include "PenStyleNode.cc"
 #include "QC_QObject.cc"
 #include "QC_QRect.cc"
 #include "QC_QRectF.cc"
@@ -34,3 +36,5 @@
 #include "QC_QModelIndex.cc"
 #include "QC_QTranslator.cc"
 
+#include "QC_QAbstractTableModel.cc"
+#include "QC_QAbstractListModel.cc"

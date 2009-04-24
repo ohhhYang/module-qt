@@ -338,8 +338,29 @@ static AbstractQoreNode *QTOOLBAR_widgetForAction(QoreObject *self, QoreQToolBar
    return return_qwidget(qtb->qobj->widgetForAction(static_cast<QAction *>(action->getQAction())));
 }
 
-static QoreClass *initQToolBarClass(QoreClass *qwidget)
-{
+// void setIconSize ( const QSize & iconSize )
+static AbstractQoreNode *QTOOLBAR_setIconSize(QoreObject *self, QoreQToolBar *qtb, const QoreListNode *params, ExceptionSink *xsink) {
+   const AbstractQoreNode *p = get_param(params, 0);
+   QoreQSize *iconSize = (p && p->getType() == NT_OBJECT) ? (QoreQSize *)reinterpret_cast<const QoreObject *>(p)->getReferencedPrivateData(CID_QSIZE, xsink) : 0;
+   if (!iconSize) {
+      if (!xsink->isException())
+         xsink->raiseException("QTOOLBAR-SETICONSIZE-PARAM-ERROR", "expecting a QSize object as first argument to QToolBar::setIconSize()");
+      return 0;
+   }
+   ReferenceHolder<AbstractPrivateData> iconSizeHolder(static_cast<AbstractPrivateData *>(iconSize), xsink);
+   qtb->qobj->setIconSize(*(static_cast<QSize *>(iconSize)));
+   return 0;
+}
+
+//void setToolButtonStyle ( Qt::ToolButtonStyle toolButtonStyle )
+static AbstractQoreNode *QTOOLBAR_setToolButtonStyle(QoreObject *self, QoreQToolBar *qtb, const QoreListNode *params, ExceptionSink *xsink) {
+   const AbstractQoreNode *p = get_param(params, 0);
+   Qt::ToolButtonStyle toolButtonStyle = (Qt::ToolButtonStyle)(p ? p->getAsInt() : 0);
+   qtb->qobj->setToolButtonStyle(toolButtonStyle);
+   return 0;
+}
+
+static QoreClass *initQToolBarClass(QoreClass *qwidget) {
    QC_QToolBar = new QoreClass("QToolBar", QDOM_GUI);
    CID_QTOOLBAR = QC_QToolBar->getID();
 
@@ -369,6 +390,10 @@ static QoreClass *initQToolBarClass(QoreClass *qwidget)
    QC_QToolBar->addMethod("toggleViewAction",            (q_method_t)QTOOLBAR_toggleViewAction);
    QC_QToolBar->addMethod("toolButtonStyle",             (q_method_t)QTOOLBAR_toolButtonStyle);
    QC_QToolBar->addMethod("widgetForAction",             (q_method_t)QTOOLBAR_widgetForAction);
+
+   // slots
+   QC_QToolBar->addMethod("setIconSize",                 (q_method_t)QTOOLBAR_setIconSize);
+   QC_QToolBar->addMethod("setToolButtonStyle",          (q_method_t)QTOOLBAR_setToolButtonStyle);
 
    return QC_QToolBar;
 }

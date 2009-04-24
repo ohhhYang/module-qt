@@ -24,12 +24,9 @@
 
 #define _QORE_QT_PENSTYLENODE_H
 
-#include <QPen>
-
 DLLEXPORT extern qore_type_t NT_PENSTYLE;
 
-class PenStyleNode : public SimpleValueQoreNode
-{
+class PenStyleNode : public SimpleValueQoreNode {
    private:
       Qt::PenStyle val;
 
@@ -39,12 +36,10 @@ class PenStyleNode : public SimpleValueQoreNode
       DLLLOCAL virtual double getAsFloatImpl() const;
 
    public:
-      DLLLOCAL PenStyleNode(Qt::PenStyle v) : SimpleValueQoreNode(NT_PENSTYLE), val(v)
-      {
+      DLLLOCAL PenStyleNode(Qt::PenStyle v) : SimpleValueQoreNode(NT_PENSTYLE), val(v) {
       }
 
-      DLLLOCAL ~PenStyleNode()
-      {
+      DLLLOCAL ~PenStyleNode() {
       }
 
       // get the value of the type in a string context (default implementation = del = false and returns NullString)
@@ -73,16 +68,14 @@ class PenStyleNode : public SimpleValueQoreNode
       // returns the type name as a c string
       DLLLOCAL virtual const char *getTypeName() const;
 
-      DLLLOCAL Qt::PenStyle getStyle() const
-      {
+      DLLLOCAL Qt::PenStyle getStyle() const {
 	 return val;
       }
 };
 
 void addPenStyleType();
 
-static inline const PenStyleNode *test_penstyle_param(const QoreListNode *n, int i)
-{
+static inline const PenStyleNode *test_penstyle_param(const QoreListNode *n, int i) {
    if (!n) return 0;
    return dynamic_cast<const PenStyleNode *>(n->retrieve_entry(i));
 }

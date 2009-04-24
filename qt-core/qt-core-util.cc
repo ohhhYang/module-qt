@@ -3,7 +3,7 @@
   
   Qore Programming Language
 
-  Copyright 2003 - 2008 David Nichols
+  Copyright 2003 - 2009 David Nichols
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -20,7 +20,7 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#include <qore/Qore.h>
+#include "qt-core.h"
 
 #include "QC_QByteArray.h"
 #include "QC_QChar.h"
@@ -45,6 +45,7 @@
 //#include "QC_QSizeF.h"
 //#include "QC_QStringList.h"
 #include "QC_QUrl.h"
+#include "QC_QModelIndex.h"
 
 QoreNamespace *QtNS = 0, *QEventNS = 0;
 
@@ -56,8 +57,7 @@ static qv_hook_list_t qvariant_hooks;
 static qo_hook_list_t qobject_hooks;
 static qe_hook_list_t qevent_hooks;
 
-int get_qdate(const AbstractQoreNode *n, QDate &date, ExceptionSink *xsink)
-{
+int get_qdate(const AbstractQoreNode *n, QDate &date, ExceptionSink *xsink) {
    {
       const DateTimeNode *d = dynamic_cast<const DateTimeNode *>(n);
       if (d) {
@@ -92,7 +92,7 @@ int get_qdate(const AbstractQoreNode *n, QDate &date, ExceptionSink *xsink)
    return 0;
 }
 
-int get_qdatetime(const AbstractQoreNode *n, QDateTime &dt, class ExceptionSink *xsink)
+int get_qdatetime(const AbstractQoreNode *n, QDateTime &dt, ExceptionSink *xsink)
 {
    if (n) {
       {
@@ -111,11 +111,11 @@ int get_qdatetime(const AbstractQoreNode *n, QDateTime &dt, class ExceptionSink 
 	 if (*xsink)
 	    return -1;
 	 if (!qd) {
-	    class QoreQDateTime *qdt = (QoreQDateTime *)o->getReferencedPrivateData(CID_QDATETIME, xsink);
+	    QoreQDateTime *qdt = (QoreQDateTime *)o->getReferencedPrivateData(CID_QDATETIME, xsink);
 	    if (*xsink)
 	       return -1;
 	    if (!qdt) {
-	       class QoreQTime *qt = (QoreQTime *)o->getReferencedPrivateData(CID_QTIME, xsink);
+	       QoreQTime *qt = (QoreQTime *)o->getReferencedPrivateData(CID_QTIME, xsink);
 	       if (*xsink)
 		  return -1;
 	       if (!qt)
@@ -140,7 +140,7 @@ int get_qdatetime(const AbstractQoreNode *n, QDateTime &dt, class ExceptionSink 
    return -1;
 }
 
-int get_qtime(const AbstractQoreNode *n, QTime &time, class ExceptionSink *xsink)
+int get_qtime(const AbstractQoreNode *n, QTime &time, ExceptionSink *xsink)
 {
    {
       const DateTimeNode *qdt = dynamic_cast<const DateTimeNode *>(n);
@@ -151,11 +151,11 @@ int get_qtime(const AbstractQoreNode *n, QTime &time, class ExceptionSink *xsink
    }
    
    const QoreObject *o = dynamic_cast<const QoreObject *>(n);
-   class QoreQTime *qt = o ? (QoreQTime *)o->getReferencedPrivateData(CID_QTIME, xsink) : 0;
+   QoreQTime *qt = o ? (QoreQTime *)o->getReferencedPrivateData(CID_QTIME, xsink) : 0;
    if (*xsink)
       return -1;
    if (!qt) {
-      class QoreQDateTime *qdt = o ? (QoreQDateTime *)o->getReferencedPrivateData(CID_QDATETIME, xsink) : 0;
+      QoreQDateTime *qdt = o ? (QoreQDateTime *)o->getReferencedPrivateData(CID_QDATETIME, xsink) : 0;
       if (!qdt) {
 	 if (!*xsink) {
 	    if (n && n->getType() == NT_OBJECT) 
@@ -176,7 +176,7 @@ int get_qtime(const AbstractQoreNode *n, QTime &time, class ExceptionSink *xsink
    return 0;
 }
 
-int get_qbytearray(const AbstractQoreNode *n, QByteArray &ba, class ExceptionSink *xsink, bool suppress_exception)
+int get_qbytearray(const AbstractQoreNode *n, QByteArray &ba, ExceptionSink *xsink, bool suppress_exception)
 {
    qore_type_t ntype = n ? n->getType() : 0;
 
@@ -215,56 +215,58 @@ int get_qbytearray(const AbstractQoreNode *n, QByteArray &ba, class ExceptionSin
    return -1;
 }
 
-int get_qvariant(const AbstractQoreNode *n, QVariant &qva, class ExceptionSink *xsink, bool suppress_exception)
-{
+int get_qvariant(const AbstractQoreNode *n, QVariant &qva, ExceptionSink *xsink, bool suppress_exception) {
    //printd(5, "get_variant() n=%08p %s\n", n, n ? n->getTypeName() : "n/a");
-   if (n) {
-      qore_type_t ntype = n->getType();
+   if (is_nothing(n)) {
+      qva = QVariant();
+      return 0;
+   }
 
-      if (ntype == NT_OBJECT) {
-	 const QoreObject *o = reinterpret_cast<const QoreObject *>(n);
-	 QoreQVariant *qv = (QoreQVariant *)o->getReferencedPrivateData(CID_QVARIANT, xsink);
-	 if (*xsink)
-	    return -1;
-	 if (qv) {
-	    ReferenceHolder<QoreQVariant> qvHolder(qv, xsink);
-	    qva = *qv;
-	    return 0;
-	 }
-	 QoreQLocale *qlocale = (QoreQLocale *)o->getReferencedPrivateData(CID_QLOCALE, xsink);
-	 if (*xsink)
-	    return -1;
-	 if (qlocale) {
-	    ReferenceHolder<QoreQLocale> qlocaleHolder(qlocale, xsink);
-	    qva = *qlocale;
-	    return 0;
-	 }
-	 if (!suppress_exception)
-	    xsink->raiseException("QVARIANT-ERROR", "cannot convert class '%s' to QVariant", o->getClass()->getName());
+   qore_type_t ntype = n->getType();
+
+   if (ntype == NT_OBJECT) {
+      const QoreObject *o = reinterpret_cast<const QoreObject *>(n);
+      QoreQVariant *qv = (QoreQVariant *)o->getReferencedPrivateData(CID_QVARIANT, xsink);
+      if (*xsink)
 	 return -1;
-      }
-
-      if (ntype == NT_STRING) {
-	 const QoreStringNode *str = reinterpret_cast<const QoreStringNode *>(n);
-	 QVariant n_qv(str->getBuffer());
-	 qva = n_qv;
+      if (qv) {
+	 ReferenceHolder<QoreQVariant> qvHolder(qv, xsink);
+	 qva = *qv;
 	 return 0;
       }
-
-      if (ntype == NT_INT) {
-	 const QoreBigIntNode *b = reinterpret_cast<const QoreBigIntNode *>(n);
-	 if (b->val <= 0x7fffffff)
-	    qva.setValue((int)b->val);
-	 else
-	    qva.setValue(b->val);
-	 //printd(5, "qvariant integer %d (%d)\n", (int)b->val, qva.toInt());
+      QoreQLocale *qlocale = (QoreQLocale *)o->getReferencedPrivateData(CID_QLOCALE, xsink);
+      if (*xsink)
+	 return -1;
+      if (qlocale) {
+	 ReferenceHolder<QoreQLocale> qlocaleHolder(qlocale, xsink);
+	 qva = *qlocale;
 	 return 0;
       }
-
-      if (ntype == NT_FLOAT) {
-	 qva.setValue(reinterpret_cast<const QoreFloatNode *>(n)->f);
-	 return 0;
-      }
+      if (!suppress_exception)
+	 xsink->raiseException("QVARIANT-ERROR", "cannot convert class '%s' to QVariant", o->getClass()->getName());
+      return -1;
+   }
+   
+   if (ntype == NT_STRING) {
+      const QoreStringNode *str = reinterpret_cast<const QoreStringNode *>(n);
+      QVariant n_qv(str->getBuffer());
+      qva = n_qv;
+      return 0;
+   }
+   
+   if (ntype == NT_INT) {
+      const QoreBigIntNode *b = reinterpret_cast<const QoreBigIntNode *>(n);
+      if (b->val <= 0x7fffffff)
+	 qva.setValue((int)b->val);
+      else
+	 qva.setValue(b->val);
+      //printd(5, "qvariant integer %d (%d)\n", (int)b->val, qva.toInt());
+      return 0;
+   }
+   
+   if (ntype == NT_FLOAT) {
+      qva.setValue(reinterpret_cast<const QoreFloatNode *>(n)->f);
+      return 0;
    }
 
    if (!suppress_exception)
@@ -272,8 +274,7 @@ int get_qvariant(const AbstractQoreNode *n, QVariant &qva, class ExceptionSink *
    return -1;
 }
 
-int get_qchar(const AbstractQoreNode *n, QChar &c, class ExceptionSink *xsink, bool suppress_exception)
-{
+int get_qchar(const AbstractQoreNode *n, QChar &c, ExceptionSink *xsink, bool suppress_exception) {
    qore_type_t ntype = n ? n->getType() : 0;
    
    if (ntype == NT_STRING) {
@@ -305,8 +306,7 @@ int get_qchar(const AbstractQoreNode *n, QChar &c, class ExceptionSink *xsink, b
    return 0;
 }
 
-int get_qstring(const AbstractQoreNode *n, QString &str, class ExceptionSink *xsink, bool suppress_exception)
-{
+int get_qstring(const AbstractQoreNode *n, QString &str, ExceptionSink *xsink, bool suppress_exception) {
    qore_type_t ntype = n ? n->getType() : 0;
 
    if (ntype == NT_STRING) {
@@ -339,11 +339,11 @@ int get_qstring(const AbstractQoreNode *n, QString &str, class ExceptionSink *xs
    }
 
    const QoreObject *o = ntype == NT_OBJECT ? reinterpret_cast<const QoreObject *>(n) : 0;
-   class QoreQChar *qc = o ? (QoreQChar *)o->getReferencedPrivateData(CID_QCHAR, xsink) : 0;
+   QoreQChar *qc = o ? (QoreQChar *)o->getReferencedPrivateData(CID_QCHAR, xsink) : 0;
    if (*xsink)
       return -1;
    if (!qc) {
-      class QoreQVariant *qv = o ? (QoreQVariant *)o->getReferencedPrivateData(CID_QVARIANT, xsink) : 0;
+      QoreQVariant *qv = o ? (QoreQVariant *)o->getReferencedPrivateData(CID_QVARIANT, xsink) : 0;
       if (*xsink)
 	 return -1;
       if (!qv) {
@@ -370,15 +370,57 @@ int get_qstring(const AbstractQoreNode *n, QString &str, class ExceptionSink *xs
    return 0;
 }
 
-QoreObject *return_object(const QoreClass *qclass, AbstractPrivateData *data)
-{
+int get_qmodelindexlist(const AbstractQoreNode *n, QModelIndexList &qmi, ExceptionSink *xsink, bool suppress_exception) {
+   if (!n || n->getType() != NT_LIST) {
+      if (!suppress_exception)
+	 xsink->raiseException("GET-QMODELINDEX-LIST", "expecting a list of QModelIndex objects: type returned: %s", n ? n->getTypeName() : "NOTHING");
+      return -1;
+   }
+
+   ConstListIterator li(reinterpret_cast<const QoreListNode *>(n));
+   while (li.next()) {
+      const AbstractQoreNode *v = li.getValue();
+
+      const QoreObject *o = v && v->getType() == NT_OBJECT ? reinterpret_cast<const QoreObject *>(v) : 0;
+      QoreQModelIndex *qmip = o ? (QoreQModelIndex *)o->getReferencedPrivateData(CID_QMODELINDEX, xsink) : 0;
+      if (!qmip) {
+	 xsink->raiseException("GET-QMODELINDEX-LIST", "list index %d does not contain a QModelIndex object", li.index());
+	 return -1;
+      }
+
+      ReferenceHolder<QoreQModelIndex> qmiHolder(qmip, xsink);
+      QModelIndex rv_qmi = *(static_cast<QModelIndex *>(qmip));
+      qmi.push_back(rv_qmi);
+   }
+
+   return 0;
+}
+
+QVariant to_qvariant(const AbstractQoreNode *n, ExceptionSink *xsink) {
+   QVariant rv;
+   get_qvariant(n, rv, xsink, false);
+   return rv;
+}
+
+QString to_qstring(const AbstractQoreNode *n, ExceptionSink *xsink) {
+   QString rv;
+   get_qstring(n, rv, xsink, false);
+   return rv;
+}
+
+QModelIndexList to_qmodelindexlist(const AbstractQoreNode *n, ExceptionSink *xsink) {
+   QModelIndexList qmi;
+   get_qmodelindexlist(n, qmi, xsink, false);
+   return qmi;
+}
+
+QoreObject *return_object(const QoreClass *qclass, AbstractPrivateData *data) {
    QoreObject *qore_object = new QoreObject(qclass, getProgram());
    qore_object->setPrivate(qclass->getID(), data);
    return qore_object;
 }
 
-AbstractQoreNode *return_qvariant(const QVariant &qv)
-{
+AbstractQoreNode *return_qvariant(const QVariant &qv) {
    QVariant::Type type = qv.type();
    switch (type) {
       case QVariant::Invalid:
@@ -453,8 +495,7 @@ AbstractQoreNode *return_qvariant(const QVariant &qv)
 }
 
 // returns a QoreObject tagged as the appropriate QObject subclass
-QoreObject *return_qobject(QObject *o)
-{
+QoreObject *return_qobject(QObject *o) {
    if (!o)
       return 0;
 
@@ -479,8 +520,7 @@ QoreObject *return_qobject(QObject *o)
    return qo;
 }
 
-QoreObject *return_qevent(QEvent *event)
-{
+QoreObject *return_qevent(QEvent *event) {
    if (!event)
       return 0;
 
@@ -506,26 +546,32 @@ QoreObject *return_qevent(QEvent *event)
    return return_object(QC_QEvent, new QoreQEvent(*event));
 }
 
-QoreListNode *return_qstringlist(const QStringList &l)
-{
+QoreListNode *return_qstringlist(const QStringList &l) {
    QoreListNode *ql = new QoreListNode();
    for (QStringList::const_iterator i = l.begin(), e = l.end(); i != e; ++i)
       ql->push(new QoreStringNode((*i).toUtf8().data(), QCS_UTF8));
    return ql;
 }
 
-void register_return_qvariant_hook(return_qvariant_hook_t hook)
-{
+QoreListNode *return_qmodelindexlist(const QModelIndexList &qmil) {
+   QoreListNode *l = new QoreListNode();
+
+   for (QModelIndexList::const_iterator i = qmil.begin(), e = qmil.end(); i != e; ++i) {
+      QoreObject *qo = new QoreObject(QC_QModelIndex, getProgram());
+      qo->setPrivate(CID_QMODELINDEX, new QoreQModelIndex(*i));
+      l->push(qo);
+   }
+   return l;
+}
+
+void register_return_qvariant_hook(return_qvariant_hook_t hook) {
    qvariant_hooks.push_back(hook);
 }
 
-void register_return_qobject_hook(return_qobject_hook_t hook)
-{
+void register_return_qobject_hook(return_qobject_hook_t hook) {
    qobject_hooks.push_back(hook);
 }
 
-void register_return_qevent_hook(return_qevent_hook_t hook)
-{
+void register_return_qevent_hook(return_qevent_hook_t hook) {
    qevent_hooks.push_back(hook);
 }
-

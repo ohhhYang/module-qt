@@ -3,7 +3,7 @@
  
  Qore Programming Language
  
- Copyright 2003 - 2008 David Nichols
+ Copyright 2003 - 2009 David Nichols
  
  This library is free software; you can redistribute it and/or
  modify it under the terms of the GNU Lesser General Public
@@ -27,13 +27,11 @@
 qore_classid_t CID_QMETAOBJECT;
 class QoreClass *QC_QMetaObject = 0;
 
-static void QMETAOBJECT_constructor(class QoreObject *self, const QoreListNode *params, ExceptionSink *xsink)
-{
+static void QMETAOBJECT_constructor(class QoreObject *self, const QoreListNode *params, ExceptionSink *xsink) {
    xsink->raiseException("QMETAOBJECT-CONSTRUCTOR-ERROR", "objects of this class cannot be manually constructed");
 }
 
-static void QMETAOBJECT_copy(class QoreObject *self, class QoreObject *old, class QoreQObject *qo, ExceptionSink *xsink)
-{
+static void QMETAOBJECT_copy(class QoreObject *self, class QoreObject *old, class QoreQObject *qo, ExceptionSink *xsink) {
    xsink->raiseException("QMETAOBJECT-COPY-ERROR", "objects of this class cannot be copied");
 }
 
@@ -210,8 +208,60 @@ static AbstractQoreNode *QMETAOBJECT_superClass(QoreObject *self, QoreQMetaObjec
 //   ??? return new QoreBigIntNode(qmo->qobj->userProperty());
 //}
 
-QoreClass *initQMetaObjectClass()
-{
+//# bool checkConnectArgs ( const char * signal, const char * method )
+static AbstractQoreNode *f_QMetaObject_checkConnectArgs(const QoreListNode *params, ExceptionSink *xsink) {
+   const AbstractQoreNode *p = get_param(params, 0);
+   if (!p || p->getType() != NT_STRING) {
+      xsink->raiseException("QMETAOBJECT-CHECKCONNECTARGS-PARAM-ERROR", "expecting a string as first argument to QMetaObject::checkConnectArgs()");
+      return 0;
+   }
+   const char *signal = reinterpret_cast<const QoreStringNode *>(p)->getBuffer();
+   p = get_param(params, 1);
+   if (!p || p->getType() != NT_STRING) {
+      xsink->raiseException("QMETAOBJECT-CHECKCONNECTARGS-PARAM-ERROR", "expecting a string as second argument to QMetaObject::checkConnectArgs()");
+      return 0;
+   }
+   const char *method = reinterpret_cast<const QoreStringNode *>(p)->getBuffer();
+   return get_bool_node(QMetaObject::checkConnectArgs(signal, method));
+}
+
+//void connectSlotsByName ( QObject * object )
+static AbstractQoreNode *f_QMetaObject_connectSlotsByName(const QoreListNode *params, ExceptionSink *xsink) {
+   const AbstractQoreNode *p = get_param(params, 0);
+   QoreAbstractQObject *object = (p && p->getType() == NT_OBJECT) ? (QoreAbstractQObject *)reinterpret_cast<const QoreObject *>(p)->getReferencedPrivateData(CID_QOBJECT, xsink) : 0;
+   if (!object) {
+      if (!xsink->isException())
+         xsink->raiseException("QMETAOBJECT-CONNECTSLOTSBYNAME-PARAM-ERROR", "expecting a QObject object as first argument to QMetaObject::connectSlotsByName()");
+      return 0;
+   }
+   ReferenceHolder<AbstractPrivateData> objectHolder(static_cast<AbstractPrivateData *>(object), xsink);
+   QMetaObject::connectSlotsByName(object->getQObject());
+   return 0;
+}
+
+//QByteArray normalizedSignature ( const char * method )
+static AbstractQoreNode *f_QMetaObject_normalizedSignature(const QoreListNode *params, ExceptionSink *xsink) {
+   const AbstractQoreNode *p = get_param(params, 0);
+   if (!p || p->getType() != NT_STRING) {
+      xsink->raiseException("QMETAOBJECT-NORMALIZEDSIGNATURE-PARAM-ERROR", "expecting a string as first argument to QMetaObject::normalizedSignature()");
+      return 0;
+   }
+   const char *method = reinterpret_cast<const QoreStringNode *>(p)->getBuffer();
+   return return_object(QC_QByteArray, new QoreQByteArray(QMetaObject::normalizedSignature(method)));
+}
+
+//QByteArray normalizedType ( const char * type )
+static AbstractQoreNode *f_QMetaObject_normalizedType(const QoreListNode *params, ExceptionSink *xsink) {
+   const AbstractQoreNode *p = get_param(params, 0);
+   if (!p || p->getType() != NT_STRING) {
+      xsink->raiseException("QMETAOBJECT-NORMALIZEDTYPE-PARAM-ERROR", "expecting a string as first argument to QMetaObject::normalizedType()");
+      return 0;
+   }
+   const char *type = reinterpret_cast<const QoreStringNode *>(p)->getBuffer();
+   return return_object(QC_QByteArray, new QoreQByteArray(QMetaObject::normalizedType(type)));
+}
+
+QoreClass *initQMetaObjectClass() {
    QC_QMetaObject = new QoreClass("QMetaObject", QDOM_GUI);
    CID_QMETAOBJECT = QC_QMetaObject->getID();
 
@@ -240,5 +290,11 @@ QoreClass *initQMetaObjectClass()
    QC_QMetaObject->addMethod("superClass",                  (q_method_t)QMETAOBJECT_superClass);
    //QC_QMetaObject->addMethod("userProperty",                (q_method_t)QMETAOBJECT_userProperty);
 
+   QC_QMetaObject->addStaticMethod("checkConnectArgs",            f_QMetaObject_checkConnectArgs);
+   QC_QMetaObject->addStaticMethod("connectSlotsByName",          f_QMetaObject_connectSlotsByName);
+   QC_QMetaObject->addStaticMethod("normalizedSignature",         f_QMetaObject_normalizedSignature);
+   QC_QMetaObject->addStaticMethod("normalizedType",              f_QMetaObject_normalizedType);
+
    return QC_QMetaObject;
 }
+

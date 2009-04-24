@@ -3,7 +3,7 @@
 
   Qore Programming Language
 
-  Copyright 2003 - 2008 David Nichols
+  Copyright 2003 - 2009 David Nichols
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -24,12 +24,9 @@
 
 #define _QORE_QT_BRUSHSTYLE_H
 
-#include <QBrush>
-
 DLLEXPORT extern qore_type_t NT_BRUSHSTYLE;
 
-class BrushStyleNode : public SimpleValueQoreNode
-{
+class BrushStyleNode : public SimpleValueQoreNode {
    private:
       Qt::BrushStyle val;
 
@@ -39,12 +36,10 @@ class BrushStyleNode : public SimpleValueQoreNode
       DLLLOCAL virtual double getAsFloatImpl() const;
 
    public:
-      DLLLOCAL BrushStyleNode(Qt::BrushStyle v) : SimpleValueQoreNode(NT_BRUSHSTYLE), val(v)
-      {
+      DLLLOCAL BrushStyleNode(Qt::BrushStyle v) : SimpleValueQoreNode(NT_BRUSHSTYLE), val(v) {
       }
 
-      DLLLOCAL ~BrushStyleNode()
-      {
+      DLLLOCAL ~BrushStyleNode() {
       }
 
       // get the value of the type in a string context (default implementation = del = false and returns NullString)
@@ -74,16 +69,14 @@ class BrushStyleNode : public SimpleValueQoreNode
       // returns the type name as a c string
       DLLLOCAL virtual const char *getTypeName() const;
 
-      DLLLOCAL Qt::BrushStyle getStyle() const
-      {
+      DLLLOCAL Qt::BrushStyle getStyle() const {
 	 return val;
       }
 };
 
 void addBrushStyleType();
 
-static inline const BrushStyleNode *test_brushstyle_param(const QoreListNode *n, int i)
-{
+static inline const BrushStyleNode *test_brushstyle_param(const QoreListNode *n, int i) {
    if (!n) return 0;
    return dynamic_cast<const BrushStyleNode *>(n->retrieve_entry(i));
 }

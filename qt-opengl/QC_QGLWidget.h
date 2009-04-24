@@ -57,24 +57,22 @@ class myQGLWidget : public QGLWidget, public QoreQWidgetExtension
 	 m_resizeOverlayGL      = oc->findMethod("resizeOverlayGL");
       }
 
-      virtual void glDraw()
-      {
+      virtual void glDraw() {
 	 if (!m_glDraw) {
 	    QGLWidget::glDraw();
 	    return;
 	 }
 
-	 dispatch_event(qore_obj, m_glDraw, 0);
+	 dispatch_event(qore_obj, m_glDraw);
       }
 
-      virtual void glInit()
-      {
+      virtual void glInit() {
 	 if (!m_glInit) {
 	    QGLWidget::glInit();
 	    return;
 	 }
 
-	 dispatch_event(qore_obj, m_glInit, 0);
+	 dispatch_event(qore_obj, m_glInit);
       }
 
       virtual void initializeGL()
@@ -84,7 +82,7 @@ class myQGLWidget : public QGLWidget, public QoreQWidgetExtension
 	    return;
 	 }
 
-	 dispatch_event(qore_obj, m_initializeGL, 0);
+	 dispatch_event(qore_obj, m_initializeGL);
       }
 
       virtual void initializeOverlayGL()
@@ -94,7 +92,7 @@ class myQGLWidget : public QGLWidget, public QoreQWidgetExtension
 	    return;
 	 }
 
-	 dispatch_event(qore_obj, m_initializeOverlayGL, 0);
+	 dispatch_event(qore_obj, m_initializeOverlayGL);
       }
 
       virtual void paintGL()
@@ -104,7 +102,7 @@ class myQGLWidget : public QGLWidget, public QoreQWidgetExtension
 	    return;
 	 }
 
-	 dispatch_event(qore_obj, m_paintGL, 0);
+	 dispatch_event(qore_obj, m_paintGL);
       }
 
       virtual void paintOverlayGL()
@@ -114,7 +112,7 @@ class myQGLWidget : public QGLWidget, public QoreQWidgetExtension
 	    return;
 	 }
 
-	 dispatch_event(qore_obj, m_paintOverlayGL, 0);
+	 dispatch_event(qore_obj, m_paintOverlayGL);
       }
       
       virtual void resizeGL(int width, int height)
@@ -129,7 +127,7 @@ class myQGLWidget : public QGLWidget, public QoreQWidgetExtension
          args->push(new QoreBigIntNode(width));
          args->push(new QoreBigIntNode(height));
 
-	 dispatch_event(qore_obj, m_resizeGL, *args);
+	 dispatch_event(qore_obj, m_resizeGL, *args, &xsink);
       }
 
       virtual void resizeOverlayGL(int width, int height)
@@ -144,7 +142,7 @@ class myQGLWidget : public QGLWidget, public QoreQWidgetExtension
          args->push(new QoreBigIntNode(width));
          args->push(new QoreBigIntNode(height));
 
-	 dispatch_event(qore_obj, m_resizeOverlayGL, *args);
+	 dispatch_event(qore_obj, m_resizeOverlayGL, *args, &xsink);
       }
 
    public:

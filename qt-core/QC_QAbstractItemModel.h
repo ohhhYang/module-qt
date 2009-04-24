@@ -32,13 +32,34 @@ DLLEXPORT extern QoreClass *QC_QAbstractItemModel;
 
 DLLEXPORT QoreClass *initQAbstractItemModelClass(QoreClass *);
 
+class myQAbstractItemModel : public QAbstractItemModel, public QoreQAbstractItemModelExtension {
+#define QOREQTYPE QAbstractItemModel
+#define MYQOREQTYPE myQAbstractItemModel
+#include "qore-qt-metacode.h"
+#include "qore-qt-qabstractitemmodel-methods.h"
+#undef MYQOREQTYPE
+#undef QOREQTYPE
+
+  public:
+   DLLLOCAL myQAbstractItemModel(QoreObject *obj, QObject* parent = 0) : QAbstractItemModel(parent), QoreQAbstractItemModelExtension(obj, this) {
+   }
+
+   
+};
+
+typedef QoreQAbstractItemModelBase<myQAbstractItemModel, QoreAbstractQAbstractItemModel> QoreQAbstractItemModelImpl;
+
+class QoreQAbstractItemModel : public QoreQAbstractItemModelImpl {
+  public:
+   DLLLOCAL QoreQAbstractItemModel(QoreObject *obj, QObject* parent = 0) : QoreQAbstractItemModelImpl(new myQAbstractItemModel(obj, parent)) {
+   }
+};
+
 typedef QoreQtQAbstractItemModelBase<QAbstractItemModel, QoreAbstractQAbstractItemModel> QoreQtQAbstractItemModelImpl;
 
-class QoreQtQAbstractItemModel : public QoreQtQAbstractItemModelImpl
-{
+class QoreQtQAbstractItemModel : public QoreQtQAbstractItemModelImpl {
    public:
-      DLLLOCAL QoreQtQAbstractItemModel(QoreObject *obj, QAbstractItemModel *aim) : QoreQtQAbstractItemModelImpl(obj, aim)
-      {
+      DLLLOCAL QoreQtQAbstractItemModel(QoreObject *obj, QAbstractItemModel *aim) : QoreQtQAbstractItemModelImpl(obj, aim) {
       }
 };
 

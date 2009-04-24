@@ -32,8 +32,7 @@ class QoreClass *QC_QModelIndex = 0;
 
 //QModelIndex ()
 //QModelIndex ( const QModelIndex & other )
-static void QMODELINDEX_constructor(QoreObject *self, const QoreListNode *params, ExceptionSink *xsink)
-{
+static void QMODELINDEX_constructor(QoreObject *self, const QoreListNode *params, ExceptionSink *xsink) {
    self->setPrivate(CID_QMODELINDEX, new QoreQModelIndex());
    return;
 }
@@ -83,11 +82,10 @@ static AbstractQoreNode *QMODELINDEX_internalId(QoreObject *self, QoreQModelInde
 }
 
 //void * internalPointer () const
-//static AbstractQoreNode *QMODELINDEX_internalPointer(QoreObject *self, QoreQModelIndex *qmi, const QoreListNode *params, ExceptionSink *xsink)
-//{
-//   qmi->internalPointer();
-//   return 0;
-//}
+static AbstractQoreNode *QMODELINDEX_internalPointer(QoreObject *self, QoreQModelIndex *qmi, const QoreListNode *params, ExceptionSink *xsink) {
+   qore_magic_holder *mh = static_cast<qore_magic_holder *>(qmi->internalPointer());
+   return mh->get();
+}
 
 //bool isValid () const
 static AbstractQoreNode *QMODELINDEX_isValid(QoreObject *self, QoreQModelIndex *qmi, const QoreListNode *params, ExceptionSink *xsink)
@@ -154,7 +152,7 @@ QoreClass *initQModelIndexClass()
    QC_QModelIndex->addMethod("data",                        (q_method_t)QMODELINDEX_data);
    QC_QModelIndex->addMethod("flags",                       (q_method_t)QMODELINDEX_flags);
    QC_QModelIndex->addMethod("internalId",                  (q_method_t)QMODELINDEX_internalId);
-   //QC_QModelIndex->addMethod("internalPointer",             (q_method_t)QMODELINDEX_internalPointer);
+   QC_QModelIndex->addMethod("internalPointer",             (q_method_t)QMODELINDEX_internalPointer);
    QC_QModelIndex->addMethod("isValid",                     (q_method_t)QMODELINDEX_isValid);
    QC_QModelIndex->addMethod("model",                       (q_method_t)QMODELINDEX_model);
    QC_QModelIndex->addMethod("parent",                      (q_method_t)QMODELINDEX_parent);

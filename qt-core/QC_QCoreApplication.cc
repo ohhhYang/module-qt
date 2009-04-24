@@ -486,8 +486,7 @@ static AbstractQoreNode *f_QCoreApplication_translate(const QoreListNode *params
    return new QoreStringNode(QCoreApplication::translate(context, sourceText, comment, encoding, n).toUtf8().data(), QCS_UTF8);
 }
 
-QoreClass *initQCoreApplicationClass(QoreClass *qobject)
-{
+static QoreClass *initQCoreApplicationClass(QoreClass *qobject) {
    QC_QCoreApplication = new QoreClass("QCoreApplication", QDOM_GUI);
    CID_QCOREAPPLICATION = QC_QCoreApplication->getID();
 
@@ -534,4 +533,17 @@ QoreClass *initQCoreApplicationClass(QoreClass *qobject)
    QC_QCoreApplication->addStaticMethod("translate",                    f_QCoreApplication_translate);
 
    return QC_QCoreApplication;
+}
+
+QoreNamespace *initQCoreApplicationNS(QoreClass *qobject) {
+   QoreNamespace *ns = new QoreNamespace("QCoreApplication");
+
+   ns->addSystemClass(initQCoreApplicationClass(qobject));
+
+   // Encoding enum
+   ns->addConstant("CodecForTr",               new QoreBigIntNode(QCoreApplication::CodecForTr));
+   ns->addConstant("UnicodeUTF8",              new QoreBigIntNode(QCoreApplication::UnicodeUTF8));
+   ns->addConstant("DefaultCodec",             new QoreBigIntNode(QCoreApplication::DefaultCodec));
+
+   return ns;
 }

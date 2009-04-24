@@ -8,7 +8,8 @@ class T {
 	 if (!m_createEditor)
 	    return QOREQTYPE::createEditor(parent, option, index);
 
-	 QoreListNode *args = new QoreListNode();
+	 ExceptionSink xsink;
+	 ReferenceHolder<QoreListNode> args(new QoreListNode, &xsink);
 
 	 args->push(return_qobject(parent));
 
@@ -20,18 +21,13 @@ class T {
 	 qw->setPrivate(CID_QMODELINDEX, new QoreQModelIndex(index));
 	 args->push(qw);
 
-	 ExceptionSink xsink;
+	 ReferenceHolder<AbstractQoreNode> rv(dispatch_event_intern(qore_obj, m_createEditor, *args, &xsink), &xsink);
 
-	 AbstractQoreNode *rv = dispatch_event_intern(qore_obj, m_createEditor, args, &xsink);
-
-	 if (xsink) {
-            discard(rv, &xsink);
+	 if (xsink)
             return QOREQTYPE::createEditor(parent, option, index);
-         }
 	 
-	 QoreObject *o = dynamic_cast<QoreObject *>(rv);
+	 QoreObject *o = dynamic_cast<QoreObject *>(*rv);
 	 QoreQWidget *qqw = o ? (QoreQWidget *)o->getReferencedPrivateData(CID_QWIDGET, &xsink) : 0;
-         discard(rv, &xsink);
 
          if (!qqw) {
             xsink.raiseException("CREATEEDITOR-ERROR", "the createEditor() method did not return a QWidget object");
@@ -45,7 +41,9 @@ class T {
 	 if (!m_editorEvent)
 	    return QOREQTYPE::editorEvent(event, model, option, index);
 
-	 QoreListNode *args = new QoreListNode();
+	 ExceptionSink xsink;
+	 ReferenceHolder<QoreListNode> args(new QoreListNode, &xsink);
+
 	 QoreObject *o = new QoreObject(QC_QEvent, getProgram());
 	 o->setPrivate(CID_QEVENT, new QoreQEvent(*event));
 	 args->push(o);
@@ -63,7 +61,7 @@ class T {
 	 o->setPrivate(CID_QMODELINDEX, new QoreQModelIndex(index));
 	 args->push(o);
 
-	 return dispatch_event_bool(qore_obj, m_editorEvent, args);
+	 return dispatch_event_bool(qore_obj, m_editorEvent, *args, &xsink);
       }
 
       virtual void paint ( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const {
@@ -72,7 +70,9 @@ class T {
 	    return;
 	 }
 
-	 QoreListNode *args = new QoreListNode();
+	 ExceptionSink xsink;
+	 ReferenceHolder<QoreListNode> args(new QoreListNode, &xsink);
+
 	 QoreObject *o = new QoreObject(QC_QPainter, getProgram());
 	 o->setPrivate(CID_QPAINTER, new QoreQPainter(painter));
 	 args->push(o);
@@ -85,14 +85,15 @@ class T {
 	 o->setPrivate(CID_QMODELINDEX, new QoreQModelIndex(index));
 	 args->push(o);
 
-	 dispatch_event(qore_obj, m_paint, args);
+	 dispatch_event(qore_obj, m_paint, *args, &xsink);
       }
 
       virtual void setEditorData ( QWidget * editor, const QModelIndex & index ) const {
 	 if (!m_setEditorData)
 	    return QOREQTYPE::setEditorData(editor, index);
 
-	 QoreListNode *args = new QoreListNode();
+	 ExceptionSink xsink;
+	 ReferenceHolder<QoreListNode> args(new QoreListNode, &xsink);
 
 	 args->push(return_qobject(editor));
 
@@ -100,7 +101,7 @@ class T {
 	 qw->setPrivate(CID_QMODELINDEX, new QoreQModelIndex(index));
 	 args->push(qw);
 
-	 dispatch_event(qore_obj, m_setEditorData, args);
+	 dispatch_event(qore_obj, m_setEditorData, *args, &xsink);
       }
 
       virtual void setModelData ( QWidget * editor, QAbstractItemModel * model, const QModelIndex & index ) const {
@@ -109,7 +110,8 @@ class T {
 	    return;
 	 }
 
-	 QoreListNode *args = new QoreListNode();
+	 ExceptionSink xsink;
+	 ReferenceHolder<QoreListNode> args(new QoreListNode, &xsink);
 
 	 QoreObject *qw = 0;
 	 if (editor) {
@@ -129,14 +131,15 @@ class T {
 	 qw->setPrivate(CID_QMODELINDEX, new QoreQModelIndex(index));
 	 args->push(qw);
 
-	 dispatch_event(qore_obj, m_setModelData, args);
+	 dispatch_event(qore_obj, m_setModelData, *args, &xsink);
       }
 
       virtual QSize sizeHint ( const QStyleOptionViewItem & option, const QModelIndex & index ) const {
 	 if (!m_sizeHint)
 	    return QOREQTYPE::sizeHint(option, index);
 
-	 QoreListNode *args = new QoreListNode();
+	 ExceptionSink xsink;
+	 ReferenceHolder<QoreListNode> args(new QoreListNode, &xsink);
 
 	 QoreObject *o = new QoreObject(QC_QStyleOptionViewItem, getProgram());
 	 o->setPrivate(CID_QSTYLEOPTIONVIEWITEM, new QoreQStyleOptionViewItem(option));
@@ -146,18 +149,13 @@ class T {
 	 o->setPrivate(CID_QMODELINDEX, new QoreQModelIndex(index));
 	 args->push(o);
 
-	 ExceptionSink xsink;
-
-	 AbstractQoreNode *rv = dispatch_event_intern(qore_obj, m_sizeHint, args, &xsink);
+	 ReferenceHolder<AbstractQoreNode> rv(dispatch_event_intern(qore_obj, m_sizeHint, *args, &xsink), &xsink);
 	 
-	 if (xsink) {
-            discard(rv, &xsink);
+	 if (xsink)
             return QOREQTYPE::sizeHint(option, index);
-         }
 	 
-         o = dynamic_cast<QoreObject *>(rv);
+         o = dynamic_cast<QoreObject *>(*rv);
 	 QoreQSize *qs = o ? (QoreQSize *)o->getReferencedPrivateData(CID_QSIZE, &xsink) : 0;
-         discard(rv, &xsink);
 
          if (!qs) {
             xsink.raiseException("SIZEHINT-ERROR", "the sizeHint() method did not return a QSize object");
@@ -174,7 +172,8 @@ class T {
 	    return;
 	 }
 
-	 QoreListNode *args = new QoreListNode();
+	 ExceptionSink xsink;
+	 ReferenceHolder<QoreListNode> args(new QoreListNode, &xsink);
 
 	 QoreObject *o = 0;
 	 if (editor) {
@@ -193,7 +192,7 @@ class T {
 	 o->setPrivate(CID_QMODELINDEX, new QoreQModelIndex(index));
 	 args->push(o);
 
-	 dispatch_event(qore_obj, m_updateEditorGeometry, args);
+	 dispatch_event(qore_obj, m_updateEditorGeometry, *args, &xsink);
       }
 #if 0
 }

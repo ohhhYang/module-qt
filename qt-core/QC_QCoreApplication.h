@@ -30,10 +30,9 @@
 DLLEXPORT extern qore_classid_t CID_QCOREAPPLICATION;
 DLLEXPORT extern QoreClass *QC_QCoreApplication;
 
-DLLEXPORT QoreClass *initQCoreApplicationClass(QoreClass *);
+DLLEXPORT QoreNamespace *initQCoreApplicationNS(QoreClass *parent);
 
-class myQCoreApplication : public QCoreApplication, public QoreQObjectExtension
-{
+class myQCoreApplication : public QCoreApplication, public QoreQObjectExtension {
 #define QOREQTYPE QCoreApplication
 #define MYQOREQTYPE myQCoreApplication
 #include "qore-qt-metacode.h"
@@ -41,13 +40,11 @@ class myQCoreApplication : public QCoreApplication, public QoreQObjectExtension
 #undef QOREQTYPE
 
    public:
-      DLLLOCAL myQCoreApplication(QoreObject *obj, int& argc, char ** argv) : QCoreApplication(argc, argv), QoreQObjectExtension(obj, this)
-      {
+      DLLLOCAL myQCoreApplication(QoreObject *obj, int& argc, char ** argv) : QCoreApplication(argc, argv), QoreQObjectExtension(obj, this) {
       }
 };
 
-class myQCoreApplicationWithArgs : public myQCoreApplication
-{
+class myQCoreApplicationWithArgs : public myQCoreApplication {
    private:
       QoreQtArgs *qt_args;
 
@@ -68,8 +65,7 @@ class myQCoreApplicationWithArgs : public myQCoreApplication
 
 typedef QoreQCoreApplicationBase<myQCoreApplicationWithArgs, QoreAbstractQCoreApplication> QoreQCoreApplicationImpl;
 
-class QoreQCoreApplication : public QoreQCoreApplicationImpl
-{
+class QoreQCoreApplication : public QoreQCoreApplicationImpl {
    public:
       DLLLOCAL QoreQCoreApplication(QoreObject *obj, int& argc, char ** argv) : QoreQCoreApplicationImpl(new myQCoreApplicationWithArgs(obj, argc, argv))
       {
@@ -81,8 +77,7 @@ class QoreQCoreApplication : public QoreQCoreApplicationImpl
 
 typedef QoreQtQCoreApplicationBase<QCoreApplication, QoreAbstractQCoreApplication> QoreQtQCoreApplicationImpl;
 
-class QoreQtQCoreApplication : public QoreQtQCoreApplicationImpl
-{
+class QoreQtQCoreApplication : public QoreQtQCoreApplicationImpl {
   public:
    DLLLOCAL QoreQtQCoreApplication(QoreObject *obj, QCoreApplication *qcoreapplication) : QoreQtQCoreApplicationImpl(obj, qcoreapplication)
    {

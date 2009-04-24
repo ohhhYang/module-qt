@@ -1,11 +1,13 @@
 pkglibdir = $(mypkglibdir)
 
-QT_SOURCES = qt-core-module.cc
+QT_SOURCES = qt-core-module.cc qt-core-constants.cc
 
 if COND_SINGLE_COMPILATION_UNIT
 QORE_QT_SOURCES = single-compilation-unit.cc
 else
 QORE_QT_SOURCES = qt-core-util.cc \
+	BrushStyleNode.cc \
+	PenStyleNode.cc \
 	QC_QObject.cc \
 	QC_QRect.cc \
 	QC_QRectF.cc \
@@ -39,7 +41,9 @@ QORE_QT_SOURCES = qt-core-util.cc \
 	QC_QModelIndex.cc \
 	QC_QMimeData.cc \
 	QC_QBasicTimer.cc \
-	QC_QMetaObject.cc
+	QC_QMetaObject.cc \
+	QC_QAbstractTableModel.cc \
+	QC_QAbstractListModel.cc
 endif
 
 lib_LTLIBRARIES = libqore-qt-core.la

@@ -3,7 +3,7 @@
  
  Qore Programming Language
  
- Copyright 2003 - 2008 David Nichols
+ Copyright 2003 - 2009 David Nichols
  
  This library is free software; you can redistribute it and/or
  modify it under the terms of the GNU Lesser General Public
@@ -31,20 +31,34 @@
 #include <QObject>
 #include <QList>
 #include <QStringList>
+#include <QModelIndex>
+
+#include <map>
+
+typedef std::map<int, const char *> qt_enum_map_t;
+
+#include "BrushStyleNode.h"
+#include "PenStyleNode.h"
 
 DLLEXPORT extern QoreNamespace *QtNS, *QEventNS;
 
-DLLEXPORT int get_qdate(const AbstractQoreNode *n, QDate &date, class ExceptionSink *xsink);
-DLLEXPORT int get_qtime(const AbstractQoreNode *n, QTime &time, class ExceptionSink *xsink);
-DLLEXPORT int get_qdatetime(const AbstractQoreNode *n, QDateTime &dt, class ExceptionSink *xsink);
-DLLEXPORT int get_qvariant(const AbstractQoreNode *n, QVariant &qv, class ExceptionSink *xsink, bool suppress_exception = false);
-DLLEXPORT int get_qbytearray(const AbstractQoreNode *n, QByteArray &qba, class ExceptionSink *xsink, bool suppress_exception = false);
-DLLEXPORT int get_qchar(const AbstractQoreNode *n, QChar &c, class ExceptionSink *xsink, bool suppress_exception = false);
-DLLEXPORT int get_qstring(const AbstractQoreNode *n, QString &str, class ExceptionSink *xsink, bool suppress_exception = false);
+DLLEXPORT int get_qdate(const AbstractQoreNode *n, QDate &date, ExceptionSink *xsink);
+DLLEXPORT int get_qtime(const AbstractQoreNode *n, QTime &time, ExceptionSink *xsink);
+DLLEXPORT int get_qdatetime(const AbstractQoreNode *n, QDateTime &dt, ExceptionSink *xsink);
+DLLEXPORT int get_qvariant(const AbstractQoreNode *n, QVariant &qv, ExceptionSink *xsink, bool suppress_exception = false);
+DLLEXPORT int get_qbytearray(const AbstractQoreNode *n, QByteArray &qba, ExceptionSink *xsink, bool suppress_exception = false);
+DLLEXPORT int get_qchar(const AbstractQoreNode *n, QChar &c, ExceptionSink *xsink, bool suppress_exception = false);
+DLLEXPORT int get_qstring(const AbstractQoreNode *n, QString &str, ExceptionSink *xsink, bool suppress_exception = false);
+DLLEXPORT int get_qmodelindexlist(const AbstractQoreNode *n, QModelIndexList &qmi, ExceptionSink *xsink, bool suppress_exception = false);
+
+DLLEXPORT QString to_qstring(const AbstractQoreNode *n, ExceptionSink *xsink);
+DLLEXPORT QModelIndexList to_qmodelindexlist(const AbstractQoreNode *n, ExceptionSink *xsink);
+DLLEXPORT QVariant to_qvariant(const AbstractQoreNode *n, ExceptionSink *xsink);
 
 DLLEXPORT QoreObject *return_object(const QoreClass *qclass, AbstractPrivateData *data);
 DLLEXPORT QoreObject *return_qobject(QObject *o);
 DLLEXPORT QoreObject *return_qevent(QEvent *event);
+DLLEXPORT QoreListNode *return_qmodelindexlist(const QModelIndexList &qmil);
 
 DLLEXPORT AbstractQoreNode *return_qvariant(const QVariant &qv);
 DLLEXPORT QoreListNode *return_qstringlist(const QStringList &l);
@@ -68,12 +82,10 @@ class QoreQtArgs {
       QoreListNode *new_args;
 
    public:
-      DLLLOCAL QoreQtArgs() : argc(0), argv(0), new_args(0)
-      {
+      DLLLOCAL QoreQtArgs() : argc(0), argv(0), new_args(0) {
       }
 
-      DLLLOCAL QoreQtArgs(const QoreListNode *args)
-      {
+      DLLLOCAL QoreQtArgs(const QoreListNode *args) {
 	 if (!args || !args->size()) {
 	    argc = 0;
 	    argv = 0;
@@ -94,8 +106,7 @@ class QoreQtArgs {
 	 }
       }
 
-      DLLLOCAL ~QoreQtArgs()
-      {
+      DLLLOCAL ~QoreQtArgs() {
 	 if (argv)
 	    delete [] argv;
 	 if (new_args) {

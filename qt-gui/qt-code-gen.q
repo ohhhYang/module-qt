@@ -4,18 +4,18 @@
 %enable-all-warnings
 
 const module_info = (
-    ( "file" : "qt-core-module.cc",
-      "ns"   : "qt_ns",
-      "mf"   : "qt-core" ),
-    ( "file" : "qt-gui-module.cc",
-      "ns"   : "qt_ns",
-      "mf"   : "qt-gui" ),
-    ( "file" : "qt-opengl.cc",
-      "ns"   : "gl_ns",
-      "mf"   : "qt-opengl" ),
-    ( "file" : "qt-svg.cc",
-      "ns"   : "svg_ns",
-      "mf"   : "qt-svg" )
+    "core"   : ( "file"    : "qt-core-module.cc",
+		 "include" : "qt-core.h",
+		 "ns"      : "qt_ns" ),
+    "gui"    : ( "file"    : "qt-gui-module.cc",
+		 "include" : "qore-qt-gui.h",
+		 "ns"      : "qt_ns" ),
+    "opengl" : ( "file"    : "qt-opengl.cc",
+		 "include" : "qore-qt-gui.h",
+		 "ns"      : "gl_ns" ),
+    "svg"    : ( "file"    : "qt-svg.cc",
+		 "include" : "qore-qt-gui.h",
+		 "ns"      : "svg_ns" ),
     );
 
 const opts = (
@@ -30,10 +30,10 @@ const opts = (
     "style"           : "s,style",
     "validator"       : "v,validator",
     "gitem"           : "g,graphicsitem",
+    "itemmodel"       : "I,itemmodel",
     "static"          : "S,static",
     "test"            : "t,test",
     "ns"              : "N,namespace",
-    "core"            : "C,core",
     "help"            : "h,help"
     );
 
@@ -41,10 +41,11 @@ const ordinal = ( "first", "second", "third", "fourth", "fifth", "sixth",
 		  "seventh", "eighth", "ninth", "tenth" );
 
 our $special_hash = 
-    ( "QDate"      : \do_qdate(),
-      "QDateTime"  : \do_qdatetime(),
-      "QTime"      : \do_qtime(),
-      "QBrush"     : \do_qbrush(),
+    ( "QDate"           : \do_qdate(),
+      "QDateTime"       : \do_qdatetime(),
+      "QTime"           : \do_qtime(),
+      "QBrush"          : \do_qbrush(),
+      "QModelIndexList" : \do_qmodelindexlist(),
     );
 
 const special_arg_list =
@@ -61,14 +62,16 @@ const qobject_list =
       "QApplication", "QCoreApplication", "QListView", "QListWidget",
       "QProgressBar", "QProgressDialog", "QLabel", "QGLWidget",
       "QSvgRenderer", "QSvgWidget", "QSplashScreen", "QSplitter",
-      "QSplitterHandle", "QTextDocument",
+      "QSplitterHandle", "QTextDocument", "QAbstractTableModel",
+      "QStatusBar", "QDockWidget", "QToolBar", "QItemSelectionModel",
+      
  );
 
 const abstract_class_list = 
     ( "QObject", "QWidget", "QAbstractItemDelegate", "QItemDelegate", 
       "QItemModel", "QLayout", "QStyle", "QHeaderView", "QMenuBar",
       "QAction", "QValidator", "QIODevice", "QPainter", "QGraphicsItem",
-      "QPaintDevice"
+      "QPaintDevice", "QAbstractItemModel", "QAbstractTableModel"
     );
 
 const const_class_list = 
@@ -81,7 +84,8 @@ const const_class_list =
       "QStyleOptionViewItemV2", "QLocale", "QUrl", "QByteArray", "QVariant", 
       "QRect", "QRectF", "QFontInfo", "QFontMetrics", "QDir", "QRegExp",
       "QFileInfo", "QPainterPath", "QMatrix", "QTransform", "QTextBlock",
-      "QTextLine", "QTextOption", "QItemSelectionRange", 
+      "QTextLine", "QTextOption", "QItemSelectionRange", "QItemSelection",
+      "QStyleOptionDockWidget",
     );
 
 const class_list = ( "QRegion",
@@ -161,6 +165,7 @@ const class_list = ( "QRegion",
 		     "QGraphicsPixmapItem",
 		     #"QGraphicsItem",
 		     "QTextLayout",
+		     "QFileIconProvider"
 
  ) + const_class_list + qobject_list;
 
@@ -185,12 +190,12 @@ sub usage() {
   -d.--dialog              is a QDialog
   -s,--style               is a QStyle
   -g,--graphicsitem        is a QGraphicsItem
+  -I,--itemmodel           is a QAbstractItemModel
   -q,--qt-class            add Qt class to abstract class
   -p,--parent=ARG          parent class name
   -S,--static              assume prototypes are static functions
   -N,--namespace           add class as namespace
   -t,--test                do not create files (use with -f)
-  -C,--core                assume qt-core module
   -h,--help                this help text
 ", basename($ENV."_"));
     exit(1);
@@ -238,10 +243,16 @@ sub command_line() {
     if (!$o.indep && !exists $o.parent)
 	$o.parent = $o.dialog ? "QDialog" : $o.widget ? "QWidget" : "QObject";
 
-    if ($o.core)
-	$o.module = "core";
-    else
-	$o.module = "gui";
+    # find module info
+    my $f;
+    foreach $f in (keys module_info) {
+	if (is_file(module_info.$f.file))
+	    break;
+    }
+    if (!exists $f)
+	throw "MODULE-NOT-FOUND";
+
+    $o.module = $f;
 }
 
 sub dl($l) {
@@ -429,14 +440,7 @@ sub add_new_build_files($fp) {
 	    system("printf '#include \\\"" + $cc + "\\\"\\n'>> single-compilation-unit.cc");
     }
 
-    my $f;
-    # find module info
-    foreach $f in (module_info) {
-	if (is_file($f.file))
-	    break;
-    }
-    if (!exists $f)
-	throw "MODULE-NOT-FOUND";
+    my $f = module_info.($o.module);
 
     # add to Makefile.am
     if (!$o.test && !strlen(trim(backquote("grep " + $cc + " Makefile.am")))) {
@@ -461,7 +465,7 @@ sub add_new_build_files($fp) {
 	my $lines = split("\n", `cat ../Makefile.am`);
 	my $of = get_file("../Makefile.am");
 	my ($found, $done);
-	my $str = $f.mf + "/";
+	my $str = "qt-" + $o.module + "/";
 	for (my $i = 0; $i < elements $lines; ++$i) {
 	    if (!$done) {
 		#printf("(%s): %n: %s\n", $str, regex($lines[$i], $str), $lines[$i]);
@@ -469,9 +473,9 @@ sub add_new_build_files($fp) {
 		    $found = True;
 		}
 		else if ($found && !regex($lines[$i], $str)) {
-		    $of.printf("\t%s/%s \\\n", $f.mf, $hh);
+		    $of.printf("\t%s/%s \\\n", "qt-" + $o.module, $hh);
 		    if ($o.abstract) 
-			$of.printf("\%s/QoreAbstract%s.h \\\n", $f.mf, $cn);
+			$of.printf("\%s/QoreAbstract%s.h \\\n", "qt-" + $o.module, $cn);
 		    $done = True;
 		}
 	    }
@@ -499,7 +503,7 @@ sub add_new_build_files($fp) {
 	    }
 	    else {
 		if ($lines[$i + 1] =~ /\/\/ add here/) {
-		    my $ns = $o.dialog ? "qdialog_ns" : module_info.ns;
+		    my $ns = $o.dialog ? "qdialog_ns" : $f.ns;
 		    if ($o.ns)
 			$of.printf("   %s.addInitialNamespace(init%sNS(%s));\n", $f.ns, $cn, exists $o.parent ? "QC_" + $o.parent : "");
 		    else
@@ -605,6 +609,7 @@ sub main() {
 	$t =~ s/ \*>/*>/;
 	$t =~ s/  / /g;
 	trim $t;
+	$t =~ s/\$#*//g;
 	#printf("%s\n", $t);
 
 	my ($rt, $name, $args) = $t =~ x/([a-zA-Z0-9\*<>:&]+) (\w+) \((.*)\)/;
@@ -747,7 +752,12 @@ sub main() {
 #include <%s>
 ", $cn, copyright, $func_prefix, $func_prefix, $cn);
 
-	if (exists $o.abstract_class) {
+	if (exists $o.abstract) {
+	    $of.printf("#include \"QoreAbstract%s.h\"\n", $cn);
+	    if (!$o.indep && $o.module != "core")
+		$of.printf("#include \"qore-qt-events.h\"\n");
+	}
+	else if (exists $o.abstract_class) {
 	    $of.printf("#include \"QoreAbstract%s.h\"\n", $o.abstract_class);
 	    if (!$o.indep && $o.module != "core")
 		$of.printf("#include \"qore-qt-events.h\"\n");
@@ -790,6 +800,7 @@ DLLEXPORT extern QoreClass *QC_%s;
 		       $o.widget ? ", public QoreQWidgetExtension" :  
 		       $o.validator ? ", public QoreQValidatorExtension" : 
 		       $o.gitem ? ", public QoreQGraphicsItemExtension" :
+		       $o.itemmodel ? ", public QoreQAbstractItemModelExtension" :
 		       ", public QoreQObjectExtension");
             if ($o.style)
                 $of.printf("      friend class Qore%s;\n\n", $cn);
@@ -805,6 +816,8 @@ DLLEXPORT extern QoreClass *QC_%s;
 		$of.printf("#include \"qore-qt-widget-events.h\"\n");
 	    else if ($o.validator)
 		$of.printf("#include \"qore-qt-qvalidator-methods.h\"\n");
+	    else if ($o.itemmodel)
+		$of.printf("#include \"qore-qt-qabstractitemmodel-methods.h\"\n");
             $of.printf("#undef MYQOREQTYPE\n#undef QOREQTYPE\n\n   public:\n");
 	    
 	    if (exists $proto.$cn) {
@@ -823,6 +836,7 @@ DLLEXPORT extern QoreClass *QC_%s;
 			       $o.widget ? ", QoreQWidgetExtension" :
 			       $o.validator ? ", QoreQValidatorExtension" : 
 			       $o.gitem ? ", QoreQGraphicsItemExtension" :
+			       $o.itemmodel ? ", QoreQAbstractItemModelExtension" :
 			       ", QoreQObjectExtension", $cargs);
 		    $of.printf("      }\n"); 
 		}
@@ -906,14 +920,14 @@ DLLEXPORT extern QoreClass *QC_%s;
  %s
  */
 
-#include \"qt-%s.h\"
+#include \"%s\"
 
 #include \"QC_%s.h\"
 
 qore_classid_t CID_%s;
 QoreClass *QC_%s = 0;
 
-", $cn, copyright, $o.module, $cn, $func_prefix, $cn);
+", $cn, copyright, module_info.($o.module).include, $cn, $func_prefix, $cn);
     }
 
     foreach my $p in (keys $proto) {
@@ -949,7 +963,7 @@ QoreClass *QC_%s = 0;
 
     foreach my $p in (keys $proto) {	
 	if ($p != $cn)
-	    $of.printf("   %sQC_%s->add%sMethod(%-30s (q_method_t)%s);\n", $proto.$p.ok ? "" : "//", $cn, $o.static ? "Static" : "", "\""+$p+"\",", $proto.$p.funcname);
+	    $of.printf("   %sQC_%s->add%sMethod(%-30s %s%s);\n", $proto.$p.ok ? "" : "//", $cn, $o.static ? "Static" : "", "\""+$p+"\",", $o.static ? "" : "(q_method_t)", $proto.$p.funcname);
     }
 
     if (exists $o.file) {
@@ -1074,6 +1088,15 @@ sub do_qbrush($arg, $const) {
     
     $lo += sprintf("QBrush %s;", $arg.name);
     $lo += sprintf("if (get_qbrush(p, %s, xsink))", $arg.name);
+    $lo += sprintf("   return%s;", $const ? "" : " 0");
+    return $lo;
+}
+
+sub do_qmodelindexlist($arg, $const) {
+    my $lo = ();
+    
+    $lo += sprintf("QModelIndexList %s;", $arg.name);
+    $lo += sprintf("if (get_qmodelindexlist(p, %s, xsink))", $arg.name);
     $lo += sprintf("   return%s;", $const ? "" : " 0");
     return $lo;
 }
@@ -1214,6 +1237,10 @@ sub do_multi_function($name, $func, $inst, $callstr, $param, $offset) {
 		    break;
 		case /QList/:
 		case "QStringList": {
+		    $qt = "LIST";
+		    break;
+		}
+		case "QModelIndexList": {
 		    $qt = "LIST";
 		    break;
 		}
@@ -1741,6 +1768,11 @@ sub do_return_value($offset, $rt, $callstr, $ok) {
 	    $lo += "for (QFileInfoList::iterator i = qfilist_rv.begin(), e = qfilist_rv.end(); i != e; ++i)";
 	    $lo += "   l->push(return_object(QC_QFileInfo, new QoreQFileInfo(*i)));";
 	    $lo += "return l;";
+	    break;
+	}
+
+	case "QModelIndexList": {
+	    $lo += sprintf("return return_qmodelindexlist(%s);", $callstr);
 	    break;
 	}
 

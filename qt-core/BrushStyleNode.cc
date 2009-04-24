@@ -1,5 +1,5 @@
 /*
-  PenStyleNode.cc
+  QT_BrushStyle.cc
 
   Qore Programming Language
 
@@ -20,18 +20,18 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#include "qore-qt-gui.h"
+#include "qt-core.h"
 
-#include "PenStyleNode.h"
+#include "BrushStyleNode.h"
 
-static qt_enum_map_t psmap;
+static qt_enum_map_t bsmap;
 
-qore_type_t NT_PENSTYLE = -1;
+qore_type_t NT_BRUSHSTYLE = -1;
 
 // get the value of the type in a string context (default implementation = del = false and returns NullString)
 // if del is true, then the returned QoreString * should be deleted, if false, then it must not be
 // use the QoreStringValueHelper class (defined in QoreStringNode.h) instead of using this function directly
-QoreString *PenStyleNode::getStringRepresentation(bool &del) const
+QoreString *BrushStyleNode::getStringRepresentation(bool &del) const
 {
    del = true;
    QoreString *str = new QoreString();
@@ -40,33 +40,33 @@ QoreString *PenStyleNode::getStringRepresentation(bool &del) const
 }
 
 // concatenate string representation to a QoreString (no action for complex types = default implementation)
-void PenStyleNode::getStringRepresentation(QoreString &str) const
+void BrushStyleNode::getStringRepresentation(QoreString &str) const
 {
-   qt_enum_map_t::iterator i = psmap.find((int)val);
-   if (i == psmap.end()) {
-      str.concat("Qt::PenStyle::");
+   qt_enum_map_t::iterator i = bsmap.find((int)val);
+   if (i == bsmap.end()) {
+      str.concat("Qt::BrushStyle::");
       str.sprintf("%d", (int)val);
       return;
    }
    str.concat(i->second);
 }
 
-bool PenStyleNode::getAsBoolImpl() const
+bool BrushStyleNode::getAsBoolImpl() const
 {
    return (bool)val;
 }
 
-int PenStyleNode::getAsIntImpl() const
+int BrushStyleNode::getAsIntImpl() const
 {
    return (int)val;
 }
 
-int64 PenStyleNode::getAsBigIntImpl() const
+int64 BrushStyleNode::getAsBigIntImpl() const
 {
    return (int64)val;
 }
 
-double PenStyleNode::getAsFloatImpl() const
+double BrushStyleNode::getAsFloatImpl() const
 {
    return (double)val;
 }
@@ -76,34 +76,34 @@ double PenStyleNode::getAsFloatImpl() const
 // if del is true, then the returned QoreString * should be deleted, if false, then it must not be
 // the ExceptionSink is only needed for QoreObject where a method may be executed
 // use the QoreNodeAsStringHelper class (defined in QoreStringNode.h) instead of using this function directly
-QoreString *PenStyleNode::getAsString(bool &del, int foff, class ExceptionSink *xsink) const
+QoreString *BrushStyleNode::getAsString(bool &del, int foff, class ExceptionSink *xsink) const
 {
    return getStringRepresentation(del);
 }
 
-int PenStyleNode::getAsString(QoreString &str, int foff, class ExceptionSink *xsink) const
+int BrushStyleNode::getAsString(QoreString &str, int foff, class ExceptionSink *xsink) const
 {
    getStringRepresentation(str);
    return 0;
 }
 
-class AbstractQoreNode *PenStyleNode::realCopy() const
+class AbstractQoreNode *BrushStyleNode::realCopy() const
 {
-   return new PenStyleNode(val);
+   return new BrushStyleNode(val);
 }
 
 // performs a lexical compare, return -1, 0, or 1 if the "this" value is less than, equal, or greater than
 // the "val" passed
 //DLLLOCAL virtual int compare(const AbstractQoreNode *val) const;
 // the type passed must always be equal to the current type
-bool PenStyleNode::is_equal_soft(const AbstractQoreNode *v, ExceptionSink *xsink) const
+bool BrushStyleNode::is_equal_soft(const AbstractQoreNode *v, ExceptionSink *xsink) const
 {
-   return (Qt::PenStyle)v->getAsInt() == val;
+   return (Qt::BrushStyle)v->getAsInt() == val;
 }
 
-bool PenStyleNode::is_equal_hard(const AbstractQoreNode *v, ExceptionSink *xsink) const
+bool BrushStyleNode::is_equal_hard(const AbstractQoreNode *v, ExceptionSink *xsink) const
 {
-   const PenStyleNode *ps = dynamic_cast<const PenStyleNode *>(v);
+   const BrushStyleNode *ps = dynamic_cast<const BrushStyleNode *>(v);
    if (!ps)
       return false;
 
@@ -111,22 +111,34 @@ bool PenStyleNode::is_equal_hard(const AbstractQoreNode *v, ExceptionSink *xsink
 }
 
 // returns the type name as a c string
-const char *PenStyleNode::getTypeName() const
+const char *BrushStyleNode::getTypeName() const
 {
-   return "PenStyle";
+   return "BrushStyle";
 }
 
-void addPenStyleType()
+void addBrushStyleType()
 {
    // make map for descriptions
-   psmap[(int)Qt::NoPen] = "NoPen";
-   psmap[(int)Qt::SolidLine] = "SolidLine";
-   psmap[(int)Qt::DashLine] = "DashLine";
-   psmap[(int)Qt::DotLine] = "DotLine";
-   psmap[(int)Qt::DashDotLine] = "DashDotLine";
-   psmap[(int)Qt::DashDotDotLine] = "DashDotDotLine";
-   psmap[(int)Qt::CustomDashLine] = "CustomDashLine";
+   bsmap[(int)Qt::NoBrush] = "NoBrush";
+   bsmap[(int)Qt::SolidPattern] = "SolidPattern";
+   bsmap[(int)Qt::Dense1Pattern] = "Dense1Pattern";
+   bsmap[(int)Qt::Dense2Pattern] = "Dense2Pattern";
+   bsmap[(int)Qt::Dense3Pattern] = "Dense3Pattern";
+   bsmap[(int)Qt::Dense4Pattern] = "Dense4Pattern";
+   bsmap[(int)Qt::Dense5Pattern] = "Dense5Pattern";
+   bsmap[(int)Qt::Dense6Pattern] = "Dense6Pattern";
+   bsmap[(int)Qt::Dense7Pattern] = "Dense7Pattern";
+   bsmap[(int)Qt::HorPattern] = "HorPattern";
+   bsmap[(int)Qt::VerPattern] = "VerPattern";
+   bsmap[(int)Qt::CrossPattern] = "CrossPattern";
+   bsmap[(int)Qt::BDiagPattern] = "BDiagPattern";
+   bsmap[(int)Qt::FDiagPattern] = "FDiagPattern";
+   bsmap[(int)Qt::DiagCrossPattern] = "DiagCrossPattern";
+   bsmap[(int)Qt::LinearGradientPattern] = "LinearGradientPattern";
+   bsmap[(int)Qt::RadialGradientPattern] = "RadialGradientPattern";
+   bsmap[(int)Qt::ConicalGradientPattern] = "ConicalGradientPattern";
+   bsmap[(int)Qt::TexturePattern] = "TexturePattern";  
 
    // add types for enums
-   NT_PENSTYLE = get_next_type_id();
+   NT_BRUSHSTYLE = get_next_type_id();
 }

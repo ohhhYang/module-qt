@@ -8,6 +8,8 @@ noinst_HEADERS = qt-core/QC_QObject.h \
 	qt-core/QoreAbstractQAbstractItemModel.h \
 	qt-core/qore-qt-metacode.h \
 	qt-core/qt-core.h \
+	qt-core/BrushStyleNode.h \
+	qt-core/PenStyleNode.h \
 	qt-core/QC_QRect.h \
 	qt-core/QC_QRectF.h \
 	qt-core/QC_QPoint.h \
@@ -44,6 +46,10 @@ noinst_HEADERS = qt-core/QC_QObject.h \
 	qt-core/QoreAbstractQCoreApplication.h \
 	qt-core/QoreQtDynamicMethod.h \
 	qt-core/QoreQtEventDispatcher.h \
+	qt-core/QC_QAbstractTableModel.h \
+	qt-core/QoreAbstractQAbstractTableModel.h \
+	qt-core/QC_QAbstractListModel.h \
+qt-core/QoreAbstractQAbstractListModel.h \
 	qt-gui/QC_QApplication.h \
 	qt-gui/QC_QPushButton.h \
 	qt-gui/QC_QFont.h \
@@ -119,8 +125,6 @@ noinst_HEADERS = qt-core/QC_QObject.h \
 	qt-gui/QC_QKeySequence.h \
 	qt-gui/QC_QAction.h \
 	qt-gui/QC_QActionGroup.h \
-	qt-gui/BrushStyleNode.h \
-	qt-gui/PenStyleNode.h \
 	qt-gui/QC_QPolygon.h \
 	qt-gui/QC_QPolygonF.h \
 	qt-gui/QC_QAbstractButton.h \
@@ -289,6 +293,16 @@ noinst_HEADERS = qt-core/QC_QObject.h \
 	qt-gui/QC_QTextLayout.h \
 	qt-gui/QC_QDesktopServices.h \
 	qt-gui/QC_QItemSelectionRange.h \
+	qt-gui/QC_QFileIconProvider.h \
+	qt-gui/QC_QDirModel.h \
+	qt-gui/QC_QStatusBar.h \
+	qt-gui/QC_QItemSelection.h \
+	qt-gui/QC_QItemSelectionModel.h \
+	qt-gui/QC_QStyleOptionDockWidget.h \
+	qt-gui/QC_QDockWidget.h \
+qt-gui/QoreAbstractQDockWidget.h \
+	qt-gui/QC_QTreeView.h \
+qt-gui/QoreAbstractQTreeView.h \
 	qt-opengl/QC_QGLWidget.h \
 	qt-opengl/QC_QGLFormat.h \
 	qt-opengl/QC_QGLContext.h \

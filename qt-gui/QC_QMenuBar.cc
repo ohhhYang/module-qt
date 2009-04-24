@@ -71,9 +71,22 @@ static AbstractQoreNode *QMENUBAR_activeAction(QoreObject *self, QoreAbstractQMe
 
 //QAction * addAction ( const QString & text )
 //QAction * addAction ( const QString & text, const QObject * receiver, const char * member )
-static AbstractQoreNode *QMENUBAR_addAction(QoreObject *self, QoreAbstractQMenuBar *qmb, const QoreListNode *params, ExceptionSink *xsink)
-{
+static AbstractQoreNode *QMENUBAR_addAction(QoreObject *self, QoreAbstractQMenuBar *qmb, const QoreListNode *params, ExceptionSink *xsink) {
    const AbstractQoreNode *p = get_param(params, 0);
+
+   // see if it's a QAction
+   if (p && p->getType() == NT_OBJECT) {
+      const QoreObject *o = reinterpret_cast<const QoreObject *>(p);
+      QoreAbstractQAction *action = (QoreAbstractQAction *)o->getReferencedPrivateData(CID_QACTION, xsink);
+      if (*xsink)
+	 return 0;
+      if (action) {
+	 ReferenceHolder<QoreAbstractQAction> actionHolder(action, xsink);
+	 qmb->getQMenuBar()->addAction(action->getQAction());
+	 return 0;
+      }
+   }
+
    QString text;
    if (get_qstring(p, text, xsink))
       return 0;
