@@ -8,6 +8,7 @@ noinst_HEADERS = qt-core/QC_QObject.h \
 	qt-core/QoreAbstractQAbstractItemModel.h \
 	qt-core/qore-qt-metacode.h \
 	qt-core/qt-core.h \
+	qt-core/qore-magic-holder.h \
 	qt-core/BrushStyleNode.h \
 	qt-core/PenStyleNode.h \
 	qt-core/QC_QRect.h \

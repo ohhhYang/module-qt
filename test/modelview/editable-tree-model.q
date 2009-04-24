@@ -392,8 +392,8 @@ class TreeModel inherits QAbstractItemModel {
 	$.rootItem = new TreeItem($rootData);
 	$.setupModelData(split("\n", $data), $.rootItem);
 
-	$.showAll();
-	exit();
+	#$.showAll();
+	#exit();
     }
 
     showAll($parent, $offset) {
@@ -476,6 +476,7 @@ class TreeModel inherits QAbstractItemModel {
 	if (exists $childItem) {
 	    if (exists $parent) printf("1: index: %s\n", gi($parent));
 	    $rv = $.createIndex($row, $column, $childItem);
+	    if (exists $parent) printf("2: index: %s\n", gi($parent));
 	}
 	else
 	    $rv = new QModelIndex();

@@ -3,7 +3,7 @@
  
  Qore Programming Language
  
- Copyright 2003 - 2008 David Nichols
+ Copyright 2003 - 2009 David Nichols
  
  This library is free software; you can redistribute it and/or
  modify it under the terms of the GNU Lesser General Public
@@ -28,50 +28,18 @@
 
 #include "QC_QModelIndex.h"
 #include "QC_QMimeData.h"
+#include "qore_magic_holder.h"
 
 extern qore_classid_t CID_QWIDGET;
 
-#define QORE_MAGIC_DATA 0xbadee1deadbeef59ll
-
-class qore_magic_holder {
-   private:
-      unsigned long long magic;
-      AbstractQoreNode *data;
-
-      DLLLOCAL void deref_intern() {
-	 if (data) {
-	    ExceptionSink xsink;
-	    data->deref(&xsink);
-	 } 
-      }
-
-   public:
-      DLLLOCAL qore_magic_holder() : magic(QORE_MAGIC_DATA), data(0) {
-      }
-      DLLLOCAL ~qore_magic_holder() {
-	 deref_intern();
-      }
-      DLLLOCAL void assign(const AbstractQoreNode *d) {
-	 deref_intern();
-	 data = d ? d->refSelf() : 0;
-      }
-      DLLLOCAL AbstractQoreNode *get() {
-	 if (!this || magic != QORE_MAGIC_DATA || !data)
-	    return 0;
-	 return data->refSelf();
-      }
-};
-
 class QoreAbstractQAbstractItemModel : public QoreAbstractQObject {
-   private:
-      mutable qore_magic_holder holder;
-      
    public:
       DLLLOCAL QoreAbstractQAbstractItemModel() {}
 
       DLLLOCAL QModelIndex qoreCreateIndex(int row, int column, const AbstractQoreNode *data) const {
-	 holder.assign(data);
-	 return createIndex(row, column, &holder);
+	 //printd(5, "QoreAbstractQAbstractItemModel::qoreCreateIndex(row=%d, column=%d, data=%p) this=%p\n", row, column, data, this);
+
+	 return createIndex(row, column, data ? new qore_magic_holder(data) : 0);
       }
 
       virtual QAbstractItemModel *getQAbstractItemModel() const = 0;

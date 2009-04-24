@@ -25,20 +25,23 @@
 #define _QORE_QT_QC_QMODELINDEX_H
 
 #include <QModelIndex>
+#include "qore_magic_holder.h"
 
 DLLEXPORT extern qore_classid_t CID_QMODELINDEX;
-DLLEXPORT extern class QoreClass *QC_QModelIndex;
+DLLEXPORT extern QoreClass *QC_QModelIndex;
 
-DLLEXPORT class QoreClass *initQModelIndexClass();
+DLLEXPORT QoreClass *initQModelIndexClass();
 
-class QoreQModelIndex : public AbstractPrivateData, public QModelIndex
-{
+class QoreQModelIndex : public AbstractPrivateData, public QModelIndex {
    public:
-      DLLLOCAL QoreQModelIndex() : QModelIndex()
-      {
+      DLLLOCAL QoreQModelIndex() : QModelIndex() {
       }
-      DLLLOCAL QoreQModelIndex(const QModelIndex& other) : QModelIndex(other)
-      {
+      DLLLOCAL QoreQModelIndex(const QModelIndex& other) : QModelIndex(other) {
+      }
+
+      DLLLOCAL ~QoreQModelIndex() {
+	 qore_magic_holder *mh = static_cast<qore_magic_holder *>(internalPointer());
+	 mh->del();
       }
 };
 
