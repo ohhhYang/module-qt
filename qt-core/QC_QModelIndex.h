@@ -36,12 +36,13 @@ class QoreQModelIndex : public AbstractPrivateData, public QModelIndex {
    public:
       DLLLOCAL QoreQModelIndex() : QModelIndex() {
       }
-      DLLLOCAL QoreQModelIndex(const QModelIndex& other) : QModelIndex(other) {
-      }
 
+      DLLLOCAL QoreQModelIndex(const QModelIndex& other) : QModelIndex(other) {
+	 static_cast<qore_magic_holder *>(internalPointer())->ref();
+      }
+      
       DLLLOCAL ~QoreQModelIndex() {
-	 qore_magic_holder *mh = static_cast<qore_magic_holder *>(internalPointer());
-	 mh->del();
+	 static_cast<qore_magic_holder *>(internalPointer())->deref();
       }
 };
 

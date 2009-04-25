@@ -26,7 +26,7 @@
 
 #define QORE_MAGIC_DATA 0xbadee1deadbeef59ll
 
-class qore_magic_holder {
+   class qore_magic_holder : protected QoreReferenceCounter {
    private:
       unsigned long long magic;
       AbstractQoreNode *data;
@@ -38,13 +38,22 @@ class qore_magic_holder {
 	 } 
       }
 
+      DLLLOCAL ~qore_magic_holder() {
+	 deref_intern();
+      }
+
    public:
       DLLLOCAL qore_magic_holder() : magic(QORE_MAGIC_DATA), data(0) {
       }
       DLLLOCAL qore_magic_holder(const AbstractQoreNode *d) : magic(QORE_MAGIC_DATA), data(d ? d->refSelf() : 0) {
       }
-      DLLLOCAL ~qore_magic_holder() {
-	 deref_intern();
+      DLLLOCAL void ref() {
+	 if (this && magic == QORE_MAGIC_DATA)
+	    ROreference();
+      }
+      DLLLOCAL void deref() {
+	 if (this && magic == QORE_MAGIC_DATA && ROdereference())
+	    delete this;
       }
       DLLLOCAL void del() {
 	 if (this && magic == QORE_MAGIC_DATA)
