@@ -62,40 +62,56 @@ static AbstractQoreNode *QMODELINDEX_column(QoreObject *self, QoreQModelIndex *q
 }
 
 //QVariant data ( int role = Qt::DisplayRole ) const
-static AbstractQoreNode *QMODELINDEX_data(QoreObject *self, QoreQModelIndex *qmi, const QoreListNode *params, ExceptionSink *xsink)
-{
+static AbstractQoreNode *QMODELINDEX_data(QoreObject *self, QoreQModelIndex *qmi, const QoreListNode *params, ExceptionSink *xsink) {
    const AbstractQoreNode *p = get_param(params, 0);
    int role = !is_nothing(p) ? p->getAsInt() : Qt::DisplayRole;
    return return_qvariant(qmi->data(role));
 }
 
 //Qt::ItemFlags flags () const
-static AbstractQoreNode *QMODELINDEX_flags(QoreObject *self, QoreQModelIndex *qmi, const QoreListNode *params, ExceptionSink *xsink)
-{
+static AbstractQoreNode *QMODELINDEX_flags(QoreObject *self, QoreQModelIndex *qmi, const QoreListNode *params, ExceptionSink *xsink) {
    return new QoreBigIntNode(qmi->flags());
 }
 
 //qint64 internalId () const
-static AbstractQoreNode *QMODELINDEX_internalId(QoreObject *self, QoreQModelIndex *qmi, const QoreListNode *params, ExceptionSink *xsink)
-{
+static AbstractQoreNode *QMODELINDEX_internalId(QoreObject *self, QoreQModelIndex *qmi, const QoreListNode *params, ExceptionSink *xsink) {
    return new QoreBigIntNode(qmi->internalId());
 }
 
 //void * internalPointer () const
 static AbstractQoreNode *QMODELINDEX_internalPointer(QoreObject *self, QoreQModelIndex *qmi, const QoreListNode *params, ExceptionSink *xsink) {
-   qore_magic_holder *mh = static_cast<qore_magic_holder *>(qmi->internalPointer());
-   return mh->get();
+   void *d = qmi->internalPointer();
+   if (!d)
+      return 0;
+
+   // see if it's a Qore object
+   const QAbstractItemModel *aim = qmi->model();
+   if (!aim)
+      return 0;
+   QVariant qv_ptr = aim->property("qobject");
+   QoreObject *qo = reinterpret_cast<QoreObject *>(qv_ptr.toULongLong());
+   if (!qo)
+      return 0;
+   
+   QoreAbstractQAbstractItemModel *qaim = (QoreAbstractQAbstractItemModel *)qo->getReferencedPrivateData(CID_QABSTRACTITEMMODEL, xsink);
+   if (!qaim || *xsink)
+      return 0;
+   ReferenceHolder<AbstractPrivateData> qaim_holder(static_cast<AbstractPrivateData *>(qaim), xsink);
+   
+   const AbstractQoreNode *qd = reinterpret_cast<const AbstractQoreNode *>(d);
+   if (!qaim->isQoreData(qd))
+      return 0;
+   
+   return qd->refSelf();
 }
 
 //bool isValid () const
-static AbstractQoreNode *QMODELINDEX_isValid(QoreObject *self, QoreQModelIndex *qmi, const QoreListNode *params, ExceptionSink *xsink)
-{
+static AbstractQoreNode *QMODELINDEX_isValid(QoreObject *self, QoreQModelIndex *qmi, const QoreListNode *params, ExceptionSink *xsink) {
    return get_bool_node(qmi->isValid());
 }
 
 //const QAbstractItemModel * model () const
-static AbstractQoreNode *QMODELINDEX_model(QoreObject *self, QoreQModelIndex *qmi, const QoreListNode *params, ExceptionSink *xsink)
-{
+static AbstractQoreNode *QMODELINDEX_model(QoreObject *self, QoreQModelIndex *qmi, const QoreListNode *params, ExceptionSink *xsink) {
    const QAbstractItemModel *qt_qobj = qmi->model();
    if (!qt_qobj)
       return 0;

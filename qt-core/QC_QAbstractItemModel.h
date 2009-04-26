@@ -30,7 +30,7 @@
 DLLEXPORT extern qore_classid_t CID_QABSTRACTITEMMODEL;
 DLLEXPORT extern QoreClass *QC_QAbstractItemModel;
 
-DLLEXPORT QoreClass *initQAbstractItemModelClass(QoreClass *);
+DLLEXPORT QoreClass *initQAbstractItemModelClass(QoreClass *); 
 
 class myQAbstractItemModel : public QAbstractItemModel, public QoreQAbstractItemModelExtension {
 #define QOREQTYPE QAbstractItemModel
@@ -43,8 +43,6 @@ class myQAbstractItemModel : public QAbstractItemModel, public QoreQAbstractItem
   public:
    DLLLOCAL myQAbstractItemModel(QoreObject *obj, QObject* parent = 0) : QAbstractItemModel(parent), QoreQAbstractItemModelExtension(obj, this) {
    }
-
-   
 };
 
 typedef QoreQAbstractItemModelBase<myQAbstractItemModel, QoreAbstractQAbstractItemModel> QoreQAbstractItemModelImpl;

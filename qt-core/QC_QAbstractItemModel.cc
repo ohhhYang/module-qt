@@ -40,7 +40,7 @@ static void QABSTRACTITEMMODEL_constructor(QoreObject *self, const QoreListNode 
    self->setPrivate(CID_QABSTRACTITEMMODEL, new QoreQAbstractItemModel(self, parent ? parent->getQObject() : 0));
 }
 
-static void QABSTRACTITEMMODEL_copy(class QoreObject *self, class QoreObject *old, class QoreQAbstractItemModel *qaim, ExceptionSink *xsink) {
+static void QABSTRACTITEMMODEL_copy(class QoreObject *self, class QoreObject *old, QoreQAbstractItemModel *qaim, ExceptionSink *xsink) {
    xsink->raiseException("QABSTRACTITEMMODEL-COPY-ERROR", "objects of this class cannot be copied");
 }
 

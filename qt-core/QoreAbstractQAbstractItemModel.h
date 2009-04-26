@@ -28,19 +28,17 @@
 
 #include "QC_QModelIndex.h"
 #include "QC_QMimeData.h"
-#include "qore_magic_holder.h"
+
+#include <set>
+
+typedef std::set<AbstractQoreNode *> node_set_t;
 
 extern qore_classid_t CID_QWIDGET;
 
 class QoreAbstractQAbstractItemModel : public QoreAbstractQObject {
    public:
-      DLLLOCAL QoreAbstractQAbstractItemModel() {}
-
-      DLLLOCAL QModelIndex qoreCreateIndex(int row, int column, const AbstractQoreNode *data) const {
-	 //printd(5, "QoreAbstractQAbstractItemModel::qoreCreateIndex(row=%d, column=%d, data=%p) this=%p\n", row, column, data, this);
-
-	 return createIndex(row, column, data ? new qore_magic_holder(data) : 0);
-      }
+      virtual QModelIndex qoreCreateIndex(int row, int column, const AbstractQoreNode *data) const = 0;
+      virtual bool isQoreData(const AbstractQoreNode *data) = 0;
 
       virtual QAbstractItemModel *getQAbstractItemModel() const = 0;
 
@@ -68,6 +66,13 @@ class QoreQAbstractItemModelBase : public QoreQObjectBase<T, V> {
       }
       DLLLOCAL virtual QAbstractItemModel *getQAbstractItemModel() const {
 	 return &(*this->qobj);
+      }
+
+      DLLLOCAL virtual QModelIndex qoreCreateIndex(int row, int column, const AbstractQoreNode *data) const {
+	 return this->qobj->qoreCreateIndex(row, column, data);
+      }
+      DLLLOCAL virtual bool isQoreData(const AbstractQoreNode *data) {
+	 return this->qobj->isQoreData(data);
       }
 
       // protected methods
@@ -122,6 +127,13 @@ class QoreQtQAbstractItemModelBase : public QoreQtQObjectBase<T, V, P> {
       DLLLOCAL QoreQtQAbstractItemModelBase(QoreObject *obj, T *qo) : QoreQtQObjectBase<T, V, P>(obj, qo) {
       }
 
+      DLLLOCAL virtual QModelIndex qoreCreateIndex(int row, int column, const AbstractQoreNode *data) const {
+	 return QModelIndex();
+      }
+      DLLLOCAL virtual bool isQoreData(const AbstractQoreNode *data) {
+	 return false;
+      }
+
       // protected methods
       DLLLOCAL virtual void beginInsertColumns ( const QModelIndex & parent, int first, int last ) {}
       DLLLOCAL virtual void beginInsertRows ( const QModelIndex & parent, int first, int last ) {}
@@ -145,12 +157,14 @@ class QoreQtQAbstractItemModelBase : public QoreQtQObjectBase<T, V, P> {
 
 class QoreQAbstractItemModelExtension : public QoreQObjectExtension {
    protected:
+      mutable node_set_t node_set;
+
       const QoreMethod *m_buddy, *m_canFetchMore, *m_columnCount, *m_data, *m_dropMimeData, *m_fetchMore,
 	 *m_flags, *m_hasChildren, *m_headerData, *m_index, *m_insertColumns, *m_insertRows, *m_itemData,
 	 *m_match, *m_mimeData, *m_mimeTypes, *m_parent, *m_removeColumns, *m_removeRows, *m_rowCount,
 	 *m_setData, *m_setHeaderData, *m_setItemData, *m_sort, *m_span, *m_supportedDropActions;
 
-      DLLLOCAL QoreQAbstractItemModelExtension(QoreObject *obj, QObject *qo) : QoreQObjectExtension(obj, qo) {
+   DLLLOCAL QoreQAbstractItemModelExtension(QoreObject *obj, QObject *qo) : QoreQObjectExtension(obj, qo) {
          const QoreClass *qc = obj->getClass();
 
 	 m_buddy                = findMethod(qc, "buddy");

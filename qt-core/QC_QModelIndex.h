@@ -25,7 +25,6 @@
 #define _QORE_QT_QC_QMODELINDEX_H
 
 #include <QModelIndex>
-#include "qore_magic_holder.h"
 
 DLLEXPORT extern qore_classid_t CID_QMODELINDEX;
 DLLEXPORT extern QoreClass *QC_QModelIndex;
@@ -38,11 +37,6 @@ class QoreQModelIndex : public AbstractPrivateData, public QModelIndex {
       }
 
       DLLLOCAL QoreQModelIndex(const QModelIndex& other) : QModelIndex(other) {
-	 static_cast<qore_magic_holder *>(internalPointer())->ref();
-      }
-      
-      DLLLOCAL ~QoreQModelIndex() {
-	 static_cast<qore_magic_holder *>(internalPointer())->deref();
       }
 };
 

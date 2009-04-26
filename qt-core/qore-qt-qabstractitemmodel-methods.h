@@ -4,6 +4,7 @@ class T {
 #endif
 
 protected:
+
    // virtual methods
    virtual QModelIndex buddy ( const QModelIndex & index ) const {
       if (!m_buddy)
@@ -564,6 +565,24 @@ public:
    }
    DLLLOCAL virtual void parent_reset () {
       QOREQTYPE::reset();
+   }
+
+   DLLLOCAL QModelIndex qoreCreateIndex(int row, int column, const AbstractQoreNode *data) const {
+      //printd(5, "QoreAbstractQAbstractItemModel::qoreCreateIndex(row=%d, column=%d, data=%p) this=%p\n", row, column, data, this);
+	 
+      if (data) {
+	 AbstractQoreNode *d = const_cast<AbstractQoreNode *>(data);
+	 std::pair<node_set_t::iterator, bool> rv = node_set.insert(d);
+	 if (rv.second) {
+	    d->ref();
+	 }
+      }
+
+      return QOREQTYPE::createIndex(row, column, (void *)data);
+   }
+
+   DLLLOCAL bool isQoreData(const AbstractQoreNode *data) {
+      return node_set.find(const_cast<AbstractQoreNode *>(data)) != node_set.end();
    }
    
 #if 0
