@@ -165,7 +165,8 @@ const class_list = ( "QRegion",
 		     "QGraphicsPixmapItem",
 		     #"QGraphicsItem",
 		     "QTextLayout",
-		     "QFileIconProvider"
+		     "QFileIconProvider",
+		     "QTimerEvent",
 
  ) + const_class_list + qobject_list;
 
@@ -593,14 +594,23 @@ sub main() {
     if (!is_readable($if))
 	throw "MISSING-FILE", sprintf("can't read input file '%s'", $if);
 
-    my $l = backquote(sprintf("cat %s | grep \\(", $if));
+    my $l = backquote(sprintf("cat %s | grep -e \\( -e protected", $if));
     $l = split("\n", $l);
     trim $l;
 
     my $proto = ();
 
+    my $protected;
     foreach my $p in ($l) {
+	if ($p =~ /protected:/) {
+	    $protected = True;
+	    continue;
+	}
+
 	my $t = $p;
+
+	my $virt = $t =~ /virtual /;
+
 	$t =~ s/ \* /* /g;
 	$t =~ s/ & /& /g;
 	$t =~ s/const /const^/g;
@@ -700,8 +710,14 @@ sub main() {
 	    $proto.$name = ( "funcname" : $funcname, "rt" : $rt, "inst" : () );
 	}
 
+	if ($virt)
+	    $proto.$name.virt = True;
+	if ($protected)
+	    $proto.$name.protected = True;
+
 	$proto.$name.inst += ( "args" : $args, "orig" : $p, "orig_args" : $orig_args );
     }
+    #printf("%N\n", $proto); exit();
 
     my $of;
     if (exists $o.file) {
@@ -963,7 +979,7 @@ QoreClass *QC_%s = 0;
 
     foreach my $p in (keys $proto) {	
 	if ($p != $cn)
-	    $of.printf("   %sQC_%s->add%sMethod(%-30s %s%s);\n", $proto.$p.ok ? "" : "//", $cn, $o.static ? "Static" : "", "\""+$p+"\",", $o.static ? "" : "(q_method_t)", $proto.$p.funcname);
+	    $of.printf("   %sQC_%s->add%sMethod(%-30s %s%s%s);\n", $proto.$p.ok ? "" : "//", $cn, $o.static ? "Static" : "", "\""+$p+"\",", $o.static ? "" : "(q_method_t)", $proto.$p.funcname, $proto.$p.protected ? ", true" : "");
     }
 
     if (exists $o.file) {
