@@ -38,3 +38,4 @@
 
 #include "QC_QAbstractTableModel.cc"
 #include "QC_QAbstractListModel.cc"
+#include "QC_QSettings.cc"

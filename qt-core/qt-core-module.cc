@@ -55,6 +55,7 @@
 #include "QC_QTranslator.h"
 #include "QC_QAbstractTableModel.h"
 #include "QC_QAbstractListModel.h"
+#include "QC_QSettings.h"
 
 static QoreStringNode *qt_core_module_init();
 static void qt_core_module_ns_init(QoreNamespace *rns, QoreNamespace *qns);
@@ -258,6 +259,8 @@ static void init_namespace() {
 
    qt_ns.addSystemClass(initQAbstractTableModelClass(qabstractitemmodel));
    qt_ns.addSystemClass(initQAbstractListModelClass(QC_QAbstractItemModel));
+
+   qt_ns.addInitialNamespace(initQSettingsNS(QC_QObject));
 
    // add here
 

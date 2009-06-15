@@ -51,6 +51,7 @@ noinst_HEADERS = qt-core/QC_QObject.h \
 	qt-core/QoreAbstractQAbstractTableModel.h \
 	qt-core/QC_QAbstractListModel.h \
 qt-core/QoreAbstractQAbstractListModel.h \
+	qt-core/QC_QSettings.h \
 	qt-gui/QC_QApplication.h \
 	qt-gui/QC_QPushButton.h \
 	qt-gui/QC_QFont.h \

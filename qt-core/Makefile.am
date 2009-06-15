@@ -43,7 +43,8 @@ QORE_QT_SOURCES = qt-core-util.cc \
 	QC_QBasicTimer.cc \
 	QC_QMetaObject.cc \
 	QC_QAbstractTableModel.cc \
-	QC_QAbstractListModel.cc
+	QC_QAbstractListModel.cc \
+	QC_QSettings.cc
 endif
 
 lib_LTLIBRARIES = libqore-qt-core.la
