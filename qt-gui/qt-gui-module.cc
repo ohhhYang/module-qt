@@ -1235,6 +1235,8 @@ static class QoreStringNode *qt_module_init() {
    register_return_qvariant_hook(return_gui_qvariant);
    register_return_qobject_hook(return_gui_qobject);
    register_return_qevent_hook(return_gui_qevent);
+
+   register_get_qvariant_hook(get_gui_qvariant);
    
    // initialize namespace (must come after type initialization)
    init_namespace();

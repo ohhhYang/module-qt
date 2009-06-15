@@ -53,9 +53,13 @@ typedef safe_dslist<return_qvariant_hook_t> qv_hook_list_t;
 typedef safe_dslist<return_qobject_hook_t> qo_hook_list_t;
 typedef safe_dslist<return_qevent_hook_t> qe_hook_list_t;
 
+typedef safe_dslist<get_qvariant_hook_t> get_qv_hook_list_t;
+
 static qv_hook_list_t qvariant_hooks; 
 static qo_hook_list_t qobject_hooks;
 static qe_hook_list_t qevent_hooks;
+
+static get_qv_hook_list_t get_qvariant_hooks;
 
 int get_qdate(const AbstractQoreNode *n, QDate &date, ExceptionSink *xsink) {
    {
@@ -242,6 +246,18 @@ int get_qvariant(const AbstractQoreNode *n, QVariant &qva, ExceptionSink *xsink,
 	 qva = *qlocale;
 	 return 0;
       }
+
+      if (!get_qvariant_hooks.empty()) {
+	 // try get_qvariant hooks
+	 for (get_qv_hook_list_t::iterator i = get_qvariant_hooks.begin(), e = get_qvariant_hooks.end(); i != e; ++i) {
+	    bool b = (*i)(o, qva, xsink);
+	    if (*xsink)
+	       return -1;
+	    if (b)
+	       return 0;
+	 }
+      }
+
       if (!suppress_exception)
 	 xsink->raiseException("QVARIANT-ERROR", "cannot convert class '%s' to QVariant", o->getClass()->getName());
       return -1;
@@ -585,4 +601,8 @@ void register_return_qobject_hook(return_qobject_hook_t hook) {
 
 void register_return_qevent_hook(return_qevent_hook_t hook) {
    qevent_hooks.push_back(hook);
+}
+
+void register_get_qvariant_hook(get_qvariant_hook_t hook) {
+   get_qvariant_hooks.push_back(hook);
 }

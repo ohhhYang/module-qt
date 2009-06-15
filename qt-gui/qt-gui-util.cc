@@ -371,8 +371,7 @@ QoreObject *return_qstyleoption(const QStyleOption *qso)
    return return_object(QC_QStyleOption, new QoreQStyleOption(*qso));
 }
 
-AbstractQoreNode *return_gui_qvariant(const QVariant &qv)
-{
+AbstractQoreNode *return_gui_qvariant(const QVariant &qv) {
    QVariant::Type type = qv.type();
    switch (type) {
       case QVariant::Bitmap:
@@ -418,8 +417,7 @@ AbstractQoreNode *return_gui_qvariant(const QVariant &qv)
 }
 
 // here QWidget subclasses can be determined if necessary
-static QoreObject *return_qwidget_intern(QWidget *w, bool managed = true)
-{
+static QoreObject *return_qwidget_intern(QWidget *w, bool managed = true) {
    // assign as QWidget
    QoreObject *qo = new QoreObject(QC_QWidget, getProgram());
    qo->setPrivate(CID_QWIDGET, new QoreQtQWidget(qo, w, managed));
@@ -445,8 +443,7 @@ QoreObject *return_qabstractbutton(QAbstractButton *button)
 }
 
 // returns a QoreObject tagged as the appropriate QObject subclass
-QoreObject *return_gui_qobject(QObject *o)
-{
+QoreObject *return_gui_qobject(QObject *o) {
    // see what subclass it is
    QWidget *qw = dynamic_cast<QWidget *>(o);
    return qw ? return_qwidget_intern(qw) : 0;
@@ -485,8 +482,7 @@ QoreObject *return_qaction(QAction *action)
    return rv_obj;
 }
 
-QoreObject *return_gui_qevent(QEvent *event)
-{
+QoreObject *return_gui_qevent(QEvent *event) {
    // the order is important here so the most specific subclass is checked before any base classes
 /*
    {
@@ -598,3 +594,17 @@ QoreObject *return_gui_qevent(QEvent *event)
    
    return 0;
 }
+
+bool get_gui_qvariant(const QoreObject *obj, QVariant &qv, ExceptionSink *xsink) {
+   QoreQIcon *qi = (QoreQIcon *)obj->getReferencedPrivateData(CID_QICON, xsink);
+   if (*xsink)
+      return false;
+   if (qi) {
+      ReferenceHolder<QoreQIcon> qiHolder(qi, xsink);
+      qv = *qi;
+      return true;
+   }
+
+   return false;
+}
+

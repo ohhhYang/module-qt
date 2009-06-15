@@ -51,5 +51,6 @@ DLLEXPORT QoreObject *return_qwidget(QWidget *widget, bool managed = true);
 DLLEXPORT AbstractQoreNode *return_gui_qvariant(const QVariant &qv);
 DLLEXPORT QoreObject *return_gui_qobject(QObject *o);
 DLLEXPORT QoreObject *return_gui_qevent(QEvent *event);
+DLLEXPORT bool get_gui_qvariant(const QoreObject *obj, QVariant &qv, ExceptionSink *xsink);
 
 #endif

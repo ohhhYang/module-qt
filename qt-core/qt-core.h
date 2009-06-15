@@ -67,9 +67,14 @@ typedef AbstractQoreNode *(*return_qvariant_hook_t)(const QVariant &qv);
 typedef QoreObject *(*return_qobject_hook_t)(QObject *o);
 typedef QoreObject *(*return_qevent_hook_t)(QEvent *e);
 
+// returns true if the arugment was processed
+typedef bool(*get_qvariant_hook_t)(const QoreObject *obj, QVariant &qva, ExceptionSink *xsink);
+
 DLLEXPORT void register_return_qvariant_hook(return_qvariant_hook_t hook);
 DLLEXPORT void register_return_qobject_hook(return_qobject_hook_t hook);
 DLLEXPORT void register_return_qevent_hook(return_qevent_hook_t hook);
+
+DLLEXPORT void register_get_qvariant_hook(get_qvariant_hook_t hook);
 
 class QoreQtAbstractDynamicTypeHelper;
 
