@@ -195,3 +195,4 @@
 #include "QC_QStyleOptionDockWidget.cc"
 #include "QC_QDockWidget.cc"
 #include "QC_QTreeView.cc"
+#include "QC_QSpacerItem.cc"

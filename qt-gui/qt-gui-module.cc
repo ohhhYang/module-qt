@@ -175,6 +175,7 @@
 #include "QC_QStyleOptionDockWidget.h"
 #include "QC_QDockWidget.h"
 #include "QC_QTreeView.h"
+#include "QC_QSpacerItem.h"
 
 #include <QPalette>
 #include <QToolTip>
@@ -1128,6 +1129,7 @@ static void init_namespace()
    qt_ns.addInitialNamespace(initQItemSelectionModelNS(QC_QObject));
    qt_ns.addInitialNamespace(initQStyleOptionDockWidgetNS(QC_QStyleOption));
    qt_ns.addInitialNamespace(initQDockWidgetNS(QC_QWidget));
+   qt_ns.addSystemClass(initQSpacerItemClass(QC_QLayoutItem));
 
    // add here
    

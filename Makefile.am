@@ -304,6 +304,7 @@ qt-core/QoreAbstractQAbstractListModel.h \
 qt-gui/QoreAbstractQDockWidget.h \
 	qt-gui/QC_QTreeView.h \
 qt-gui/QoreAbstractQTreeView.h \
+	qt-gui/QC_QSpacerItem.h \
 	qt-opengl/QC_QGLWidget.h \
 	qt-opengl/QC_QGLFormat.h \
 	qt-opengl/QC_QGLContext.h \

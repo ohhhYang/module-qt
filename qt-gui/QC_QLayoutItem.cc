@@ -22,9 +22,9 @@
 
 #include "qore-qt-gui.h"
 
-
 #include "QC_QLayout.h"
 #include "QC_QLayoutItem.h"
+#include "QC_QSpacerItem.h"
 
 qore_classid_t CID_QLAYOUTITEM;
 QoreClass *QC_QLayoutItem = 0;
@@ -166,13 +166,10 @@ static AbstractQoreNode *QLAYOUTITEM_sizeHint(QoreObject *self, QoreAbstractQLay
    return return_object(QC_QSize, new QoreQSize(qli->parent_sizeHint()));
 }
 
-/*
 //virtual QSpacerItem * spacerItem ()
-static AbstractQoreNode *QLAYOUTITEM_spacerItem(QoreObject *self, QoreAbstractQLayoutItemData *qli, const QoreListNode *params, ExceptionSink *xsink)
-{
-   return return_object(QC_QSpacerItem, new QoreQSpacerItem(qli->parent_spacerItem()));
+static AbstractQoreNode *QLAYOUTITEM_spacerItem(QoreObject *self, QoreAbstractQLayoutItemData *qli, const QoreListNode *params, ExceptionSink *xsink) {
+   return self->validInstanceOf(CID_QSPACERITEM) ? self->refSelf() : 0;
 }
-*/
 
 //virtual QWidget * widget ()
 static AbstractQoreNode *QLAYOUTITEM_widget(QoreObject *self, QoreAbstractQLayoutItemData *qli, const QoreListNode *params, ExceptionSink *xsink)
@@ -180,8 +177,7 @@ static AbstractQoreNode *QLAYOUTITEM_widget(QoreObject *self, QoreAbstractQLayou
    return return_qwidget(qli->parent_widget());
 }
 
-QoreClass *initQLayoutItemClass()
-{
+QoreClass *initQLayoutItemClass() {
    QC_QLayoutItem = new QoreClass("QLayoutItem", QDOM_GUI);
    CID_QLAYOUTITEM = QC_QLayoutItem->getID();
 
@@ -205,7 +201,7 @@ QoreClass *initQLayoutItemClass()
    QC_QLayoutItem->addMethod("setAlignment",                (q_method_t)QLAYOUTITEM_setAlignment);
    QC_QLayoutItem->addMethod("setGeometry",                 (q_method_t)QLAYOUTITEM_setGeometry);
    QC_QLayoutItem->addMethod("sizeHint",                    (q_method_t)QLAYOUTITEM_sizeHint);
-   //QC_QLayoutItem->addMethod("spacerItem",                  (q_method_t)QLAYOUTITEM_spacerItem);
+   QC_QLayoutItem->addMethod("spacerItem",                  (q_method_t)QLAYOUTITEM_spacerItem);
    QC_QLayoutItem->addMethod("widget",                      (q_method_t)QLAYOUTITEM_widget);
 
    return QC_QLayoutItem;
