@@ -269,6 +269,17 @@ int get_qvariant(const AbstractQoreNode *n, QVariant &qva, ExceptionSink *xsink,
       return 0;
    }
 
+   if (ntype == NT_BOOLEAN) {
+      qva.setValue(reinterpret_cast<const QoreBoolNode *>(n)->getValue());
+      return 0;
+   }
+
+   if (ntype == NT_BINARY) {
+      const BinaryNode *b = reinterpret_cast<const BinaryNode *>(n);
+      qva.setValue(QByteArray((const char *)b->getPtr(), b->size()));
+      return 0;
+   }
+
    if (!suppress_exception)
       xsink->raiseException("QVARIANT-ERROR", "cannot convert type '%s' to QVariant", n ? n->getTypeName() : "NOTHING");
    return -1;
