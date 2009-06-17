@@ -64,14 +64,14 @@ const qobject_list =
       "QSvgRenderer", "QSvgWidget", "QSplashScreen", "QSplitter",
       "QSplitterHandle", "QTextDocument", "QAbstractTableModel",
       "QStatusBar", "QDockWidget", "QToolBar", "QItemSelectionModel",
-      
+      "QAbstractScrollArea", "QMdiArea", "QMdiSubWindow"
  );
 
 const abstract_class_list = 
     ( "QObject", "QWidget", "QAbstractItemDelegate", "QItemDelegate", 
       "QItemModel", "QLayout", "QStyle", "QHeaderView", "QMenuBar",
       "QAction", "QValidator", "QIODevice", "QPainter", "QGraphicsItem",
-      "QPaintDevice", "QAbstractItemModel", "QAbstractTableModel"
+      "QPaintDevice", "QAbstractItemModel", "QAbstractTableModel",
     );
 
 const const_class_list = 

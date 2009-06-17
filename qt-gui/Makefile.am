@@ -184,7 +184,9 @@ QORE_QT_GUI_SOURCES = qt-gui-util.cc QC_QApplication.cc QC_QPushButton.cc \
 	QC_QStyleOptionDockWidget.cc \
 	QC_QDockWidget.cc \
 	QC_QTreeView.cc \
-	QC_QSpacerItem.cc
+	QC_QSpacerItem.cc \
+	QC_QMdiArea.cc \
+	QC_QMdiSubWindow.cc
 if COND_MACOSX
 QORE_QT_GUI_SOURCES += QC_QMacStyle.cc
 endif

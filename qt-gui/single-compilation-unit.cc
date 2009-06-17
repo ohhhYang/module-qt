@@ -196,3 +196,5 @@
 #include "QC_QDockWidget.cc"
 #include "QC_QTreeView.cc"
 #include "QC_QSpacerItem.cc"
+#include "QC_QMdiArea.cc"
+#include "QC_QMdiSubWindow.cc"

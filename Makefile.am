@@ -306,6 +306,8 @@ qt-gui/QoreAbstractQDockWidget.h \
 	qt-gui/QC_QTreeView.h \
 qt-gui/QoreAbstractQTreeView.h \
 	qt-gui/QC_QSpacerItem.h \
+	qt-gui/QC_QMdiArea.h \
+	qt-gui/QC_QMdiSubWindow.h \
 	qt-opengl/QC_QGLWidget.h \
 	qt-opengl/QC_QGLFormat.h \
 	qt-opengl/QC_QGLContext.h \
