@@ -104,6 +104,7 @@ qt-core/QoreAbstractQAbstractListModel.h \
 	qt-gui/qore-qt-qlayoutitem-methods.h \
 	qt-gui/qore-qt-qlayout-methods.h \
 	qt-gui/qore-qt-qgraphicsitem-methods.h \
+	qt-gui/qore-qt-qtreeview-methods.h \
 	qt-gui/QC_QBrush.h \
 	qt-gui/QC_QColor.h \
 	qt-gui/QC_QPaintDevice.h \
@@ -308,6 +309,8 @@ qt-gui/QoreAbstractQTreeView.h \
 	qt-gui/QC_QSpacerItem.h \
 	qt-gui/QC_QMdiArea.h \
 	qt-gui/QC_QMdiSubWindow.h \
+	qt-gui/QC_QTreeWidgetItem.h \
+	qt-gui/QC_QTreeWidget.h \
 	qt-opengl/QC_QGLWidget.h \
 	qt-opengl/QC_QGLFormat.h \
 	qt-opengl/QC_QGLContext.h \

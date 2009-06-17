@@ -64,7 +64,8 @@ const qobject_list =
       "QSvgRenderer", "QSvgWidget", "QSplashScreen", "QSplitter",
       "QSplitterHandle", "QTextDocument", "QAbstractTableModel",
       "QStatusBar", "QDockWidget", "QToolBar", "QItemSelectionModel",
-      "QAbstractScrollArea", "QMdiArea", "QMdiSubWindow"
+      "QAbstractScrollArea", "QMdiArea", "QMdiSubWindow",
+      "QTreeWidget", "QTreeView"
  );
 
 const abstract_class_list = 
@@ -168,6 +169,7 @@ const class_list = ( "QRegion",
 		     "QTextLayout",
 		     "QFileIconProvider",
 		     "QTimerEvent",
+		     "QTreeWidgetItem",
 
  ) + const_class_list + qobject_list;
 
@@ -193,7 +195,6 @@ sub usage() {
   -s,--style               is a QStyle
   -g,--graphicsitem        is a QGraphicsItem
   -I,--itemmodel           is a QAbstractItemModel
-  -q,--qt-class            add Qt class to abstract class
   -p,--parent=ARG          parent class name
   -S,--static              assume prototypes are static functions
   -N,--namespace           add class as namespace
@@ -927,7 +928,6 @@ DLLEXPORT extern QoreClass *QC_%s;
     
 	#printf("%-15s %-20s (%s)\n", "(" + $rt + ")", $name, dlh($args));
     }
-
 
     # do file prefix
     if (exists $o.file) {
@@ -1821,6 +1821,12 @@ sub do_return_value($offset, $rt, $callstr, $ok) {
 	    $lo += "if (!qpd_rv)";
 	    $lo += "   return 0;";
 	    $lo += "return return_object(QC_QPaintDevice, new QoreQtQPaintDevice(qpd));";
+	    break;
+	}
+
+	case /^QTreeWidgetItem/: {
+	    $lo += sprintf("QTreeWidgetItem *qtwi_rv = %s;", $callstr);
+	    $lo += "return qtwi_rv ? return_object(QC_QTreeWidgetItem, new QoreQtQTreeWidgetItem(qtwi_rv)) : 0;";
 	    break;
 	}
 

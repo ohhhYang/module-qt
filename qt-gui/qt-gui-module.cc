@@ -178,6 +178,8 @@
 #include "QC_QSpacerItem.h"
 #include "QC_QMdiArea.h"
 #include "QC_QMdiSubWindow.h"
+#include "QC_QTreeWidgetItem.h"
+#include "QC_QTreeWidget.h"
 
 #include <QPalette>
 #include <QToolTip>
@@ -1134,6 +1136,8 @@ static void init_namespace()
    qt_ns.addSystemClass(initQSpacerItemClass(QC_QLayoutItem));
    qt_ns.addInitialNamespace(initQMdiAreaNS(QC_QAbstractScrollArea));
    qt_ns.addInitialNamespace(initQMdiSubWindowNS(QC_QWidget));
+   qt_ns.addInitialNamespace(initQTreeWidgetItemNS());
+   qt_ns.addSystemClass(initQTreeWidgetClass(QC_QTreeView));
 
    // add here
    
