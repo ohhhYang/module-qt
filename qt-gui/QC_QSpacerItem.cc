@@ -62,7 +62,7 @@ static AbstractQoreNode *QSPACERITEM_changeSize(QoreObject *self, QoreQSpacerIte
 
 //virtual bool isEmpty () const
 static AbstractQoreNode *QSPACERITEM_isEmpty(QoreObject *self, QoreQSpacerItem *qsi, const QoreListNode *params, ExceptionSink *xsink) {
-   return get_bool_node(qsi->isEmpty());
+   return get_bool_node(qsi->parent_isEmpty());
 }
 
 //virtual QSpacerItem * spacerItem ()
