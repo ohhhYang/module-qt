@@ -104,7 +104,7 @@ class MainWindow inherits QMainWindow, private Ui_MainWindow {
 	my $headers = (TR("Title"), TR("Description"));
 
 	my $file = new File();
-	$file.open("default.txt");
+	$file.open(get_script_dir() + "default.txt");
 	my $model = new TreeModel($headers, $file.read(-1), $.view);
 	$file.close();
 

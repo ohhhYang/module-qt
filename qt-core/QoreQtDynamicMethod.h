@@ -44,8 +44,7 @@ class QoreQtAbstractDynamicTypeHelper {
       std::string type_name;
 
    public:
-      DLLLOCAL QoreQtAbstractDynamicTypeHelper(const char *name) : type_name(name)
-      {
+      DLLLOCAL QoreQtAbstractDynamicTypeHelper(const char *name) : type_name(name) {
       }
       virtual ~QoreQtAbstractDynamicTypeHelper() {}
       virtual void add_qore_arg(QoreListNode &args, void *arg) = 0;
@@ -53,8 +52,7 @@ class QoreQtAbstractDynamicTypeHelper {
       virtual void del_arg(void *ptr) = 0;
       virtual void do_return(void *rv, const AbstractQoreNode *val) = 0;
 
-      DLLLOCAL bool identify(const char *&p)
-      {
+      DLLLOCAL bool identify(const char *&p) {
 	 if (!strncmp(type_name.c_str(), p, type_name.size())) {
 	    p += type_name.size();
 	    return true;
@@ -65,32 +63,25 @@ class QoreQtAbstractDynamicTypeHelper {
       DLLLOCAL const char *get_name() const { return type_name.c_str(); }
 };
 
-class QoreQtInt : public QoreQtAbstractDynamicTypeHelper
-{
+class QoreQtInt : public QoreQtAbstractDynamicTypeHelper {
    protected:
-      DLLLOCAL QoreQtInt(const char *n) : QoreQtAbstractDynamicTypeHelper(n)
-      {
+      DLLLOCAL QoreQtInt(const char *n) : QoreQtAbstractDynamicTypeHelper(n) {
       }
 
    public:
-      DLLLOCAL QoreQtInt() : QoreQtAbstractDynamicTypeHelper("int")
-      {
+      DLLLOCAL QoreQtInt() : QoreQtAbstractDynamicTypeHelper("int") {
       }
-      DLLLOCAL virtual void add_qore_arg(QoreListNode &args, void *arg)
-      {
+      DLLLOCAL virtual void add_qore_arg(QoreListNode &args, void *arg) {
 	 int *ptr = reinterpret_cast<int *>(arg);
 	 args.push(new QoreBigIntNode(*ptr));
       }
-      DLLLOCAL virtual void add_qt_arg(void *&ptr, void *&save, const AbstractQoreNode *val)
-      {
+      DLLLOCAL virtual void add_qt_arg(void *&ptr, void *&save, const AbstractQoreNode *val) {
 	 save = (void *)(val ? val->getAsInt() : 0);
 	 ptr = &save;
       }
-      DLLLOCAL virtual void del_arg(void *ptr)
-      {
+      DLLLOCAL virtual void del_arg(void *ptr) {
       }
-      DLLLOCAL virtual void do_return(void *rv, const AbstractQoreNode *val)
-      {
+      DLLLOCAL virtual void do_return(void *rv, const AbstractQoreNode *val) {
 	 int *ptr = reinterpret_cast<int *>(rv);
 	 *ptr = val ? val->getAsInt() : 0;
       }
@@ -105,13 +96,11 @@ struct QoreQtDynamicMethod {
       DLLEXPORT static int get_type(const char *&p);
 
    public:
-      virtual ~QoreQtDynamicMethod()
-      {
+      virtual ~QoreQtDynamicMethod() {
       }
 };
 
-class QoreQtDynamicSlot : public QoreQtDynamicMethod
-{
+class QoreQtDynamicSlot : public QoreQtDynamicMethod {
    private:
       QoreObject *qore_obj;
       const QoreMethod *method;
@@ -122,46 +111,39 @@ class QoreQtDynamicSlot : public QoreQtDynamicMethod
    public:
       DLLEXPORT QoreQtDynamicSlot(QoreObject *n_qore_obj, const char *sig, ExceptionSink *xsink);
 
-      DLLEXPORT virtual ~QoreQtDynamicSlot()
-      {
+      DLLEXPORT virtual ~QoreQtDynamicSlot() {
       }
 
       DLLEXPORT virtual void call(void **arguments);
       DLLEXPORT virtual void call();
 };
 
-struct QoreQtDynamicSignal : public QoreQtDynamicMethod
-{
+struct QoreQtDynamicSignal : public QoreQtDynamicMethod {
    private:
 
    public:
       DLLEXPORT QoreQtDynamicSignal(const char *sig, ExceptionSink *xsink);
-      DLLEXPORT virtual ~QoreQtDynamicSignal()
-      {
+      DLLEXPORT virtual ~QoreQtDynamicSignal() {
       }
       DLLEXPORT void emit_signal(QObject *obj, int id, const QoreListNode *args);
 };
 
 typedef std::vector<QoreQtDynamicMethod *> qore_qt_method_list_t;
 
-class DynamicMethodMap : public qore_qt_method_list_t
-{
+class DynamicMethodMap : public qore_qt_method_list_t {
    private:
 
    public:
-      DLLEXPORT ~DynamicMethodMap()
-      {
+      DLLEXPORT ~DynamicMethodMap() {
 	 for (qore_qt_method_list_t::iterator i = begin(), e = end(); i != e; ++i)
 	    delete *i;
       }
-      DLLEXPORT int addMethod(QoreQtDynamicSlot *slot)
-      {
+      DLLEXPORT int addMethod(QoreQtDynamicSlot *slot) {
 	 int id = size();
 	 push_back(slot);
 	 return id;
       }
-      DLLEXPORT int addMethod(QoreQtDynamicSignal *sig)
-      {
+      DLLEXPORT int addMethod(QoreQtDynamicSignal *sig) {
 	 int id = size();
 	 push_back(sig);
 	 return id;

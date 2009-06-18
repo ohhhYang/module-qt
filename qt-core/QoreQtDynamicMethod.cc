@@ -32,8 +32,7 @@
 
 typedef safe_dslist<QoreQtAbstractDynamicTypeHelper *> qore_qt_type_list_t;
 
-class QoreQtTypeList : public qore_qt_type_list_t
-{
+class QoreQtTypeList : public qore_qt_type_list_t {
    public:
       DLLLOCAL QoreQtTypeList();
 
@@ -58,25 +57,19 @@ class QoreQtTypeList : public qore_qt_type_list_t
 
 static QoreQtTypeList qqt_type_list;
 
-class QoreQtVoid : public QoreQtAbstractDynamicTypeHelper
-{
+class QoreQtVoid : public QoreQtAbstractDynamicTypeHelper {
    public:
-      DLLLOCAL QoreQtVoid() : QoreQtAbstractDynamicTypeHelper("void")
-      {
+      DLLLOCAL QoreQtVoid() : QoreQtAbstractDynamicTypeHelper("void") {
       }
-      DLLLOCAL virtual void add_qore_arg(QoreListNode &args, void *arg)
-      {
+      DLLLOCAL virtual void add_qore_arg(QoreListNode &args, void *arg) {
 	 args.push(0);
       }
-      DLLLOCAL virtual void add_qt_arg(void *&ptr, void *&save, const AbstractQoreNode *val)
-      {
+      DLLLOCAL virtual void add_qt_arg(void *&ptr, void *&save, const AbstractQoreNode *val) {
 	 ptr = 0;
       }
-      DLLLOCAL virtual void del_arg(void *ptr)
-      {
+      DLLLOCAL virtual void del_arg(void *ptr) {
       }
-      DLLLOCAL virtual void do_return(void *rv, const AbstractQoreNode *val)
-      {
+      DLLLOCAL virtual void do_return(void *rv, const AbstractQoreNode *val) {
       }
 };
 
@@ -84,27 +77,21 @@ DLLLOCAL QoreQtVoid qqt_void;
 
 DLLLOCAL QoreQtInt qqt_int;
 
-class QoreQtLong : public QoreQtAbstractDynamicTypeHelper
-{
+class QoreQtLong : public QoreQtAbstractDynamicTypeHelper {
    public:
-      DLLLOCAL QoreQtLong() : QoreQtAbstractDynamicTypeHelper("long")
-      {
+      DLLLOCAL QoreQtLong() : QoreQtAbstractDynamicTypeHelper("long") {
       }
-      DLLLOCAL virtual void add_qore_arg(QoreListNode &args, void *arg)
-      {
+      DLLLOCAL virtual void add_qore_arg(QoreListNode &args, void *arg) {
 	 long *ptr = reinterpret_cast<long *>(arg);
 	 args.push(new QoreBigIntNode(*ptr));
       }
-      DLLLOCAL virtual void add_qt_arg(void *&ptr, void *&save, const AbstractQoreNode *val)
-      {
+      DLLLOCAL virtual void add_qt_arg(void *&ptr, void *&save, const AbstractQoreNode *val) {
 	 save = (void *)(val ? (long)val->getAsBigInt() : 0);
 	 ptr = &save;
       }
-      DLLLOCAL virtual void del_arg(void *ptr)
-      {
+      DLLLOCAL virtual void del_arg(void *ptr) {
       }
-      DLLLOCAL virtual void do_return(void *rv, const AbstractQoreNode *val)
-      {
+      DLLLOCAL virtual void do_return(void *rv, const AbstractQoreNode *val) {
 	 long *ptr = reinterpret_cast<long *>(rv);
 	 *ptr = val ? val->getAsInt() : 0;
       }
@@ -112,27 +99,21 @@ class QoreQtLong : public QoreQtAbstractDynamicTypeHelper
 
 DLLLOCAL QoreQtLong qqt_long;
 
-class QoreQtBool : public QoreQtAbstractDynamicTypeHelper
-{
+class QoreQtBool : public QoreQtAbstractDynamicTypeHelper {
    public:
-      DLLLOCAL QoreQtBool() : QoreQtAbstractDynamicTypeHelper("bool")
-      {
+      DLLLOCAL QoreQtBool() : QoreQtAbstractDynamicTypeHelper("bool") {
       }
-      DLLLOCAL virtual void add_qore_arg(QoreListNode &args, void *arg)
-      {
+      DLLLOCAL virtual void add_qore_arg(QoreListNode &args, void *arg) {
 	 bool *ptr = reinterpret_cast<bool *>(arg);
 	 args.push(get_bool_node(*ptr));
       }
-      DLLLOCAL virtual void add_qt_arg(void *&ptr, void *&save, const AbstractQoreNode *val)
-      {
+      DLLLOCAL virtual void add_qt_arg(void *&ptr, void *&save, const AbstractQoreNode *val) {
 	 save = (void *)(val ? val->getAsBool() : 0);
 	 ptr = &save;
       }
-      DLLLOCAL virtual void del_arg(void *ptr)
-      {
+      DLLLOCAL virtual void del_arg(void *ptr) {
       }
-      DLLLOCAL virtual void do_return(void *rv, const AbstractQoreNode *val)
-      {
+      DLLLOCAL virtual void do_return(void *rv, const AbstractQoreNode *val) {
 	 bool *ptr = reinterpret_cast<bool *>(rv);
 	 *ptr = val ? val->getAsBool() : 0;
       }
@@ -140,8 +121,7 @@ class QoreQtBool : public QoreQtAbstractDynamicTypeHelper
 
 DLLLOCAL QoreQtBool qqt_bool;
 
-class QoreQtFloat : public QoreQtAbstractDynamicTypeHelper
-{
+class QoreQtFloat : public QoreQtAbstractDynamicTypeHelper {
    public:
       DLLLOCAL QoreQtFloat() : QoreQtAbstractDynamicTypeHelper("float")
       {
@@ -171,30 +151,24 @@ class QoreQtFloat : public QoreQtAbstractDynamicTypeHelper
 
 DLLLOCAL QoreQtFloat qqt_float;
 
-class QoreQtDouble : public QoreQtAbstractDynamicTypeHelper
-{
+class QoreQtDouble : public QoreQtAbstractDynamicTypeHelper {
    public:
-      DLLLOCAL QoreQtDouble() : QoreQtAbstractDynamicTypeHelper("double")
-      {
+      DLLLOCAL QoreQtDouble() : QoreQtAbstractDynamicTypeHelper("double") {
       }
-      DLLLOCAL virtual void add_qore_arg(QoreListNode &args, void *arg)
-      {
+      DLLLOCAL virtual void add_qore_arg(QoreListNode &args, void *arg) {
 	 double *ptr = reinterpret_cast<double *>(arg);
 	 args.push(new QoreFloatNode(*ptr));
       }
-      DLLLOCAL virtual void add_qt_arg(void *&ptr, void *&save, const AbstractQoreNode *val)
-      {
+      DLLLOCAL virtual void add_qt_arg(void *&ptr, void *&save, const AbstractQoreNode *val) {
 	 save = malloc(sizeof(double));
 	 double *p = (double *)save;
 	 *p = val ? val->getAsFloat() : 0.0;
 	 ptr = save;
       }
-      DLLLOCAL virtual void del_arg(void *ptr)
-      {
+      DLLLOCAL virtual void del_arg(void *ptr) {
 	 free(ptr);
       }
-      DLLLOCAL virtual void do_return(void *rv, const AbstractQoreNode *val)
-      {
+      DLLLOCAL virtual void do_return(void *rv, const AbstractQoreNode *val) {
 	 double *ptr = reinterpret_cast<double *>(rv);
 	 *ptr = val ? val->getAsFloat() : 0;
       }
@@ -202,30 +176,24 @@ class QoreQtDouble : public QoreQtAbstractDynamicTypeHelper
 
 DLLLOCAL QoreQtDouble qqt_double;
 
-class QoreQtQReal : public QoreQtAbstractDynamicTypeHelper
-{
+class QoreQtQReal : public QoreQtAbstractDynamicTypeHelper {
    public:
-      DLLLOCAL QoreQtQReal() : QoreQtAbstractDynamicTypeHelper("qreal")
-      {
+      DLLLOCAL QoreQtQReal() : QoreQtAbstractDynamicTypeHelper("qreal") {
       }
-      DLLLOCAL virtual void add_qore_arg(QoreListNode &args, void *arg)
-      {
+      DLLLOCAL virtual void add_qore_arg(QoreListNode &args, void *arg) {
 	 qreal *ptr = reinterpret_cast<qreal *>(arg);
 	 args.push(new QoreFloatNode(*ptr));
       }
-      DLLLOCAL virtual void add_qt_arg(void *&ptr, void *&save, const AbstractQoreNode *val)
-      {
+      DLLLOCAL virtual void add_qt_arg(void *&ptr, void *&save, const AbstractQoreNode *val) {
 	 save = malloc(sizeof(qreal));
 	 qreal *p = (double *)save;
 	 *p = val ? (qreal)val->getAsFloat() : 0.0;
 	 ptr = save;
       }
-      DLLLOCAL virtual void del_arg(void *ptr)
-      {
+      DLLLOCAL virtual void del_arg(void *ptr) {
 	 free(ptr);
       }
-      DLLLOCAL virtual void do_return(void *rv, const AbstractQoreNode *val)
-      {
+      DLLLOCAL virtual void do_return(void *rv, const AbstractQoreNode *val) {
 	 qreal *ptr = reinterpret_cast<qreal *>(rv);
 	 *ptr = val ? (qreal)val->getAsFloat() : 0;
       }
@@ -233,13 +201,11 @@ class QoreQtQReal : public QoreQtAbstractDynamicTypeHelper
 
 DLLLOCAL QoreQtQReal qqt_qreal;
 
-struct string_saver
-{
+struct string_saver {
       QoreStringNode *v;
       char *p;
 
-      DLLLOCAL string_saver(const AbstractQoreNode *val)
-      {
+      DLLLOCAL string_saver(const AbstractQoreNode *val) {
 	 QoreStringNodeValueHelper str(val);
 	 v = str.getReferencedValue();
 	 p = (char *)v->getBuffer();
@@ -248,34 +214,32 @@ struct string_saver
       DLLLOCAL char *get_ptr() { return p; }
 };
 
-class QoreQtCharPtr : public QoreQtAbstractDynamicTypeHelper
-{
+class QoreQtCharPtr : public QoreQtAbstractDynamicTypeHelper {
    protected:
-      DLLLOCAL QoreQtCharPtr(const char *n) : QoreQtAbstractDynamicTypeHelper(n)
-      {
+      DLLLOCAL QoreQtCharPtr(const char *n) : QoreQtAbstractDynamicTypeHelper(n) {
       }
 
    public:
-      DLLLOCAL QoreQtCharPtr() : QoreQtAbstractDynamicTypeHelper("char*")
-      {
+      DLLLOCAL QoreQtCharPtr() : QoreQtAbstractDynamicTypeHelper("char*") {
       }
-      DLLLOCAL virtual void add_qore_arg(QoreListNode &args, void *arg)
-      {
+
+      DLLLOCAL virtual void add_qore_arg(QoreListNode &args, void *arg) {
 	 char **ptr = reinterpret_cast<char **>(arg);
 	 args.push(new QoreStringNode(*ptr));
       }
-      DLLLOCAL virtual void add_qt_arg(void *&ptr, void *&save, const AbstractQoreNode *val)
-      {
+
+      DLLLOCAL virtual void add_qt_arg(void *&ptr, void *&save, const AbstractQoreNode *val) {
 	 string_saver *ss = new string_saver(val);
+	 save = ss;
 	 ptr = ss->get_ptr();
       }
-      DLLLOCAL virtual void del_arg(void *ptr)
-      {
+
+      DLLLOCAL virtual void del_arg(void *ptr) {
 	 string_saver *ss = (string_saver *)(ptr);
 	 delete ss;
       }
-      DLLLOCAL virtual void do_return(void *rv, const AbstractQoreNode *val)
-      {
+
+      DLLLOCAL virtual void do_return(void *rv, const AbstractQoreNode *val) {
 	 assert(false);
 	 //char **ptr = reinterpret_cast<char **>(rv);
 	 // *ptr = (val && val->getType() == NT_STRING) ? reinterpret_cast<const QoreStringNode *
@@ -284,92 +248,118 @@ class QoreQtCharPtr : public QoreQtAbstractDynamicTypeHelper
 
 DLLLOCAL QoreQtCharPtr qqt_char_ptr;
 
-class QoreQtConstCharPtr : public QoreQtCharPtr
-{
+class QoreQtConstCharPtr : public QoreQtCharPtr {
    public:
-      DLLLOCAL QoreQtConstCharPtr() : QoreQtCharPtr("const char*")
-      {
+      DLLLOCAL QoreQtConstCharPtr() : QoreQtCharPtr("const char*") {
       }
 };
 
 DLLLOCAL QoreQtConstCharPtr qqt_const_char_ptr;
 
-class QoreQtQString : public QoreQtAbstractDynamicTypeHelper
-{
+class QoreQtQString : public QoreQtAbstractDynamicTypeHelper {
    protected:
-      DLLLOCAL QoreQtQString(const char *n) : QoreQtAbstractDynamicTypeHelper(n)
-      {
+      DLLLOCAL QoreQtQString(const char *n) : QoreQtAbstractDynamicTypeHelper(n) {
       }
 
    public:
-      DLLLOCAL QoreQtQString() : QoreQtAbstractDynamicTypeHelper("QString")
-      {
+      DLLLOCAL QoreQtQString() : QoreQtAbstractDynamicTypeHelper("QString") {
       }
-      DLLLOCAL virtual void add_qore_arg(QoreListNode &args, void *arg)
-      {
+      DLLLOCAL virtual void add_qore_arg(QoreListNode &args, void *arg) {
 	 QString *qstr = reinterpret_cast<QString *>(arg);
 	 //printd(5, "slot argument string: %08p: %d\n", qstr, qstr->length());
 	 //printd(5, "slot argument string: '%s'\n", qstr->toUtf8().data());
 	 args.push(new QoreStringNode(qstr->toUtf8().data(), QCS_UTF8));
       }
-      DLLLOCAL virtual void add_qt_arg(void *&ptr, void *&save, const AbstractQoreNode *val)
-      {
+      DLLLOCAL virtual void add_qt_arg(void *&ptr, void *&save, const AbstractQoreNode *val) {
 	 ExceptionSink xsink;
 
 	 QString str;
 	 get_qstring(val, str, &xsink);
          QString *p = new QString();
+	 (*p) = str;
 	 save = (void *)p;
 	 ptr = save;
       }
-      DLLLOCAL virtual void del_arg(void *ptr)
-      {
+      DLLLOCAL virtual void del_arg(void *ptr) {
 	 QString *p = (QString *)ptr;
 	 delete p;
       }
-      DLLLOCAL virtual void do_return(void *rv, const AbstractQoreNode *val)
-      {
+      DLLLOCAL virtual void do_return(void *rv, const AbstractQoreNode *val) {
 	 assert(false);
       }
 };
 
 DLLLOCAL QoreQtQString qqt_qstring;
 
-class QoreQtConstQStringRef : public QoreQtQString
-{
+class QoreQtConstQStringRef : public QoreQtQString {
    public:
-      DLLLOCAL QoreQtConstQStringRef() : QoreQtQString("const QString&")
-      {
+      DLLLOCAL QoreQtConstQStringRef() : QoreQtQString("const QString&") {
       }
 };
 
 DLLLOCAL QoreQtConstQStringRef qqt_const_qstring_ref;
 
-class QoreQtQDate : public QoreQtAbstractDynamicTypeHelper
-{
+class QoreQtQDate : public QoreQtAbstractDynamicTypeHelper {
    public:
-      DLLLOCAL QoreQtQDate() : QoreQtAbstractDynamicTypeHelper("QDate")
-      {
+      DLLLOCAL QoreQtQDate() : QoreQtAbstractDynamicTypeHelper("QDate") {
       }
-      DLLLOCAL virtual void add_qore_arg(QoreListNode &args, void *arg)
-      {
+      DLLLOCAL virtual void add_qore_arg(QoreListNode &args, void *arg) {
 	 QDate *qdate = reinterpret_cast<QDate *>(arg);
 	 args.push(new DateTimeNode(qdate->year(), qdate->month(), qdate->day()));
       }
-      DLLLOCAL virtual void add_qt_arg(void *&ptr, void *&save, const AbstractQoreNode *val)
-      {
+      DLLLOCAL virtual void add_qt_arg(void *&ptr, void *&save, const AbstractQoreNode *val) {
 	 assert(false);
       }
-      DLLLOCAL virtual void del_arg(void *ptr)
-      {
+      DLLLOCAL virtual void del_arg(void *ptr) {
       }
-      DLLLOCAL virtual void do_return(void *rv, const AbstractQoreNode *val)
-      {
+      DLLLOCAL virtual void do_return(void *rv, const AbstractQoreNode *val) {
 	 assert(false);
       }
 };
 
 DLLLOCAL QoreQtQDate qqt_qdate;
+
+class QoreQtQModelIndex : public QoreQtAbstractDynamicTypeHelper {
+   protected:
+      DLLLOCAL QoreQtQModelIndex(const char *n) : QoreQtAbstractDynamicTypeHelper(n) {
+      }
+
+   public:
+      DLLLOCAL QoreQtQModelIndex() : QoreQtAbstractDynamicTypeHelper("QModelIndex") {
+      }
+
+      DLLLOCAL virtual void add_qore_arg(QoreListNode &args, void *arg) {
+	 QModelIndex *qmi = reinterpret_cast<QModelIndex *>(arg);
+	 //printd(5, "slot argument string: %08p: %d\n", qstr, qstr->length());
+	 //printd(5, "slot argument string: '%s'\n", qstr->toUtf8().data());
+
+	 QoreObject *o_qmi = new QoreObject(QC_QModelIndex, getProgram());
+	 QoreQModelIndex *q_qmi = new QoreQModelIndex(*qmi);
+	 o_qmi->setPrivate(CID_QMODELINDEX, q_qmi);
+
+	 args.push(o_qmi);
+      }
+
+      DLLLOCAL virtual void add_qt_arg(void *&ptr, void *&save, const AbstractQoreNode *val) {
+	 assert(false);
+      }
+      DLLLOCAL virtual void del_arg(void *ptr) {
+      }
+      DLLLOCAL virtual void do_return(void *rv, const AbstractQoreNode *val) {
+	 assert(false);
+      }
+};
+
+DLLLOCAL QoreQtQModelIndex qqt_qmodelindex;
+
+class QoreQtConstQModelIndexRef : public QoreQtQModelIndex {
+   public:
+      DLLLOCAL QoreQtConstQModelIndexRef() : QoreQtQModelIndex("const QModelIndex&") {
+      }
+};
+
+DLLLOCAL QoreQtConstQModelIndexRef qqt_const_qmodelindex_ref;
+
 
 /*
 class QoreQt : public QoreQtAbstractDynamicTypeHelper
@@ -393,8 +383,7 @@ class QoreQt : public QoreQtAbstractDynamicTypeHelper
 };
 */
 
-QoreQtTypeList::QoreQtTypeList()
-{
+QoreQtTypeList::QoreQtTypeList() {
    push_back(&qqt_void);
    push_back(&qqt_int);
    push_back(&qqt_long);
@@ -405,6 +394,9 @@ QoreQtTypeList::QoreQtTypeList()
    push_back(&qqt_char_ptr);
    push_back(&qqt_const_char_ptr);
    push_back(&qqt_qstring);
+   push_back(&qqt_const_qstring_ref);
+   push_back(&qqt_qmodelindex);
+   push_back(&qqt_const_qmodelindex_ref);
    push_back(&qqt_qdate);
 }
 
