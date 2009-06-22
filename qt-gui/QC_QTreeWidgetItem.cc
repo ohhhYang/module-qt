@@ -89,6 +89,9 @@ static void QTREEWIDGETITEM_constructor(QoreObject *self, const QoreListNode *pa
 	 self->setPrivate(CID_QTREEWIDGETITEM, new QoreQTreeWidgetItem(i_parent->getQTreeWidgetItem(), type));
 	 return;
       }
+      // first argument is a QTreeWidget
+      ReferenceHolder<AbstractPrivateData> parentHolder(static_cast<AbstractPrivateData *>(parent), xsink);
+      p = get_param(params, 1);
 
       if (p && p->getType() == NT_LIST) {
 	 QStringList strings;
