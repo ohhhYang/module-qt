@@ -77,10 +77,10 @@ class QoreQGLContext : public AbstractPrivateData, public QGLContext
       {
 	 const QoreClass *oc = qore_obj->getClass();
 
-	 m_chooseContext      = oc->findMethod("chooseContext");
-	 //m_chooseMacVisual    = oc->findMethod("chooseMacVisual");
-	 //m_choosePixelFormat  = oc->findMethod("choosePixelFormat");
-	 //m_chooseVisual       = oc->findMethod("chooseVisual");
+	 m_chooseContext      = findUserMethod(oc, "chooseContext");
+	 //m_chooseMacVisual    = findUserMethod(oc, "chooseMacVisual");
+	 //m_choosePixelFormat  = findUserMethod(oc, "choosePixelFormat");
+	 //m_chooseVisual       = findUserMethod(oc, "chooseVisual");
       }
 
       virtual bool chooseContext ( const QGLContext * shareContext = 0 )

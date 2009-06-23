@@ -47,7 +47,7 @@ class myQSplitter : public QSplitter, public QoreQWidgetExtension
 
       void init(const QoreClass *qc)
       {
-         m_createHandle = oc->findMethod("createHandle");
+         m_createHandle = findUserMethod(oc, "createHandle");
       }
 
       virtual QSplitterHandle * createHandle ()

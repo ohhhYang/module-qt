@@ -47,14 +47,14 @@ class myQGLWidget : public QGLWidget, public QoreQWidgetExtension
 
       void init(const QoreClass *oc)
       {
-	 m_glDraw               = oc->findMethod("glDraw");
-	 m_glInit               = oc->findMethod("glInit");
-	 m_initializeGL         = oc->findMethod("initializeGL");
-	 m_initializeOverlayGL  = oc->findMethod("initializeOverlayGL");
-	 m_paintGL              = oc->findMethod("paintGL");
-	 m_paintOverlayGL       = oc->findMethod("paintOverlayGL");
-	 m_resizeGL             = oc->findMethod("resizeGL");
-	 m_resizeOverlayGL      = oc->findMethod("resizeOverlayGL");
+	 m_glDraw               = findUserMethod(oc, "glDraw");
+	 m_glInit               = findUserMethod(oc, "glInit");
+	 m_initializeGL         = findUserMethod(oc, "initializeGL");
+	 m_initializeOverlayGL  = findUserMethod(oc, "initializeOverlayGL");
+	 m_paintGL              = findUserMethod(oc, "paintGL");
+	 m_paintOverlayGL       = findUserMethod(oc, "paintOverlayGL");
+	 m_resizeGL             = findUserMethod(oc, "resizeGL");
+	 m_resizeOverlayGL      = findUserMethod(oc, "resizeOverlayGL");
       }
 
       virtual void glDraw() {

@@ -85,30 +85,30 @@ class QoreQGraphicsItemExtension : public QoreQtEventDispatcher
       {
          const QoreClass *oc = qore_obj->getClass();
 
-	 m_boundingRect            = oc->findMethod("boundingRect");
-	 m_paint                   = oc->findMethod("paint");
-	 m_contextMenuEvent        = oc->findMethod("contextMenuEvent");
-	 m_dragEnterEvent          = oc->findMethod("dragEnterEvent");
-	 m_dragLeaveEvent          = oc->findMethod("dragLeaveEvent");
-	 m_dragMoveEvent           = oc->findMethod("dragMoveEvent");
-	 m_dropEvent               = oc->findMethod("dropEvent");
-	 m_focusInEvent            = oc->findMethod("focusInEvent");
-	 m_focusOutEvent           = oc->findMethod("focusOutEvent");
-	 m_hoverEnterEvent         = oc->findMethod("hoverEnterEvent");
-	 m_hoverLeaveEvent         = oc->findMethod("hoverLeaveEvent");
-	 m_hoverMoveEvent          = oc->findMethod("hoverMoveEvent");
-	 m_inputMethodEvent        = oc->findMethod("inputMethodEvent");
-	 m_inputMethodQuery        = oc->findMethod("inputMethodQuery");
-	 m_itemChange              = oc->findMethod("itemChange");
-	 m_keyPressEvent           = oc->findMethod("keyPressEvent");
-	 m_keyReleaseEvent         = oc->findMethod("keyReleaseEvent");
-	 m_mouseDoubleClickEvent   = oc->findMethod("mouseDoubleClickEvent");
-	 m_mouseMoveEvent          = oc->findMethod("mouseMoveEvent");
-	 m_mousePressEvent         = oc->findMethod("mousePressEvent");
-	 m_mouseReleaseEvent       = oc->findMethod("mouseReleaseEvent");
-	 m_sceneEvent              = oc->findMethod("sceneEvent");
-	 m_sceneEventFilter        = oc->findMethod("sceneEventFilter");
-	 m_wheelEvent              = oc->findMethod("wheelEvent");
+	 m_boundingRect            = findUserMethod(oc, "boundingRect");
+	 m_paint                   = findUserMethod(oc, "paint");
+	 m_contextMenuEvent        = findUserMethod(oc, "contextMenuEvent");
+	 m_dragEnterEvent          = findUserMethod(oc, "dragEnterEvent");
+	 m_dragLeaveEvent          = findUserMethod(oc, "dragLeaveEvent");
+	 m_dragMoveEvent           = findUserMethod(oc, "dragMoveEvent");
+	 m_dropEvent               = findUserMethod(oc, "dropEvent");
+	 m_focusInEvent            = findUserMethod(oc, "focusInEvent");
+	 m_focusOutEvent           = findUserMethod(oc, "focusOutEvent");
+	 m_hoverEnterEvent         = findUserMethod(oc, "hoverEnterEvent");
+	 m_hoverLeaveEvent         = findUserMethod(oc, "hoverLeaveEvent");
+	 m_hoverMoveEvent          = findUserMethod(oc, "hoverMoveEvent");
+	 m_inputMethodEvent        = findUserMethod(oc, "inputMethodEvent");
+	 m_inputMethodQuery        = findUserMethod(oc, "inputMethodQuery");
+	 m_itemChange              = findUserMethod(oc, "itemChange");
+	 m_keyPressEvent           = findUserMethod(oc, "keyPressEvent");
+	 m_keyReleaseEvent         = findUserMethod(oc, "keyReleaseEvent");
+	 m_mouseDoubleClickEvent   = findUserMethod(oc, "mouseDoubleClickEvent");
+	 m_mouseMoveEvent          = findUserMethod(oc, "mouseMoveEvent");
+	 m_mousePressEvent         = findUserMethod(oc, "mousePressEvent");
+	 m_mouseReleaseEvent       = findUserMethod(oc, "mouseReleaseEvent");
+	 m_sceneEvent              = findUserMethod(oc, "sceneEvent");
+	 m_sceneEventFilter        = findUserMethod(oc, "sceneEventFilter");
+	 m_wheelEvent              = findUserMethod(oc, "wheelEvent");
 
 	 qore_obj->tRef();
       }

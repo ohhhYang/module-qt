@@ -45,8 +45,8 @@ class myQFileIconProvider : public QFileIconProvider, public QoreQtEventDispatch
    public:
       DLLLOCAL myQFileIconProvider(QoreObject *qo) : qore_obj(qo) {
 	 const QoreClass *qc = qo->getClass();
-         m_icon = qc->findMethod("icon");
-	 m_type = qc->findMethod("type");
+         m_icon = findUserMethod(qc, "icon");
+	 m_type = findUserMethod(qc, "type");
       }
       
       DLLLOCAL QIcon icon ( IconType type ) const {

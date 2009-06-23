@@ -51,7 +51,7 @@ class myQSplashScreen : public QSplashScreen, public QoreQWidgetExtension
 
       void init(const QoreClass *qc)
       {
-	 m_drawContents = qc->findMethod("drawContents");
+	 m_drawContents = findUserMethod(qc, "drawContents");
       }
 
       DLLLOCAL virtual void drawContents ( QPainter * painter )

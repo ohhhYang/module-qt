@@ -124,4 +124,6 @@ class QoreQtArgs {
       char **get_argv() { return argv; } 
 };
 
+DLLEXPORT const QoreMethod *findUserMethod(const QoreClass *oc, const char *name);
+
 #endif

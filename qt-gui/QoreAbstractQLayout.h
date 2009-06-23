@@ -50,14 +50,14 @@ class QoreQLayoutExtension : public QoreQObjectExtension, public QoreQLayoutItem
       bool manual_delete;
 
    public:
-      DLLLOCAL QoreQLayoutExtension(QoreObject *obj, QObject *qo) : QoreQObjectExtension(obj, qo), QoreQLayoutItemExtensionBase(obj->getClass())
+      DLLLOCAL QoreQLayoutExtension(QoreObject *obj, QObject *qo) : QoreQObjectExtension(obj, qo), QoreQLayoutItemExtensionBase(obj->getClass()), item_externally_owned(false), manual_delete(false)
       {
 	 const QoreClass *oc = obj->getClass();
-         m_addItem                = oc->findMethod("addItem");
-         m_count                  = oc->findMethod("count");
-         m_indexOf                = oc->findMethod("indexOf");
-         m_itemAt                 = oc->findMethod("itemAt");
-         m_takeAt                 = oc->findMethod("takeAt");
+         m_addItem                = findUserMethod(oc, "addItem");
+         m_count                  = findUserMethod(oc, "count");
+         m_indexOf                = findUserMethod(oc, "indexOf");
+         m_itemAt                 = findUserMethod(oc, "itemAt");
+         m_takeAt                 = findUserMethod(oc, "takeAt");
       }
 
       DLLLOCAL ~QoreQLayoutExtension()

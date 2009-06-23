@@ -420,7 +420,7 @@ const QoreMethod *QoreQtDynamicSlot::resolveMethod(QoreObject *n_qore_obj, const
       return 0;
    }
 
-   const QoreMethod *meth = qc->findMethod(tmp.getBuffer());
+   const QoreMethod *meth = findUserMethod(qc, tmp.getBuffer());
    if (!meth)
       xsink->raiseException("DYNAMIC-SLOT-ERROR", "method %s::%s() does not exist", qc->getName(), tmp.getBuffer());
 	 

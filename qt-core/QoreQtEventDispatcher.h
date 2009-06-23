@@ -88,7 +88,7 @@ class QoreQtEventDispatcher {
       }
 
       DLLLOCAL static const QoreMethod *findMethod(const QoreClass *qc, const char *n) {
-	 const QoreMethod *m = qc->findMethod(n);
+	 const QoreMethod *m = findUserMethod(qc, n);
 	 //printd(5, "findMethod() %s::%s: %s\n", qc->getName(), n, (m && m->isUser()) ? "ok" : "x");
 	 return (m && m->isUser()) ? m : 0;
       }

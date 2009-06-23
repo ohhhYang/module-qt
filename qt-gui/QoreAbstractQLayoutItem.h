@@ -70,20 +70,20 @@ class QoreQLayoutItemExtensionBase
    public:
       DLLLOCAL QoreQLayoutItemExtensionBase(const QoreClass *oc)
       {
-         m_expandingDirections    = oc->findMethod("expandingDirections");
-         m_geometry               = oc->findMethod("geometry");
-         m_hasHeightForWidth      = oc->findMethod("hasHeightForWidth");
-	 m_heightForWidth         = oc->findMethod("heightForWidth");
-         m_invalidate             = oc->findMethod("invalidate");
-         m_isEmpty                = oc->findMethod("isEmpty");
-         m_layout                 = oc->findMethod("layout");
-         m_maximumSize            = oc->findMethod("maximumSize");
-         m_minimumHeightForWidth  = oc->findMethod("minimumHeightForWidth");
-         m_minimumSize            = oc->findMethod("minimumSize");
-         m_setGeometry            = oc->findMethod("setGeometry");
-         m_sizeHint               = oc->findMethod("sizeHint");
-         m_spacerItem             = oc->findMethod("spacerItem");
-         m_widget                 = oc->findMethod("widget");	 
+         m_expandingDirections    = findUserMethod(oc, "expandingDirections");
+         m_geometry               = findUserMethod(oc, "geometry");
+         m_hasHeightForWidth      = findUserMethod(oc, "hasHeightForWidth");
+	 m_heightForWidth         = findUserMethod(oc, "heightForWidth");
+         m_invalidate             = findUserMethod(oc, "invalidate");
+         m_isEmpty                = findUserMethod(oc, "isEmpty");
+         m_layout                 = findUserMethod(oc, "layout");
+         m_maximumSize            = findUserMethod(oc, "maximumSize");
+         m_minimumHeightForWidth  = findUserMethod(oc, "minimumHeightForWidth");
+         m_minimumSize            = findUserMethod(oc, "minimumSize");
+         m_setGeometry            = findUserMethod(oc, "setGeometry");
+         m_sizeHint               = findUserMethod(oc, "sizeHint");
+         m_spacerItem             = findUserMethod(oc, "spacerItem");
+         m_widget                 = findUserMethod(oc, "widget");	 
       }
 };
 

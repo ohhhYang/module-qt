@@ -61,6 +61,11 @@ static qe_hook_list_t qevent_hooks;
 
 static get_qv_hook_list_t get_qvariant_hooks;
 
+const QoreMethod *findUserMethod(const QoreClass *oc, const char *name) {
+   const QoreMethod *m = oc->findMethod(name);
+   return m && m->isUser() ? m : 0;
+}
+
 int get_qdate(const AbstractQoreNode *n, QDate &date, ExceptionSink *xsink) {
    {
       const DateTimeNode *d = dynamic_cast<const DateTimeNode *>(n);
