@@ -34,68 +34,56 @@ DLLEXPORT extern qore_classid_t CID_QLAYOUTITEM;
 DLLEXPORT extern QoreClass *QC_QLayoutItem;
 DLLEXPORT QoreClass *initQLayoutItemClass();
 
-class QoreQLayoutItem : public QoreAbstractQLayoutItemData, public QLayoutItem, public QoreQLayoutItemExtension
-{
+class QoreQLayoutItem : public QoreAbstractQLayoutItemData, public QLayoutItem, public QoreQLayoutItemExtension {
 #define QORE_IS_QLAYOUTITEM
 #define QOREQTYPE QLayoutItem
 #include "qore-qt-qlayoutitem-methods.h"
 #undef QOREQTYPE
 #undef QORE_IS_QLAYOUTITEM
 
-   public:
-      DLLLOCAL QoreQLayoutItem(QoreObject *obj, Qt::Alignment alignment = 0) : QLayoutItem(alignment), QoreQLayoutItemExtension(obj)
-      {
-      }
+public:
+   DLLLOCAL QoreQLayoutItem(QoreObject *obj, Qt::Alignment alignment = 0) : QLayoutItem(alignment), QoreQLayoutItemExtension(obj, CID_QLAYOUTITEM) {
+   }
 
-      DLLLOCAL virtual QLayoutItem *getQLayoutItem() const
-      {
-         return const_cast<QLayoutItem *>(static_cast<const QLayoutItem *>(this));
-      }
+   DLLLOCAL virtual QLayoutItem *getQLayoutItem() const {
+      return const_cast<QLayoutItem *>(static_cast<const QLayoutItem *>(this));
+   }
 };
 
 typedef QoreQtQLayoutItemImplBase<QLayoutItem, QoreAbstractQLayoutItemData> QoreQtQLayoutItemImpl;
 
-class QoreQtQLayoutItem : public QoreQtQLayoutItemImpl
-{
-   public:
-      DLLLOCAL QoreQtQLayoutItem(QLayoutItem *qo, bool n_managed = true) : QoreQtQLayoutItemImpl(qo, n_managed)
-      {
-      }
+class QoreQtQLayoutItem : public QoreQtQLayoutItemImpl {
+public:
+   DLLLOCAL QoreQtQLayoutItem(QLayoutItem *qo, bool n_managed = true) : QoreQtQLayoutItemImpl(qo, n_managed) {
+   }
 
-      // these functions are all pure virtual in the QLayoutItem
-      DLLLOCAL virtual Qt::Orientations parent_expandingDirections () const
-      {
-	 return 0;
-      }
+   // these functions are all pure virtual in the QLayoutItem
+   DLLLOCAL virtual Qt::Orientations parent_expandingDirections () const {
+      return 0;
+   }
 
-      DLLLOCAL virtual QRect parent_geometry () const
-      {
-	 return QRect();
-      }
+   DLLLOCAL virtual QRect parent_geometry () const {
+      return QRect();
+   }
 
-      DLLLOCAL virtual bool parent_isEmpty () const
-      {
-	 return false;
-      }
+   DLLLOCAL virtual bool parent_isEmpty () const {
+      return false;
+   }
 
-      DLLLOCAL virtual QSize parent_maximumSize () const
-      {
-	 return QSize();
-      }
+   DLLLOCAL virtual QSize parent_maximumSize () const {
+      return QSize();
+   }
 
-      DLLLOCAL virtual QSize parent_minimumSize () const
-      {
-	 return QSize();
-      }
+   DLLLOCAL virtual QSize parent_minimumSize () const {
+      return QSize();
+   }
 
-      DLLLOCAL virtual void parent_setGeometry ( const QRect & r )
-      {
-      }
+   DLLLOCAL virtual void parent_setGeometry ( const QRect & r ) {
+   }
 
-      DLLLOCAL virtual QSize parent_sizeHint () const
-      {
-	 return QSize();
-      }
+   DLLLOCAL virtual QSize parent_sizeHint () const {
+      return QSize();
+   }
 };
 
 #endif // _QORE_QT_QC_QLAYOUTITEM_H

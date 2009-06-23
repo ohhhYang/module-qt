@@ -322,7 +322,15 @@ else
 
    AC_MSG_RESULT([${qore_version} OK])
 
-   MODULE_API=`qore --module-api`
+   # get the latest module API
+   MODULE_API=`qore --latest-module-api`
+   mapi_major=`qore --latest-module-api|cut -f1 -d.`
+   mapi_minor=`qore --latest-module-api|cut -f2 -d.`
+
+   if test "$mapi_major" -eq "0" -a "$mapi_minor" -lt 7; then
+      AC_MSG_ERROR([this version of qore supports module API $MODULE_API, but version 0.7 or greater is required])
+   fi
+
    AC_SUBST(MODULE_API)
 
    if test -z "${prefix}" -o "${prefix}" = "NONE"; then

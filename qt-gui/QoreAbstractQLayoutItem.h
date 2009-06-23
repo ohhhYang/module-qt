@@ -59,8 +59,7 @@ class QoreAbstractQLayoutItem
       DLLLOCAL virtual void setItemExternallyOwned() = 0;
 };
 
-class QoreQLayoutItemExtensionBase
-{
+class QoreQLayoutItemExtensionBase {
    protected:
       const QoreMethod *m_expandingDirections, *m_geometry, *m_hasHeightForWidth,
 	 *m_heightForWidth, *m_invalidate, *m_isEmpty, *m_layout, *m_maximumSize,
@@ -68,8 +67,7 @@ class QoreQLayoutItemExtensionBase
 	 *m_spacerItem, *m_widget;
 
    public:
-      DLLLOCAL QoreQLayoutItemExtensionBase(const QoreClass *oc)
-      {
+      DLLLOCAL QoreQLayoutItemExtensionBase(const QoreClass *oc) {
          m_expandingDirections    = findUserMethod(oc, "expandingDirections");
          m_geometry               = findUserMethod(oc, "geometry");
          m_hasHeightForWidth      = findUserMethod(oc, "hasHeightForWidth");
@@ -87,21 +85,25 @@ class QoreQLayoutItemExtensionBase
       }
 };
 
-class QoreQLayoutItemExtension : public QoreQLayoutItemExtensionBase, public QoreQtEventDispatcher
-{
+class QoreQLayoutItemExtension : public QoreQLayoutItemExtensionBase, public QoreQtEventDispatcher {
    protected:
       QoreObject *qore_obj;
       bool item_externally_owned;
       bool manual_delete;
+      qore_classid_t cid;
 
    public:
-      DLLLOCAL QoreQLayoutItemExtension(QoreObject *obj) : QoreQLayoutItemExtensionBase(obj->getClass()), qore_obj(obj), item_externally_owned(false), manual_delete(false)
-      {
+      DLLLOCAL QoreQLayoutItemExtension(QoreObject *obj, qore_classid_t n_cid) : QoreQLayoutItemExtensionBase(obj->getClass()), qore_obj(obj), item_externally_owned(false), manual_delete(false), cid(n_cid) {
 	 qore_obj->tRef();
       }
-      DLLLOCAL ~QoreQLayoutItemExtension()
-      {
-	 if (manual_delete && qore_obj->isValid()) {
+      DLLLOCAL ~QoreQLayoutItemExtension() {
+	 //printd(5, "QoreQLayoutItemExtension::˜QoreQLayoutItemExtension() this=%p manual_delete=%d externally_owned=%d is_valid=%d\n", this, manual_delete, item_externally_owned, qore_obj->isValid());
+
+	 if (item_externally_owned && qore_obj->isValid()) {
+	    ExceptionSink xsink;
+	    qore_obj->externalDelete(cid, &xsink);
+	 }
+	 else if (manual_delete && qore_obj->isValid()) {
 	    ExceptionSink xsink;
 	    qore_obj->doDelete(&xsink);
 	 }
@@ -110,29 +112,24 @@ class QoreQLayoutItemExtension : public QoreQLayoutItemExtensionBase, public Qor
       }
 };
 
-class QoreAbstractQLayoutItemData : public AbstractPrivateData, public QoreAbstractQLayoutItem
-{
+class QoreAbstractQLayoutItemData : public AbstractPrivateData, public QoreAbstractQLayoutItem {
 };
 
 template<typename T, typename V>
-class QoreQtQLayoutItemImplBase : public V
-{
+class QoreQtQLayoutItemImplBase : public V {
    public:
       T *qobj;
       bool managed;
 
-      DLLLOCAL QoreQtQLayoutItemImplBase(T *qo, bool n_managed = true) : qobj(qo), managed(n_managed)
-      {
+      DLLLOCAL QoreQtQLayoutItemImplBase(T *qo, bool n_managed = true) : qobj(qo), managed(n_managed) {
       }
 
-      DLLLOCAL virtual ~QoreQtQLayoutItemImplBase()
-      {
+      DLLLOCAL virtual ~QoreQtQLayoutItemImplBase() {
 	 if (managed)
 	    delete qobj;
       }
 
-      DLLLOCAL virtual class QLayoutItem *getQLayoutItem() const
-      {
+      DLLLOCAL virtual class QLayoutItem *getQLayoutItem() const {
          return qobj;
       }
 
@@ -140,28 +137,23 @@ class QoreQtQLayoutItemImplBase : public V
 	 return false;
       }
 
-      DLLLOCAL virtual void setItemExternallyOwned()
-      {
+      DLLLOCAL virtual void setItemExternallyOwned() {
 	 managed = false;
       }
 
-      DLLLOCAL virtual bool parent_hasHeightForWidth () const
-      {
+      DLLLOCAL virtual bool parent_hasHeightForWidth () const {
 	 return this->qobj->hasHeightForWidth();
       }
 
-      DLLLOCAL virtual int parent_heightForWidth ( int w ) const
-      {
+      DLLLOCAL virtual int parent_heightForWidth ( int w ) const {
 	 return this->qobj->heightForWidth(w);
       }
 
-      DLLLOCAL virtual void parent_invalidate ()
-      {
+      DLLLOCAL virtual void parent_invalidate () {
 	 return this->qobj->invalidate();
       }
 
-      DLLLOCAL virtual QLayout * parent_layout ()
-      {
+      DLLLOCAL virtual QLayout * parent_layout () {
 	 return this->qobj->layout();
       }
 

@@ -32,22 +32,18 @@ DLLEXPORT extern qore_classid_t CID_QWIDGETITEM;
 DLLEXPORT extern QoreClass *QC_QWidgetItem;
 DLLEXPORT QoreClass *initQWidgetItemClass(QoreClass *);
 
-class QoreQWidgetItem : public QoreAbstractQLayoutItemData, public QWidgetItem, public QoreQLayoutItemExtension
-{
+class QoreQWidgetItem : public QoreAbstractQLayoutItemData, public QWidgetItem, public QoreQLayoutItemExtension {
 #define QOREQTYPE QWidgetItem
 #include "qore-qt-qlayoutitem-methods.h"
 #undef QOREQTYPE
 
-   public:
-      DLLLOCAL QoreQWidgetItem(QoreObject *obj, QWidget* widget) : QWidgetItem(widget), QoreQLayoutItemExtension(obj)
-      {
-      }
+public:
+   DLLLOCAL QoreQWidgetItem(QoreObject *obj, QWidget* widget) : QWidgetItem(widget), QoreQLayoutItemExtension(obj, CID_QWIDGETITEM) {
+   }
 
-      DLLLOCAL virtual QLayoutItem *getQLayoutItem() const
-      {
-         return const_cast<QLayoutItem *>(static_cast<const QLayoutItem *>(this));
-      }
-
+   DLLLOCAL virtual QLayoutItem *getQLayoutItem() const {
+      return const_cast<QLayoutItem *>(static_cast<const QLayoutItem *>(this));
+   }
 };
 
 #endif // _QORE_QT_QC_QWIDGETITEM_H

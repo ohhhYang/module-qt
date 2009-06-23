@@ -12,8 +12,7 @@ class T {
 	 return false;
       }
 
-      DLLLOCAL virtual void setItemExternallyOwned()
-      {
+      DLLLOCAL virtual void setItemExternallyOwned() {
 	 item_externally_owned = true;
       }
 

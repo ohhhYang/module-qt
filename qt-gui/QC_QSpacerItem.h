@@ -37,13 +37,13 @@ class QoreQSpacerItem : public QoreAbstractQLayoutItemData, public QSpacerItem, 
 #define QOREQTYPE QSpacerItem
 #include "qore-qt-qlayoutitem-methods.h"
 #undef QOREQTYPE
+   
+public:
+   DLLLOCAL QoreQSpacerItem(QoreObject *obj, int w, int h, QSizePolicy::Policy hPolicy = QSizePolicy::Minimum, QSizePolicy::Policy vPolicy = QSizePolicy::Minimum) : QSpacerItem(w, h, hPolicy, vPolicy), QoreQLayoutItemExtension(obj, CID_QSPACERITEM) { }
 
-   public:
-      DLLLOCAL QoreQSpacerItem(QoreObject *obj, int w, int h, QSizePolicy::Policy hPolicy = QSizePolicy::Minimum, QSizePolicy::Policy vPolicy = QSizePolicy::Minimum) : QSpacerItem(w, h, hPolicy, vPolicy), QoreQLayoutItemExtension(obj) { }
-
-      DLLLOCAL virtual QLayoutItem *getQLayoutItem() const {
-         return const_cast<QLayoutItem *>(static_cast<const QLayoutItem *>(this));
-      }
+   DLLLOCAL virtual QLayoutItem *getQLayoutItem() const {
+      return const_cast<QLayoutItem *>(static_cast<const QLayoutItem *>(this));
+   }
 };
 
 #endif // _QORE_QT_QC_QSPACERITEM_H
