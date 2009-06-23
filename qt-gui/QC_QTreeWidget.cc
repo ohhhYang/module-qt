@@ -386,6 +386,10 @@ static AbstractQoreNode *QTREEWIDGET_setHeaderLabel(QoreObject *self, QoreQTreeW
 //void setHeaderLabels ( const QStringList & labels )
 static AbstractQoreNode *QTREEWIDGET_setHeaderLabels(QoreObject *self, QoreQTreeWidget *qtw, const QoreListNode *params, ExceptionSink *xsink) {
    const AbstractQoreNode *p = get_param(params, 0);
+   if (!p || p->getType() != NT_LIST) {
+      xsink->raiseException("QTREEWIDGET-SETHEADERLABELS-ERROR", "expecting a list of strings passed to QTreeWidget::setHeaderLabels()");
+      return 0;
+   }
    QStringList labels;
    ConstListIterator li_labels(reinterpret_cast<const QoreListNode *>(p));
    while (li_labels.next()) {

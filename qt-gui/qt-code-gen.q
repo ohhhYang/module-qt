@@ -1481,11 +1481,11 @@ sub do_single_arg($offset, $name, $arg, $i, $ok, $const) {
 	    break;
 
 	    case "QStringList" : {
-		#$lo += "if (!p || p->getType() != NT_LIST) {";
-		#$lo += sprintf("   xsink->raiseException(\"%s-%s-PARAM-ERROR\", \"expecting a list as %s argument to %s::%s()\");", 
-		#	       toupper($cn), toupper($name), ordinal[$i], $cn, $name);
-		#$lo += $const ? "   return;" : "   return 0;";
-		#$lo += "}";
+		$lo += "if (!p || p->getType() != NT_LIST) {";
+		$lo += sprintf("   xsink->raiseException(\"%s-%s-PARAM-ERROR\", \"expecting a list as %s argument to %s::%s()\");", 
+			       toupper($cn), toupper($name), ordinal[$i], $cn, $name);
+		$lo += $const ? "   return;" : "   return 0;";
+		$lo += "}";
 		$lo += sprintf("QStringList %s;", $arg.name);
 		$lo += sprintf("ConstListIterator li_%s(reinterpret_cast<const QoreListNode *>(p));", $arg.name);
 		$lo += sprintf("while (li_%s.next()) {", $arg.name);

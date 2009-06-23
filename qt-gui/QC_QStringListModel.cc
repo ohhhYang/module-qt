@@ -44,6 +44,10 @@ static void QSTRINGLISTMODEL_constructor(QoreObject *self, const QoreListNode *p
       self->setPrivate(CID_QSTRINGLISTMODEL, new QoreQStringListModel(self, parent ? parent->getQObject() : 0));
       return;
    }
+   if (p->getType() != NT_LIST) {
+      xsink->raiseException("QSTRINGLISTMODEL-CONSTRUCTOR-ERROR", "expecting a list of strings passed to QStringListModel::constructor(), instead got type: '%s'", p->getTypeName());
+      return;
+   }
    QStringList strings;
    ConstListIterator li_strings(reinterpret_cast<const QoreListNode *>(p));
    while (li_strings.next()) {
@@ -69,6 +73,10 @@ static void QSTRINGLISTMODEL_copy(QoreObject *self, QoreObject *old, QoreQString
 //void setStringList ( const QStringList & strings )
 static AbstractQoreNode *QSTRINGLISTMODEL_setStringList(QoreObject *self, QoreAbstractQStringListModel *qslm, const QoreListNode *params, ExceptionSink *xsink) {
    const AbstractQoreNode *p = get_param(params, 0);
+   if (!p || p->getType() != NT_LIST) {
+      xsink->raiseException("QSTRINGLISTMODEL-SETSTRINGLIST-ERROR", "expecting a list of strings as the sole argument to QStringList::setStringList()");
+      return 0;
+   }
    QStringList strings;
    ConstListIterator li_strings(reinterpret_cast<const QoreListNode *>(p));
    while (li_strings.next()) {

@@ -95,8 +95,7 @@ static AbstractQoreNode *QTEXTBROWSER_openLinks(QoreObject *self, QoreQTextBrows
 }
 
 //QStringList searchPaths () const
-static AbstractQoreNode *QTEXTBROWSER_searchPaths(QoreObject *self, QoreQTextBrowser *qtb, const QoreListNode *params, ExceptionSink *xsink)
-{
+static AbstractQoreNode *QTEXTBROWSER_searchPaths(QoreObject *self, QoreQTextBrowser *qtb, const QoreListNode *params, ExceptionSink *xsink) {
    return return_qstringlist(qtb->qobj->searchPaths());
 }
 
@@ -119,9 +118,12 @@ static AbstractQoreNode *QTEXTBROWSER_setOpenLinks(QoreObject *self, QoreQTextBr
 }
 
 //void setSearchPaths ( const QStringList & paths )
-static AbstractQoreNode *QTEXTBROWSER_setSearchPaths(QoreObject *self, QoreQTextBrowser *qtb, const QoreListNode *params, ExceptionSink *xsink)
-{
+static AbstractQoreNode *QTEXTBROWSER_setSearchPaths(QoreObject *self, QoreQTextBrowser *qtb, const QoreListNode *params, ExceptionSink *xsink) {
    const AbstractQoreNode *p = get_param(params, 0);
+   if (!p || p->getType() != NT_LIST) {
+      xsink->raiseException("QTEXTBROWSER-SETSEARCHPATHS-ERROR", "expecting a list of strings passed to QTextBrowser::setSearchPaths()");
+      return 0;
+   }
    QStringList paths;
    ConstListIterator li_paths(reinterpret_cast<const QoreListNode *>(p));
    while (li_paths.next()) {

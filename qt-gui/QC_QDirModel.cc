@@ -421,6 +421,11 @@ static AbstractQoreNode *QDIRMODEL_setLazyChildCount(QoreObject *self, QoreQDirM
 //void setNameFilters ( const QStringList & filters )
 static AbstractQoreNode *QDIRMODEL_setNameFilters(QoreObject *self, QoreQDirModel *qdm, const QoreListNode *params, ExceptionSink *xsink) {
    const AbstractQoreNode *p = get_param(params, 0);
+
+   if (!p || p->getType() != NT_LIST) {
+      xsink->raiseException("QDIRMODEL-SETNAMEFILTERS-ERROR", "expecting a list of strings passed to QDirModel::setNameFilters()");
+      return 0;
+   }
    QStringList filters;
    ConstListIterator li_filters(reinterpret_cast<const QoreListNode *>(p));
    while (li_filters.next()) {
