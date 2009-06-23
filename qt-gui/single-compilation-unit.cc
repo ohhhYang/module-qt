@@ -200,3 +200,4 @@
 #include "QC_QMdiSubWindow.cc"
 #include "QC_QTreeWidgetItem.cc"
 #include "QC_QTreeWidget.cc"
+#include "QC_QStringListModel.cc"

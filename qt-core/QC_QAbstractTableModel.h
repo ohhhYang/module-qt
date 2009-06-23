@@ -55,7 +55,7 @@ class QoreQAbstractTableModel : public QoreQAbstractTableModelImpl {
       DLLLOCAL QoreQAbstractTableModel(QoreObject *obj, QObject* parent = 0) : QoreQAbstractTableModelImpl(new myQAbstractTableModel(obj, parent)) { }
 };
 
-typedef QoreQtQAbstractTableModelBase<QAbstractTableModel, QoreAbstractQAbstractTableModel, QAbstractItemModel> QoreQtQAbstractTableModelImpl;
+typedef QoreQtQAbstractTableModelBase<QAbstractTableModel, QoreAbstractQAbstractTableModel> QoreQtQAbstractTableModelImpl;
 
 class QoreQtQAbstractTableModel : public QoreQtQAbstractTableModelImpl {
    public:

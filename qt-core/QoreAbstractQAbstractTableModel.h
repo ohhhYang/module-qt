@@ -43,10 +43,10 @@ class QoreQAbstractTableModelBase : public QoreQAbstractItemModelBase<T, V> {
       }
 };
 
-template<typename T, typename V, typename P = T>
-class QoreQtQAbstractTableModelBase : public QoreQtQAbstractItemModelBase<T, V, P> {
+template<typename T, typename V>
+class QoreQtQAbstractTableModelBase : public QoreQtQAbstractItemModelBase<T, V> {
    public:
-      DLLLOCAL QoreQtQAbstractTableModelBase(QoreObject *obj, T *qo) : QoreQtQAbstractItemModelBase<T, V, P>(obj, qo) {
+      DLLLOCAL QoreQtQAbstractTableModelBase(QoreObject *obj, T *qo) : QoreQtQAbstractItemModelBase<T, V>(obj, qo) {
       }
 
       DLLLOCAL virtual QAbstractTableModel *getQAbstractTableModel() const {

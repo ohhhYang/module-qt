@@ -311,6 +311,8 @@ qt-gui/QoreAbstractQTreeView.h \
 	qt-gui/QC_QMdiSubWindow.h \
 	qt-gui/QC_QTreeWidgetItem.h \
 	qt-gui/QC_QTreeWidget.h \
+	qt-gui/QC_QStringListModel.h \
+qt-gui/QoreAbstractQStringListModel.h \
 	qt-opengl/QC_QGLWidget.h \
 	qt-opengl/QC_QGLFormat.h \
 	qt-opengl/QC_QGLContext.h \

@@ -425,7 +425,7 @@ class QoreQtQObjectPrivateBase : public V
       }
 };
 
-template<typename T, typename V, typename P = T>
+template<typename T, typename V>
 class QoreQtQObjectBase : public QoreQtQObjectPrivateBase<T, V> {
    protected:
       bool managed;
@@ -436,7 +436,7 @@ class QoreQtQObjectBase : public QoreQtQObjectPrivateBase<T, V> {
 
       DLLLOCAL virtual ~QoreQtQObjectBase() {
 	 // only delete the QObject if it is still a valid pointer and it is not a child of someone else
-	 if (managed && this->qobj && !this->qobj->P::parent())
+	 if (managed && this->qobj && !this->qobj->QObject::parent())
 	    delete this->qobj;
       }
 };

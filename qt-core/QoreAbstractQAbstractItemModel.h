@@ -121,10 +121,10 @@ class QoreQAbstractItemModelBase : public QoreQObjectBase<T, V> {
 
 };
 
-template<typename T, typename V, typename P = T>
-class QoreQtQAbstractItemModelBase : public QoreQtQObjectBase<T, V, P> {
+template<typename T, typename V>
+class QoreQtQAbstractItemModelBase : public QoreQtQObjectBase<T, V> {
    public:
-      DLLLOCAL QoreQtQAbstractItemModelBase(QoreObject *obj, T *qo) : QoreQtQObjectBase<T, V, P>(obj, qo) {
+      DLLLOCAL QoreQtQAbstractItemModelBase(QoreObject *obj, T *qo) : QoreQtQObjectBase<T, V>(obj, qo) {
       }
 
       DLLLOCAL virtual QModelIndex qoreCreateIndex(int row, int column, const AbstractQoreNode *data) const {

@@ -56,7 +56,7 @@ class QoreQAbstractListModel : public QoreQAbstractListModelImpl {
       DLLLOCAL QoreQAbstractListModel(QoreObject *obj, QObject* parent = 0) : QoreQAbstractListModelImpl(new myQAbstractListModel(obj, parent)) { }
 };
 
-typedef QoreQtQAbstractItemModelBase<QAbstractListModel, QoreAbstractQAbstractItemModel, QAbstractItemModel> QoreQtQAbstractListModelImpl;
+typedef QoreQtQAbstractItemModelBase<QAbstractListModel, QoreAbstractQAbstractItemModel> QoreQtQAbstractListModelImpl;
 
 class QoreQtQAbstractListModel : public QoreQtQAbstractListModelImpl {
    public:

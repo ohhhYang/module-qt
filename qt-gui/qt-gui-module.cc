@@ -180,6 +180,8 @@
 #include "QC_QMdiSubWindow.h"
 #include "QC_QTreeWidgetItem.h"
 #include "QC_QTreeWidget.h"
+#include "QC_QAbstractListModel.h"
+#include "QC_QStringListModel.h"
 
 #include <QPalette>
 #include <QToolTip>
@@ -1138,6 +1140,7 @@ static void init_namespace()
    qt_ns.addInitialNamespace(initQMdiSubWindowNS(QC_QWidget));
    qt_ns.addInitialNamespace(initQTreeWidgetItemNS());
    qt_ns.addSystemClass(initQTreeWidgetClass(QC_QTreeView));
+   qt_ns.addSystemClass(initQStringListModelClass(QC_QAbstractListModel));
 
    // add here
    
