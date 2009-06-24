@@ -52,7 +52,7 @@ class myQStringListModel : public QStringListModel, public QoreQAbstractItemMode
       }
 };
 
-typedef QoreQAbstractItemModelBase<myQStringListModel, QoreAbstractQAbstractItemModel> QoreQStringListModelImpl;
+typedef QoreQStringListModelBase<myQStringListModel, QoreAbstractQAbstractItemModel> QoreQStringListModelImpl;
 
 class QoreQStringListModel : public QoreQStringListModelImpl {
    public:
@@ -60,7 +60,7 @@ class QoreQStringListModel : public QoreQStringListModelImpl {
       DLLLOCAL QoreQStringListModel(QoreObject *obj, const QStringList& strings, QObject* parent = 0) : QoreQStringListModelImpl(new myQStringListModel(obj, strings, parent)) { }
 };
 
-typedef QoreQtQAbstractItemModelBase<QStringListModel, QoreAbstractQAbstractItemModel> QoreQtQStringListModelImpl;
+typedef QoreQtQStringListModelBase<QStringListModel, QoreAbstractQAbstractItemModel> QoreQtQStringListModelImpl;
 
 class QoreQtQStringListModel : public QoreQtQStringListModelImpl {
    public:
