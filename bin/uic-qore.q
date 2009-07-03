@@ -319,6 +319,11 @@ class Uic
                                         $.currentObject,
                                         booleanize($i."bool"));
                 break;
+            case "wordWrap":
+                printf("\t\t%s.setWordWrap(%s);\n",
+                                        $.currentObject,
+                                        booleanize($i."bool"));
+                break;
             case "selectionBehavior":
                 printf("\t\t%s.setSelectionBehavior(%s);\n",
                                         $.currentObject,
