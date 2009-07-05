@@ -252,6 +252,15 @@ int get_qvariant(const AbstractQoreNode *n, QVariant &qva, ExceptionSink *xsink,
 	 return 0;
       }
 
+      QoreQByteArray *qba = (QoreQByteArray *)o->getReferencedPrivateData(CID_QBYTEARRAY, xsink);
+      if (*xsink)
+	 return -1;
+      if (qba) {
+	 ReferenceHolder<QoreQByteArray> qbaHolder(qba, xsink);
+	 qva = *qba;
+	 return 0;
+      }
+
       if (!get_qvariant_hooks.empty()) {
 	 // try get_qvariant hooks
 	 for (get_qv_hook_list_t::iterator i = get_qvariant_hooks.begin(), e = get_qvariant_hooks.end(); i != e; ++i) {
