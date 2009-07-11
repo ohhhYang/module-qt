@@ -30,35 +30,34 @@ DLLEXPORT extern qore_classid_t CID_QLISTWIDGETITEM;
 DLLEXPORT extern QoreClass *QC_QListWidgetItem;
 DLLEXPORT QoreNamespace *initQListWidgetItemNS();
 
-class QoreQListWidgetItem : public AbstractPrivateData
-{
+class QoreQListWidgetItem : public AbstractPrivateData {
    private:
       QListWidgetItem *item;
       bool managed;
 
    public:
-      DLLLOCAL QoreQListWidgetItem(QListWidget* parent = 0, int type = QListWidgetItem::Type) : item(new QListWidgetItem(parent, type)), managed(parent ? false : true)
-      {
+      DLLLOCAL QoreQListWidgetItem(QListWidget* parent = 0, int type = QListWidgetItem::Type) : item(new QListWidgetItem(parent, type)), managed(parent ? false : true) {
+	 //printd(5, "QoreQListWidgetItem::QoreQListWidgetItem() con 1: item=%p\n", item);
       }
-      DLLLOCAL QoreQListWidgetItem(QListWidgetItem *i) : item(i), managed(false)
-      {
+      DLLLOCAL QoreQListWidgetItem(QListWidgetItem *i) : item(i), managed(false) {
+	 //printd(5, "QoreQListWidgetItem::QoreQListWidgetItem() con 2: item=%p\n", item);
+	 assert(item);
       }
       DLLLOCAL ~QoreQListWidgetItem()
       {
 	 if (managed)
 	    delete item;
       }
-      DLLLOCAL QoreQListWidgetItem(const QString& text, QListWidget* parent = 0, int type = QListWidgetItem::Type) : item(new QListWidgetItem(text, parent, type)), managed(parent ? false :true)
-      {
+      DLLLOCAL QoreQListWidgetItem(const QString& text, QListWidget* parent = 0, int type = QListWidgetItem::Type) : item(new QListWidgetItem(text, parent, type)), managed(parent ? false :true) {
+	 //printd(5, "QoreQListWidgetItem::QoreQListWidgetItem() con 3: item=%p\n", item);
       }
-      DLLLOCAL QoreQListWidgetItem(const QIcon& icon, const QString& text, QListWidget* parent = 0, int type = QListWidgetItem::Type) : item(new QListWidgetItem(icon, text, parent, type)), managed(parent ? false :true)
-      {
+      DLLLOCAL QoreQListWidgetItem(const QIcon& icon, const QString& text, QListWidget* parent = 0, int type = QListWidgetItem::Type) : item(new QListWidgetItem(icon, text, parent, type)), managed(parent ? false :true) {
+	 //printd(5, "QoreQListWidgetItem::QoreQListWidgetItem() con 5: item=%p\n", item);
       }
-      DLLLOCAL QoreQListWidgetItem(const QListWidgetItem& other) : item(new QListWidgetItem(other)), managed(true)
-      {
+      DLLLOCAL QoreQListWidgetItem(const QListWidgetItem& other) : item(new QListWidgetItem(other)), managed(true) {
+	 //printd(5, "QoreQListWidgetItem::QoreQListWidgetItem() con 4: item=%p\n", item);
       }
-      DLLLOCAL QListWidgetItem *getQListWidgetItem() const
-      {
+      DLLLOCAL QListWidgetItem *getQListWidgetItem() const {
 	 return item;
       }
 };

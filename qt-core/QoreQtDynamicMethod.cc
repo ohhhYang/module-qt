@@ -225,7 +225,10 @@ class QoreQtCharPtr : public QoreQtAbstractDynamicTypeHelper {
 
       DLLLOCAL virtual void add_qore_arg(QoreListNode &args, void *arg) {
 	 char **ptr = reinterpret_cast<char **>(arg);
-	 args.push(new QoreStringNode(*ptr));
+	 if (ptr)
+	    args.push(new QoreStringNode(*ptr));
+	 else
+	    args.push(0);
       }
 
       DLLLOCAL virtual void add_qt_arg(void *&ptr, void *&save, const AbstractQoreNode *val) {

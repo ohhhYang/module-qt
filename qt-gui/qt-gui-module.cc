@@ -1175,12 +1175,17 @@ class QoreQtQListWidgetItemPtr : public QoreQtAbstractDynamicTypeHelper {
       }
       DLLLOCAL virtual void add_qore_arg(QoreListNode &args, void *arg) {
 	 QListWidgetItem *qlwi = *(reinterpret_cast<QListWidgetItem **>(arg));
-	 
-	 QoreObject *o_qlwi = new QoreObject(QC_QListWidgetItem, getProgram());
-	 QoreQListWidgetItem *q_qlwi = new QoreQListWidgetItem(qlwi);
-	 o_qlwi->setPrivate(CID_QLISTWIDGETITEM, q_qlwi);
 
-	 args.push(o_qlwi);
+	 if (qlwi) {
+	    QoreObject *o_qlwi = new QoreObject(QC_QListWidgetItem, getProgram());
+	    QoreQListWidgetItem *q_qlwi = new QoreQListWidgetItem(qlwi);
+	    o_qlwi->setPrivate(CID_QLISTWIDGETITEM, q_qlwi);
+
+	    args.push(o_qlwi);
+	 }
+	 else {
+	    args.push(0);
+	 }
       }
       DLLLOCAL virtual void add_qt_arg(void *&ptr, void *&save, const AbstractQoreNode *val) {
 	 ExceptionSink xsink;
@@ -1203,12 +1208,16 @@ class QoreQtQWidgetPtr : public QoreQtAbstractDynamicTypeHelper {
       }
       DLLLOCAL virtual void add_qore_arg(QoreListNode &args, void *arg) {
 	 QWidget *qw = *(reinterpret_cast<QWidget **>(arg));
-	 
-	 QoreObject *o_qw = new QoreObject(QC_QWidget, getProgram());
-	 QoreQtQWidget *q_qw = new QoreQtQWidget(o_qw, qw, false);
-	 o_qw->setPrivate(CID_QWIDGET, q_qw);
 
-	 args.push(o_qw);
+	 if (qw) {
+	    QoreObject *o_qw = new QoreObject(QC_QWidget, getProgram());
+	    QoreQtQWidget *q_qw = new QoreQtQWidget(o_qw, qw, false);
+	    o_qw->setPrivate(CID_QWIDGET, q_qw);
+	    
+	    args.push(o_qw);
+	 }
+	 else
+	    args.push(0);
       }
       DLLLOCAL virtual void add_qt_arg(void *&ptr, void *&save, const AbstractQoreNode *val) {
 	 ExceptionSink xsink;
