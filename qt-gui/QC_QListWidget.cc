@@ -146,7 +146,6 @@ static AbstractQoreNode *QLISTWIDGET_editItem(QoreObject *self, QoreAbstractQLis
    return 0;
 }
 
-/*
 //QList<QListWidgetItem *> findItems ( const QString & text, Qt::MatchFlags flags ) const
 static AbstractQoreNode *QLISTWIDGET_findItems(QoreObject *self, QoreAbstractQListWidget *qlw, const QoreListNode *params, ExceptionSink *xsink)
 {
@@ -156,9 +155,21 @@ static AbstractQoreNode *QLISTWIDGET_findItems(QoreObject *self, QoreAbstractQLi
       return 0;
    p = get_param(params, 1);
    Qt::MatchFlags flags = (Qt::MatchFlags)(p ? p->getAsInt() : 0);
-   ??? return new QoreBigIntNode(qlw->getQListWidget()->findItems(text, flags));
+
+   QList<QListWidgetItem *> ilist_rv = qlw->getQListWidget()->findItems(text, flags);
+   QoreListNode *l = new QoreListNode();
+   for (QList<QListWidgetItem *>::iterator i = ilist_rv.begin(), e = ilist_rv.end(); i != e; ++i) {
+       if (!*i) {
+           l->push(0);
+           continue;
+       }
+       QoreObject *o_qlwi = new QoreObject(QC_QListWidgetItem, getProgram());
+       QoreQListWidgetItem *q_qlwi = new QoreQListWidgetItem(*i);
+       o_qlwi->setPrivate(CID_QLISTWIDGETITEM, q_qlwi);
+       l->push(o_qlwi);
+   }
+   return l;
 }
-*/
 
  //void insertItem ( int row, QListWidgetItem * item )
  //void insertItem ( int row, const QString & label )
@@ -467,7 +478,7 @@ QoreClass *initQListWidgetClass(QoreClass *qlistview)
    QC_QListWidget->addMethod("currentItem",                 (q_method_t)QLISTWIDGET_currentItem);
    QC_QListWidget->addMethod("currentRow",                  (q_method_t)QLISTWIDGET_currentRow);
    QC_QListWidget->addMethod("editItem",                    (q_method_t)QLISTWIDGET_editItem);
-   //QC_QListWidget->addMethod("findItems",                   (q_method_t)QLISTWIDGET_findItems);
+   QC_QListWidget->addMethod("findItems",                   (q_method_t)QLISTWIDGET_findItems);
    QC_QListWidget->addMethod("insertItem",                  (q_method_t)QLISTWIDGET_insertItem);
    QC_QListWidget->addMethod("insertItems",                 (q_method_t)QLISTWIDGET_insertItems);
    QC_QListWidget->addMethod("isSortingEnabled",            (q_method_t)QLISTWIDGET_isSortingEnabled);
