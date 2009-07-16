@@ -201,3 +201,4 @@
 #include "QC_QTreeWidgetItem.cc"
 #include "QC_QTreeWidget.cc"
 #include "QC_QStringListModel.cc"
+#include "QC_QRadialGradient.cc"

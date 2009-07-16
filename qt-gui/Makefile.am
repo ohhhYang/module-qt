@@ -189,7 +189,8 @@ QORE_QT_GUI_SOURCES = qt-gui-util.cc QC_QApplication.cc QC_QPushButton.cc \
 	QC_QMdiSubWindow.cc \
 	QC_QTreeWidgetItem.cc \
 	QC_QTreeWidget.cc \
-	QC_QStringListModel.cc
+	QC_QStringListModel.cc \
+	QC_QRadialGradient.cc
 if COND_MACOSX
 QORE_QT_GUI_SOURCES += QC_QMacStyle.cc
 endif
