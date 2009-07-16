@@ -170,6 +170,12 @@ class Uic
             $.currentObject = sprintf("$.%s", $i."^attributes^"."name");
             my $cls = $i."^attributes^"."class";
 
+            # Line is a very special widget :/
+            if ($cls == "Line")
+            {
+                 $cls = "QFrame";
+            }
+
             printf("\t\t%s = new %s(%s);\n", $.currentObject,
                                                  $cls,
                                                  $parent);
@@ -231,6 +237,13 @@ class Uic
                                          $i."rect"."width",
                                          $i."rect"."height");
                 break;
+            case "sizePolicy":
+                printf("\t\t%s.setSizePolicy(new QSizePolicy(QSizePolicy::%s, QSizePolicy::%s));\n",
+                                        $.currentObject,
+                                        $i."sizepolicy"."^attributes^"."hsizetype",
+                                        $i."sizepolicy"."^attributes^"."vsizetype"
+                                        );
+                break;
             case "windowTitle":
                 printf("\t\t%s.setWindowTitle(\"%s\");\n",
                                         $.currentObject,
@@ -243,6 +256,11 @@ class Uic
                 break;
             case "echoMode":
                 printf("\t\t%s.setEchoMode(%s);\n",
+                                        $.currentObject,
+                                        $i."enum");
+                break;
+            case "focusPolicy":
+                printf("\t\t%s.setFocusPolicy(%s);\n",
                                         $.currentObject,
                                         $i."enum");
                 break;

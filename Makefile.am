@@ -313,6 +313,7 @@ qt-gui/QoreAbstractQTreeView.h \
 	qt-gui/QC_QTreeWidget.h \
 	qt-gui/QC_QStringListModel.h \
 qt-gui/QoreAbstractQStringListModel.h \
+	qt-gui/QC_QPixmapCache.h \
 	qt-opengl/QC_QGLWidget.h \
 	qt-opengl/QC_QGLFormat.h \
 	qt-opengl/QC_QGLContext.h \
