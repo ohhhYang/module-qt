@@ -1780,6 +1780,23 @@ sub do_return_value($offset, $rt, $callstr, $ok) {
 	    break;
 	}
 
+	case "QList<QListWidgetItem*>": {
+	    $lo += sprintf("QList<QListWidgetItem *> ilist_rv = %s;", $callstr);
+	    $lo += "QoreListNode *l = new QoreListNode();";
+	    $lo += "for (QList<QListWidgetItem *>::iterator i = ilist_rv.begin(), e = ilist_rv.end(); i != e; ++i) {";
+	    $lo += "   if (!*i) {";
+	    $lo += "      l->push(0);";
+	    $lo += "      continue;";
+	    $lo += "   }";
+	    $lo += "   QoreObject *o_qlwi = new QoreObject(QC_QListWidgetItem, getProgram());";
+	    $lo += "   QoreQListWidgetItem *q_qlwi = new QoreQListWidgetItem(*i);";
+	    $lo += "   o_qlwi->setPrivate(CID_QLISTWIDGETITEM, q_qlwi);";
+	    $lo += "   l->push(o_qlwi);";
+	    $lo += "}";
+	    $lo += "return l;";
+	    break;
+	}
+
 	case "QFileInfoList": {
 	    $lo += sprintf("QFileInfoList qfilist_rv = %s;", $callstr);
 	    $lo += "QoreListNode *l = new QoreListNode();";
