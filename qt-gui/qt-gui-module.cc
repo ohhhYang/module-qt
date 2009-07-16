@@ -183,6 +183,7 @@
 #include "QC_QAbstractListModel.h"
 #include "QC_QStringListModel.h"
 #include "QC_QRadialGradient.h"
+#include "QC_QPixmapCache.h"
 
 #include <QPalette>
 #include <QToolTip>
@@ -1143,6 +1144,7 @@ static void init_namespace()
    qt_ns.addSystemClass(initQTreeWidgetClass(QC_QTreeView));
    qt_ns.addSystemClass(initQStringListModelClass(QC_QAbstractListModel));
    qt_ns.addSystemClass(initQRadialGradientClass(QC_QGradient));
+   qt_ns.addSystemClass(initQPixmapCacheClass());
 
    // add here
    
