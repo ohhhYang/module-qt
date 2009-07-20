@@ -184,6 +184,7 @@
 #include "QC_QStringListModel.h"
 #include "QC_QRadialGradient.h"
 #include "QC_QPixmapCache.h"
+#include "QC_QAbstractProxyModel.h"
 
 #include <QPalette>
 #include <QToolTip>
@@ -1145,6 +1146,7 @@ static void init_namespace()
    qt_ns.addSystemClass(initQStringListModelClass(QC_QAbstractListModel));
    qt_ns.addSystemClass(initQRadialGradientClass(QC_QGradient));
    qt_ns.addSystemClass(initQPixmapCacheClass());
+   qt_ns.addSystemClass(initQAbstractProxyModelClass(QC_QObject));
 
    // add here
    

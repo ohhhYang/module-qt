@@ -203,3 +203,4 @@
 #include "QC_QStringListModel.cc"
 #include "QC_QRadialGradient.cc"
 #include "QC_QPixmapCache.cc"
+#include "QC_QAbstractProxyModel.cc"
