@@ -334,13 +334,23 @@ static AbstractQoreNode *QLISTWIDGET_row(QoreObject *self, QoreAbstractQListWidg
    return new QoreBigIntNode(qlw->getQListWidget()->row(item->getQListWidgetItem()));
 }
 
-/*
 //QList<QListWidgetItem *> selectedItems () const
 static AbstractQoreNode *QLISTWIDGET_selectedItems(QoreObject *self, QoreAbstractQListWidget *qlw, const QoreListNode *params, ExceptionSink *xsink)
 {
-   ??? return new QoreBigIntNode(qlw->getQListWidget()->selectedItems());
+   QList<QListWidgetItem *> ilist_rv = qlw->getQListWidget()->selectedItems();
+   QoreListNode *l = new QoreListNode();
+   for (QList<QListWidgetItem *>::iterator i = ilist_rv.begin(), e = ilist_rv.end(); i != e; ++i) {
+       if (!*i) {
+           l->push(0);
+           continue;
+       }
+       QoreObject *o_qlwi = new QoreObject(QC_QListWidgetItem, getProgram());
+       QoreQListWidgetItem *q_qlwi = new QoreQListWidgetItem(*i);
+       o_qlwi->setPrivate(CID_QLISTWIDGETITEM, q_qlwi);
+       l->push(o_qlwi);
+   }
+   return l;
 }
-*/
 
  //void setCurrentItem ( QListWidgetItem * item )
 static AbstractQoreNode *QLISTWIDGET_setCurrentItem(QoreObject *self, QoreAbstractQListWidget *qlw, const QoreListNode *params, ExceptionSink *xsink)
@@ -488,7 +498,7 @@ QoreClass *initQListWidgetClass(QoreClass *qlistview)
    QC_QListWidget->addMethod("openPersistentEditor",        (q_method_t)QLISTWIDGET_openPersistentEditor);
    QC_QListWidget->addMethod("removeItemWidget",            (q_method_t)QLISTWIDGET_removeItemWidget);
    QC_QListWidget->addMethod("row",                         (q_method_t)QLISTWIDGET_row);
-   //QC_QListWidget->addMethod("selectedItems",               (q_method_t)QLISTWIDGET_selectedItems);
+   QC_QListWidget->addMethod("selectedItems",               (q_method_t)QLISTWIDGET_selectedItems);
    QC_QListWidget->addMethod("setCurrentItem",              (q_method_t)QLISTWIDGET_setCurrentItem);
    QC_QListWidget->addMethod("setCurrentRow",               (q_method_t)QLISTWIDGET_setCurrentRow);
    QC_QListWidget->addMethod("setItemWidget",               (q_method_t)QLISTWIDGET_setItemWidget);
