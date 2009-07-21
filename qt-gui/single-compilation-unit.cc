@@ -204,3 +204,4 @@
 #include "QC_QRadialGradient.cc"
 #include "QC_QPixmapCache.cc"
 #include "QC_QAbstractProxyModel.cc"
+#include "QC_QSortFilterProxyModel.cc"

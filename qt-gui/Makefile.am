@@ -192,7 +192,8 @@ QORE_QT_GUI_SOURCES = qt-gui-util.cc QC_QApplication.cc QC_QPushButton.cc \
 	QC_QStringListModel.cc \
 	QC_QRadialGradient.cc \
 	QC_QPixmapCache.cc \
-	QC_QAbstractProxyModel.cc
+	QC_QAbstractProxyModel.cc \
+	QC_QSortFilterProxyModel.cc
 if COND_MACOSX
 QORE_QT_GUI_SOURCES += QC_QMacStyle.cc
 endif

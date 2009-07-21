@@ -315,6 +315,7 @@ qt-gui/QoreAbstractQTreeView.h \
 qt-gui/QoreAbstractQStringListModel.h \
 	qt-gui/QC_QPixmapCache.h \
 	qt-gui/QC_QAbstractProxyModel.h \
+	qt-gui/QC_QSortFilterProxyModel.h \
 	qt-opengl/QC_QGLWidget.h \
 	qt-opengl/QC_QGLFormat.h \
 	qt-opengl/QC_QGLContext.h \
