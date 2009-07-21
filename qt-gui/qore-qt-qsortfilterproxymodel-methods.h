@@ -3,7 +3,6 @@
 class T {
 #endif
 
-/*
   protected:
 
    // virtual methods
@@ -70,7 +69,6 @@ class T {
 
       return rv ? rv->getAsBool() : false;
    }
-   */
 
 public:
    // provides access to protected functions from outside the class

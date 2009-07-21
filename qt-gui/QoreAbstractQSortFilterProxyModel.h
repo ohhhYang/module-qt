@@ -87,17 +87,17 @@ class QoreQtQSortFilterProxyModelBase : public QoreQtQAbstractProxyModelBase<T, 
         { return false; };
 };
 
-// class QoreQSortFilterProxyModelExtension : public QoreQAbstractProxyModelExtension {
-//   protected:
-//     //const QoreMethod *m_filterAcceptsColumn, *m_filterAcceptsRow, *m_lessThan;
-// 
-//     DLLLOCAL QoreQSortFilterProxyModelExtension(QoreObject *obj, QObject *qo) : QoreQAbstractProxyModelExtension(obj, qo) {
-// //         const QoreClass *qc = obj->getClass();
-// 
-// //          m_filterAcceptsColumn = findMethod(qc, "filterAcceptsColumn");
-// //          m_filterAcceptsRow = findMethod(qc, "filterAcceptsRow");
-// //          m_lessThan = findMethod(qc, "lessThan");
-//     }
-// };
+class QoreQSortFilterProxyModelExtension : public QoreQAbstractProxyModelExtension {
+  protected:
+    const QoreMethod *m_filterAcceptsColumn, *m_filterAcceptsRow, *m_lessThan;
+
+    DLLLOCAL QoreQSortFilterProxyModelExtension(QoreObject *obj, QObject *qo) : QoreQAbstractProxyModelExtension(obj, qo) {
+         const QoreClass *qc = obj->getClass();
+ 
+         m_filterAcceptsColumn = findMethod(qc, "filterAcceptsColumn");
+         m_filterAcceptsRow = findMethod(qc, "filterAcceptsRow");
+         m_lessThan = findMethod(qc, "lessThan");
+    }
+};
 
 #endif  // _QORE_QT_QOREABSTRACTQSORTFILTERPROXYMODEL_H

@@ -33,8 +33,7 @@ DLLEXPORT extern qore_classid_t CID_QSORTFILTERPROXYMODEL;
 DLLEXPORT extern QoreClass *QC_QSortFilterProxyModel;
 DLLEXPORT QoreClass *initQSortFilterProxyModelClass(QoreClass *);
 
-class myQSortFilterProxyModel : public QSortFilterProxyModel, public QoreQAbstractProxyModelExtension //QoreQSortFilterProxyModelExtension {
-{
+class myQSortFilterProxyModel : public QSortFilterProxyModel, public QoreQSortFilterProxyModelExtension {
 #define QOREQTYPE QSortFilterProxyModel
 #define MYQOREQTYPE myQSortFilterProxyModel
 #include "qore-qt-metacode.h"
@@ -45,7 +44,7 @@ class myQSortFilterProxyModel : public QSortFilterProxyModel, public QoreQAbstra
 #undef QOREQTYPE
 
    public:
-      DLLLOCAL myQSortFilterProxyModel(QoreObject *obj, QObject* parent = 0) : QSortFilterProxyModel(parent), QoreQAbstractProxyModelExtension/*QoreQSortFilterProxyModelExtension*/(obj, this) {
+      DLLLOCAL myQSortFilterProxyModel(QoreObject *obj, QObject* parent = 0) : QSortFilterProxyModel(parent), QoreQSortFilterProxyModelExtension(obj, this) {
       }
 };
 
