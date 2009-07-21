@@ -1147,7 +1147,7 @@ static void init_namespace()
    qt_ns.addSystemClass(initQStringListModelClass(QC_QAbstractListModel));
    qt_ns.addSystemClass(initQRadialGradientClass(QC_QGradient));
    qt_ns.addSystemClass(initQPixmapCacheClass());
-   qt_ns.addSystemClass(initQAbstractProxyModelClass(QC_QObject));
+   qt_ns.addSystemClass(initQAbstractProxyModelClass(QC_QAbstractItemModel));
    qt_ns.addSystemClass(initQSortFilterProxyModelClass(QC_QAbstractProxyModel));
 
    // add here
