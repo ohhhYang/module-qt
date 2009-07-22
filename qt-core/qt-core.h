@@ -32,6 +32,7 @@
 #include <QList>
 #include <QStringList>
 #include <QModelIndex>
+#include <QItemSelection>
 
 #include <map>
 

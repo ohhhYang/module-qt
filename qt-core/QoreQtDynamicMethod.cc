@@ -364,6 +364,51 @@ class QoreQtConstQModelIndexRef : public QoreQtQModelIndex {
 DLLLOCAL QoreQtConstQModelIndexRef qqt_const_qmodelindex_ref;
 
 
+
+class QoreQtQItemSelection : public QoreQtAbstractDynamicTypeHelper {
+   protected:
+      DLLLOCAL QoreQtQItemSelection(const char *n) : QoreQtAbstractDynamicTypeHelper(n) {
+      }
+
+   public:
+      DLLLOCAL QoreQtQItemSelection() : QoreQtAbstractDynamicTypeHelper("QItemSelection") {
+      }
+
+      DLLLOCAL virtual void add_qore_arg(QoreListNode &args, void *arg) {
+         QItemSelection *qmi = reinterpret_cast<QItemSelection*>(arg);
+         //printd(5, "slot argument string: %08p: %d\n", qstr, qstr->length());
+         //printd(5, "slot argument string: '%s'\n", qstr->toUtf8().data());
+
+         QoreObject *o_qmi = new QoreObject(QC_QItemSelection, getProgram());
+         QoreQItemSelection *q_qmi = new QoreQItemSelection(*qmi);
+         o_qmi->setPrivate(CID_QITEMSELECTION, q_qmi);
+
+         args.push(o_qmi);
+      }
+
+      DLLLOCAL virtual void add_qt_arg(void *&ptr, void *&save, const AbstractQoreNode *val) {
+         assert(false);
+      }
+      DLLLOCAL virtual void del_arg(void *ptr) {
+      }
+      DLLLOCAL virtual void do_return(void *rv, const AbstractQoreNode *val) {
+         assert(false);
+      }
+};
+
+
+
+DLLLOCAL QoreQtQItemSelection qqt_qitemselection;
+
+class QoreQtConstQItemSelectionRef : public QoreQtQItemSelection {
+    public:
+        DLLLOCAL QoreQtConstQItemSelectionRef() : QoreQtQItemSelection("const QItemSelection&") {
+        }
+};
+
+DLLLOCAL QoreQtConstQItemSelectionRef qqt_const_qitemselection_ref;
+
+
 /*
 class QoreQt : public QoreQtAbstractDynamicTypeHelper
 {
@@ -401,6 +446,8 @@ QoreQtTypeList::QoreQtTypeList() {
    push_back(&qqt_qmodelindex);
    push_back(&qqt_const_qmodelindex_ref);
    push_back(&qqt_qdate);
+   push_back(&qqt_qitemselection);
+   push_back(&qqt_const_qitemselection_ref);
 }
 
 void register_qqt_dynamic_type(QoreQtAbstractDynamicTypeHelper *t)
