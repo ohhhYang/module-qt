@@ -20,7 +20,7 @@ class T {
       qw->setPrivate(CID_QMODELINDEX, new QoreQModelIndex(source_parent));
       args->push(qw);
       
-      ReferenceHolder<AbstractQoreNode> rv(dispatch_event_intern(qore_obj, m_filterAcceptsRow, *args, &xsink), &xsink);
+      ReferenceHolder<AbstractQoreNode> rv(dispatch_event_intern(qore_obj, m_filterAcceptsColumn, *args, &xsink), &xsink);
       if (xsink)
           return false;
 
