@@ -46,7 +46,6 @@
 //#include "QC_QStringList.h"
 #include "QC_QUrl.h"
 #include "QC_QModelIndex.h"
-#include "../qt-gui/QC_QItemSelection.h"
 
 
 QoreNamespace *QtNS = 0, *QEventNS = 0;

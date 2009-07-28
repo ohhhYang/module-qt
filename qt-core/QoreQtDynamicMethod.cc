@@ -364,7 +364,7 @@ class QoreQtConstQModelIndexRef : public QoreQtQModelIndex {
 DLLLOCAL QoreQtConstQModelIndexRef qqt_const_qmodelindex_ref;
 
 
-
+/*
 class QoreQtQItemSelection : public QoreQtAbstractDynamicTypeHelper {
    protected:
       DLLLOCAL QoreQtQItemSelection(const char *n) : QoreQtAbstractDynamicTypeHelper(n) {
@@ -407,7 +407,7 @@ class QoreQtConstQItemSelectionRef : public QoreQtQItemSelection {
 };
 
 DLLLOCAL QoreQtConstQItemSelectionRef qqt_const_qitemselection_ref;
-
+*/
 
 /*
 class QoreQt : public QoreQtAbstractDynamicTypeHelper
@@ -446,8 +446,8 @@ QoreQtTypeList::QoreQtTypeList() {
    push_back(&qqt_qmodelindex);
    push_back(&qqt_const_qmodelindex_ref);
    push_back(&qqt_qdate);
-   push_back(&qqt_qitemselection);
-   push_back(&qqt_const_qitemselection_ref);
+//   push_back(&qqt_qitemselection);
+//   push_back(&qqt_const_qitemselection_ref);
 }
 
 void register_qqt_dynamic_type(QoreQtAbstractDynamicTypeHelper *t)
