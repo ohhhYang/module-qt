@@ -681,7 +681,7 @@ if test "${with_qt}" != "no"; then
       else
          # check for frameworks on darwin
 	 if test -n "$darwin" -a -d /Library/Frameworks/QtCore.framework; then
-	    qt_framework="/Library/Frameworks/QtCore.framework"
+	    qt_framework="/Library/Frameworks"
 	 else
 	    for dir in $QT_DIR $find_prefix / /usr /usr/local /opt/qt /opt/qt /usr/qt /usr/qt /sw /opt/local /opt/sfw /usr/sfw /opt/gnu; do
       	       check_qt $dir
