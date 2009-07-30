@@ -98,13 +98,16 @@ class QoreQtLong : public QoreQtAbstractDynamicTypeHelper {
 };
 
 DLLLOCAL QoreQtLong qqt_long;
-
+#include <QtDebug>
 class QoreQtBool : public QoreQtAbstractDynamicTypeHelper {
    public:
       DLLLOCAL QoreQtBool() : QoreQtAbstractDynamicTypeHelper("bool") {
       }
       DLLLOCAL virtual void add_qore_arg(QoreListNode &args, void *arg) {
+qDebug() << "arg:" << arg;
 	 bool *ptr = reinterpret_cast<bool *>(arg);
+qDebug() << "ptr:" << ptr;
+qDebug() << "ptr val:" << *ptr;
 	 args.push(get_bool_node(*ptr));
       }
       DLLLOCAL virtual void add_qt_arg(void *&ptr, void *&save, const AbstractQoreNode *val) {
