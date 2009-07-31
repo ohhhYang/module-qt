@@ -94,7 +94,7 @@ protected:
 	 if (timerId > 0)
 	    killTimer(timerId);
 	 timerId = -1;
-	 emit_signal("timeout()", 0);
+	 emit_signal("timeout()", 0, 0);
       }
 };
 

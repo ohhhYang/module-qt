@@ -135,7 +135,7 @@ class T {
       }
 
       // emits a signal; args are offset from 1
-      DLLLOCAL void emit_signal(const char *sig, const QoreListNode *args) {
+      DLLLOCAL void emit_signal(const char *sig, const QoreListNode *args, ExceptionSink *xsink) {
 	 QByteArray theSignal = QMetaObject::normalizedSignature(sig);	 
 	 int id = metaObject()->indexOfSignal(theSignal);
 
@@ -146,9 +146,12 @@ class T {
 	    emit_static_signal(this, id, qmm, args);
 	 }
 	 else { // emit dynamic signal
-	    int signalId = signalIndices.value(theSignal, -1);
-	    if (signalId < 0)
+	    int signalId = signalIndices.value(theSignal, -1);	    
+	    if (signalId < 0) {
+	       xsink->raiseException("SIGNAL-ERROR", "no signal found matching signature '%s'", sig);
 	       return;
+	    }
+	    //printd(5, "emit_signal(%s, %p) called\n", sig, args);
 	    QoreQtDynamicSignal *sp = dynamic_cast<QoreQtDynamicSignal *>(methodMap[signalId]);
 	    sp->emit_signal(this, signalId + metaObject()->methodCount(), args);
 	 }

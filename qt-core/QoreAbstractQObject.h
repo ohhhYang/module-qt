@@ -60,7 +60,7 @@ class QoreAbstractQObject : public AbstractPrivateData
       DLLLOCAL virtual bool deleteBlocker() = 0;
 
       // emits a signal; args are offset from 1
-      DLLLOCAL virtual void emit_signal(const char *sig, const QoreListNode *args) = 0;
+      DLLLOCAL virtual void emit_signal(const char *sig, const QoreListNode *args, ExceptionSink *xsink) = 0;
 
       // to mark an object as being externally owned
       DLLLOCAL virtual void setExternallyOwned() = 0;
@@ -281,9 +281,9 @@ class QoreQObjectBase : public V
       {
 	 return qobj->connectDynamic(sender, signal, qobj, slot, xsink);
       }
-      DLLLOCAL virtual void emit_signal(const char *sig, const QoreListNode *args)
+      DLLLOCAL virtual void emit_signal(const char *sig, const QoreListNode *args, ExceptionSink *xsink)
       {
-	 return qobj->emit_signal(sig, args);
+	 return qobj->emit_signal(sig, args, xsink);
       }
       DLLLOCAL virtual QObject *sender() const
       {
@@ -396,7 +396,7 @@ class QoreQtQObjectPrivateBase : public V
          return 0;
       }
 
-      DLLLOCAL virtual void emit_signal(const char *sig, const QoreListNode *args)
+      DLLLOCAL virtual void emit_signal(const char *sig, const QoreListNode *args, ExceptionSink *xsink)
       {
 /*
          QByteArray theSignal = QMetaObject::normalizedSignature(sig);   

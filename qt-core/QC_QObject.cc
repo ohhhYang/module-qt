@@ -427,7 +427,7 @@ static AbstractQoreNode *QOBJECT_emit(QoreObject *self, QoreAbstractQObject *qo,
       return 0;
    }
 
-   qo->emit_signal(p->getBuffer(), params);
+   qo->emit_signal(p->getBuffer(), params, xsink);
    return 0;
 }
 

@@ -537,7 +537,7 @@ QoreQtDynamicSlot::QoreQtDynamicSlot(QoreObject *n_qore_obj, const char *sig, Ex
 
 void QoreQtDynamicSlot::call(void **arguments)
 {
-   //printd(5, "DynamicSlot::call(%08p, %08p)\n", sender, arguments);
+   //printd(5, "DynamicSlot::call(args=%08p) '%s()'\n", arguments, method->getName());
    //printd(5, "0=%08p, 1=%08p, 2=%08p\n", arguments[0], arguments[1], arguments[2]);
 
    ExceptionSink xsink;
@@ -545,6 +545,7 @@ void QoreQtDynamicSlot::call(void **arguments)
    for (int i = 0, e = type_list.size(); i < e; ++i)
    {
       assert(type_list[i]);
+      //printd(5, "QoreQtDynamicSlot::call() i=%d/%d type=%s arg=%p\n", i, e, type_list[i]->get_name(), arguments[i+1]);
       type_list[i]->add_qore_arg(*(*args), arguments[i + 1]);
    }
    ReferenceHolder<AbstractQoreNode> rv(qore_obj->evalMethod(*method, *args, &xsink), &xsink);
@@ -601,7 +602,7 @@ void QoreQtDynamicSignal::emit_signal(QObject *obj, int id, const QoreListNode *
    void *sig_args[num_args + 1];
    void *save_args[num_args];
 
-   // return return value to 0
+   // set return value to 0
    sig_args[0] = 0;
 
    // iterate through signal parameters to build argument list
@@ -614,6 +615,7 @@ void QoreQtDynamicSignal::emit_signal(QObject *obj, int id, const QoreListNode *
 	 printd(0, "QoreQtDynamicSignal::emit_signal() unsupported type\n");
 #endif
       assert(type_list[i]);
+      //printd(5, "QoreQtDynamicSignal::emit_signal() dynamic %s arg=%d/%d %p: %s\n", type_list[i]->get_name(), i, num_args, n, n ? n->getTypeName() : "<n/a>");
 
       type_list[i]->add_qt_arg(sig_args[i + 1], save_args[i], n);
    }
@@ -654,6 +656,7 @@ void emit_static_signal(QObject *sender, int signalId, const QMetaMethod &qmm, c
 	 printd(0, "QoreQtDynamicSignal::emit_signal() unsupported type='%s'\n", str);
 #endif
       assert(tlist[i]);
+      //printd(5, "QoreQtDynamicSignal::emit_signal() static: %s %s arg=%d/%d %p: %s\n", str, tlist[i]->get_name(), i, num_args, n, n ? n->getTypeName() : "<n/a>");
 
       tlist[i]->add_qt_arg(sig_args[i + 1], save_args[i], n);
 
