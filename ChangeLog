@@ -1,3 +1,547 @@
+2009-07-31 21:05  david_nichols
+
+	* qt-core/QC_QObject.cc, qt-core/QC_QTimer.h,
+	  qt-core/QoreAbstractQObject.h, qt-core/QoreQtDynamicMethod.cc,
+	  qt-core/qore-qt-metacode.h: fixed calls to QObject::emit() with
+	  an unknown signal name to throw an exception (previously such
+	  calls were silently ignored)
+
+2009-07-30 14:53  subik
+
+	* qt-core/QoreQtDynamicMethod.cc: rolled back accidentally
+	  committed debug code
+
+2009-07-30 14:49  subik
+
+	* bin, qt-core/QoreQtDynamicMethod.cc, tools, tools/CMakeLists.txt,
+	  tools/README, tools/cmake, tools/cmake/modules,
+	  tools/cmake/modules/FindQore.cmake, tools/rcc-qore,
+	  tools/rcc-qore/CMakeLists.txt, tools/rcc-qore/Messages.sh,
+	  tools/rcc-qore/main.cpp, tools/rcc-qore/rcc.cpp,
+	  tools/rcc-qore/rcc.h, tools/uic-qore,
+	  tools/uic-qore/CMakeLists.txt, tools/uic-qore/LICENSE.GPL,
+	  tools/uic-qore/Messages.sh, tools/uic-qore/customwidgetsinfo.cpp,
+	  tools/uic-qore/customwidgetsinfo.h,
+	  tools/uic-qore/databaseinfo.cpp, tools/uic-qore/databaseinfo.h,
+	  tools/uic-qore/driver.cpp, tools/uic-qore/driver.h,
+	  tools/uic-qore/globaldefs.h, tools/uic-qore/main.cpp,
+	  tools/uic-qore/option.h, tools/uic-qore/qore,
+	  tools/uic-qore/qore/qoreextractimages.cpp,
+	  tools/uic-qore/qore/qoreextractimages.h,
+	  tools/uic-qore/qore/qorewritedeclaration.cpp,
+	  tools/uic-qore/qore/qorewritedeclaration.h,
+	  tools/uic-qore/qore/qorewriteicondata.cpp,
+	  tools/uic-qore/qore/qorewriteicondata.h,
+	  tools/uic-qore/qore/qorewriteicondeclaration.cpp,
+	  tools/uic-qore/qore/qorewriteicondeclaration.h,
+	  tools/uic-qore/qore/qorewriteiconinitialization.cpp,
+	  tools/uic-qore/qore/qorewriteiconinitialization.h,
+	  tools/uic-qore/qore/qorewriteinitialization.cpp,
+	  tools/uic-qore/qore/qorewriteinitialization.h,
+	  tools/uic-qore/treewalker.cpp, tools/uic-qore/treewalker.h,
+	  tools/uic-qore/ui4.cpp, tools/uic-qore/ui4.h,
+	  tools/uic-qore/uic.cpp, tools/uic-qore/uic.h,
+	  tools/uic-qore/utils.h, tools/uic-qore/validator.cpp,
+	  tools/uic-qore/validator.h: new uic generator for qore. Now it's
+	  c++ based
+
+2009-07-28 08:27  subik
+
+	* qt-core/QoreQtDynamicMethod.cc, qt-core/qt-core-util.cc,
+	  qt-core/qt-core.h: fixed mac compilation
+
+2009-07-28 07:52  david_nichols
+
+	* configure.ac: fixed configure for qt frameworks in standard
+	  library directory
+
+2009-07-22 12:37  subik
+
+	* qt-gui/qore-qt-qsortfilterproxymodel-methods.h: fixed typo in
+	  proxy model subclassing
+
+2009-07-22 11:43  subik
+
+	* qt-core/QoreQtDynamicMethod.cc, qt-core/qt-core-util.cc,
+	  qt-core/qt-core.h: allow QItemSelection usage in signals/slots
+
+2009-07-21 14:49  subik
+
+	* qt-gui/QC_QSortFilterProxyModel.h,
+	  qt-gui/QoreAbstractQSortFilterProxyModel.h,
+	  qt-gui/qore-qt-qsortfilterproxymodel-methods.h: fixed virtual
+	  methods for QSortFilterProxyModel
+
+2009-07-21 13:40  subik
+
+	* qt-gui/QC_QListWidget.cc: QListWidget::selectedItems()
+	  implemented
+
+2009-07-21 13:04  david_nichols
+
+	* qt-gui/qt-gui-module.cc: fixed parent class for
+	  qabstractproxymodel
+
+2009-07-21 10:47  subik
+
+	* Makefile.am, qt-gui/Makefile.am,
+	  qt-gui/QC_QSortFilterProxyModel.cc,
+	  qt-gui/QC_QSortFilterProxyModel.h,
+	  qt-gui/QoreAbstractQSortFilterProxyModel.h,
+	  qt-gui/qore-qt-qsortfilterproxymodel-methods.h,
+	  qt-gui/qt-gui-module.cc, qt-gui/single-compilation-unit.cc:
+	  QSortFilterProxyModel implemented
+
+2009-07-20 14:07  subik
+
+	* Makefile.am, qt-gui/Makefile.am,
+	  qt-gui/QC_QAbstractProxyModel.cc,
+	  qt-gui/QC_QAbstractProxyModel.h,
+	  qt-gui/QoreAbstractQAbstractProxyModel.h,
+	  qt-gui/qore-qt-qabstractproxymodel-methods.h,
+	  qt-gui/qt-gui-module.cc, qt-gui/single-compilation-unit.cc:
+	  QAbstractProxyModel implemented
+
+2009-07-20 13:16  david_nichols
+
+	* configure.ac, qore-qt.spec: added opensuse 11.2 detection to spec
+	  file, fixed rhel detection in spec files, updated configure.ac to
+	  work with older versions of autotools
+
+2009-07-16 13:25  subik
+
+	* qt-gui/QC_QListWidget.cc: QListWidget::find implemented
+
+2009-07-16 13:04  david_nichols
+
+	* qt-gui/qt-code-gen.q: added initial support for
+	  QList<QListWidgetItem*> handling
+
+2009-07-16 11:00  subik
+
+	* Makefile.am, bin/uic-qore.q: qpixmapcache implemented
+
+2009-07-16 10:59  subik
+
+	* qt-gui/Makefile.am, qt-gui/QC_QPixmapCache.cc,
+	  qt-gui/QC_QPixmapCache.h, qt-gui/qt-gui-module.cc,
+	  qt-gui/single-compilation-unit.cc: qpixmapcache implemented
+
+2009-07-16 08:37  subik
+
+	* qt-gui/Makefile.am, qt-gui/QC_QRadialGradient.cc,
+	  qt-gui/QC_QRadialGradient.h, qt-gui/qt-code-gen.q,
+	  qt-gui/qt-gui-module.cc, qt-gui/single-compilation-unit.cc:
+	  QRadialGradient implemented
+
+2009-07-11 15:13  david_nichols
+
+	* qt-core/QoreQtDynamicMethod.cc, qt-gui/QC_QListWidgetItem.h,
+	  qt-gui/qt-gui-module.cc: fixed passing null pointers as slot
+	  arguments
+
+2009-07-05 05:48  david_nichols
+
+	* qt-core/qt-core-util.cc: implemented automatic conversion from
+	  QByteArray to QVariant
+
+2009-07-03 10:31  subik
+
+	* bin/uic-qore.q: new property
+
+2009-07-02 14:06  david_nichols
+
+	* reconf.sh: suppress extraneous error messages
+
+2009-07-01 15:43  david_nichols
+
+	* qt-core/qt-core-module.cc, qt-gui/qt-gui-module.cc,
+	  qt-opengl/qt-opengl.cc, qt-svg/qt-svg.cc: updated web site home
+	  page in modules' url
+
+2009-06-30 14:06  subik
+
+	* bin/uic-qore.q: uic for designer initial import (it is not meant
+	  for public release yet)
+
+2009-06-30 14:05  subik
+
+	* bin: uic for designer initial import (it is not meant for public
+	  release yet)
+
+2009-06-24 09:30  david_nichols
+
+	* qt-gui/QC_QStringListModel.h: correted template in
+	  QStringListModel qore c++ private data classes
+
+2009-06-23 21:04  david_nichols
+
+	* configure.ac, qore-qt.spec, qt-gui/QC_QLayoutItem.h,
+	  qt-gui/QC_QSpacerItem.h, qt-gui/QC_QWidgetItem.h,
+	  qt-gui/QoreAbstractQLayoutItem.h,
+	  qt-gui/qore-qt-qlayoutitem-methods.h: fixed bugs handling
+	  QAbstractLayoutItem scope - requires new qore module API 0.7
+
+2009-06-23 15:04  david_nichols
+
+	* qt-core/QoreQtDynamicMethod.cc, qt-core/QoreQtEventDispatcher.h,
+	  qt-core/qt-core-util.cc, qt-core/qt-core.h,
+	  qt-gui/QC_QFileIconProvider.h, qt-gui/QC_QSplashScreen.h,
+	  qt-gui/QC_QSplitter.h, qt-gui/QoreAbstractQGraphicsItem.h,
+	  qt-gui/QoreAbstractQLayout.h, qt-gui/QoreAbstractQLayoutItem.h,
+	  qt-opengl/QC_QGLContext.h, qt-opengl/QC_QGLWidget.h: fixed
+	  detection of user methods - only assign method poitners to
+	  user-defined methods
+
+2009-06-23 08:46  david_nichols
+
+	* qt-gui/QC_QDirModel.cc, qt-gui/QC_QStringListModel.cc,
+	  qt-gui/QC_QTextBrowser.cc, qt-gui/QC_QTreeWidget.cc,
+	  qt-gui/qt-code-gen.q: fixed crashes related to not checking the
+	  argument type when processing QStringList arguments
+
+2009-06-23 07:58  david_nichols
+
+	* Makefile.am, qt-core/QC_QAbstractListModel.h,
+	  qt-core/QC_QAbstractTableModel.h,
+	  qt-core/QoreAbstractQAbstractItemModel.h,
+	  qt-core/QoreAbstractQAbstractTableModel.h,
+	  qt-core/QoreAbstractQObject.h, qt-core/QoreQtDynamicMethod.cc,
+	  qt-gui/Makefile.am, qt-gui/QC_QStringListModel.cc,
+	  qt-gui/QC_QStringListModel.h,
+	  qt-gui/QoreAbstractQStringListModel.h, qt-gui/qt-code-gen.q,
+	  qt-gui/qt-gui-module.cc, qt-gui/single-compilation-unit.cc: added
+	  QStringListModel and removed extraneous template argument from
+	  QObject Qore template
+
+2009-06-22 11:05  david_nichols
+
+	* qt-gui/QC_QTreeWidgetItem.cc: fixed some bugs in
+	  QTreeWidgetItem::constructor()
+
+2009-06-18 15:38  david_nichols
+
+	* qt-core/QoreQtDynamicMethod.cc, qt-core/QoreQtDynamicMethod.h,
+	  test/modelview/editable-tree-model.q: initial (test) support for
+	  QModelIndex arguments for signals/slots
+
+2009-06-18 07:54  david_nichols
+
+	* qt-gui/QC_QSpacerItem.cc: fixed QSpacerItem::isEmpty()
+
+2009-06-17 20:17  david_nichols
+
+	* Makefile.am, qt-gui/Makefile.am, qt-gui/QC_QTreeView.h,
+	  qt-gui/QC_QTreeWidget.cc, qt-gui/QC_QTreeWidget.h,
+	  qt-gui/QC_QTreeWidgetItem.cc, qt-gui/QC_QTreeWidgetItem.h,
+	  qt-gui/QoreAbstractQTreeWidgetItem.h,
+	  qt-gui/qore-qt-qtreeview-methods.h, qt-gui/qt-code-gen.q,
+	  qt-gui/qt-gui-module.cc, qt-gui/single-compilation-unit.cc: added
+	  initial support for QTreeWidgetItem and QTreeWidget
+
+2009-06-17 16:51  david_nichols
+
+	* Makefile.am, qt-gui/Makefile.am, qt-gui/QC_QMdiArea.cc,
+	  qt-gui/QC_QMdiArea.h, qt-gui/QC_QMdiSubWindow.cc,
+	  qt-gui/QC_QMdiSubWindow.h, qt-gui/qt-code-gen.q,
+	  qt-gui/qt-gui-module.cc, qt-gui/single-compilation-unit.cc: added
+	  QMdiArea and QMdiSubWindow class support
+
+2009-06-15 11:50  david_nichols
+
+	* qt-core/qt-core-util.cc, qt-core/qt-core.h, qt-gui/qore-qt-gui.h,
+	  qt-gui/qt-gui-module.cc, qt-gui/qt-gui-util.cc: added support for
+	  extending qvariant conversions (from misc types -> QVariant) in
+	  modules, added support for converting QIcon -> QVariant via new
+	  hooks
+
+2009-06-15 10:16  david_nichols
+
+	* Makefile.am, qt-core/Makefile.am, qt-core/QC_QSettings.cc,
+	  qt-core/QC_QSettings.h, qt-core/doconst.sh,
+	  qt-core/qt-core-module.cc, qt-core/single-compilation-unit.cc:
+	  added QSettings clas support
+
+2009-06-15 09:52  david_nichols
+
+	* qt-gui/QC_QSpacerItem.cc, qt-gui/QC_QSpacerItem.h,
+	  qt-gui/qore-qt-qabstractitemview-methods.h: missing files
+
+2009-06-15 08:52  david_nichols
+
+	* Makefile.am, qt-gui/Makefile.am, qt-gui/QC_QLayoutItem.cc,
+	  qt-gui/qt-code-gen.q, qt-gui/qt-gui-module.cc,
+	  qt-gui/single-compilation-unit.cc: added QSpacerItem class
+	  support
+
+2009-06-15 08:34  david_nichols
+
+	* qt-core/qt-core-util.cc: added conversions from boolean and
+	  binary to QVariant
+
+2009-06-08 08:38  david_nichols
+
+	* qore-qt.spec: fixed qore module dir detection
+
+2009-06-02 05:24  david_nichols
+
+	* qore-qt.spec, qt-gui/qt-code-gen.q: fixed typo in sles version
+	  detection
+
+2009-04-26 08:25  david_nichols
+
+	* qt-core/QC_QAbstractItemModel.cc,
+	  qt-core/QC_QAbstractItemModel.h, qt-core/QC_QModelIndex.cc,
+	  qt-core/QC_QModelIndex.h,
+	  qt-core/QoreAbstractQAbstractItemModel.h,
+	  qt-core/qore-qt-qabstractitemmodel-methods.h,
+	  qt-core/qore_magic_holder.h,
+	  test/modelview/editable-tree-model.q: bug fixes
+
+2009-04-25 07:41  david_nichols
+
+	* qt-core/QC_QModelIndex.h, qt-core/qore_magic_holder.h: fixed
+	  qmodelobject holder
+
+2009-04-24 18:06  david_nichols
+
+	* Makefile.am: fixed typo
+
+2009-04-24 17:28  david_nichols
+
+	* Makefile.am, qt-core/QC_QModelIndex.h,
+	  qt-core/QoreAbstractQAbstractItemModel.h,
+	  qt-core/qore_magic_holder.h,
+	  test/modelview/editable-tree-model.q: bug fixes
+
+2009-04-24 16:07  david_nichols
+
+	* Makefile.am, qt-core/BrushStyleNode.cc, qt-core/BrushStyleNode.h,
+	  qt-core/Makefile.am, qt-core/PenStyleNode.cc,
+	  qt-core/PenStyleNode.h, qt-core/QC_QAbstractItemModel.cc,
+	  qt-core/QC_QAbstractItemModel.h,
+	  qt-core/QC_QAbstractListModel.cc,
+	  qt-core/QC_QAbstractListModel.h,
+	  qt-core/QC_QAbstractTableModel.cc,
+	  qt-core/QC_QAbstractTableModel.h, qt-core/QC_QCoreApplication.cc,
+	  qt-core/QC_QCoreApplication.h, qt-core/QC_QMetaObject.cc,
+	  qt-core/QC_QMimeData.h, qt-core/QC_QModelIndex.cc,
+	  qt-core/QoreAbstractQAbstractItemModel.h,
+	  qt-core/QoreAbstractQAbstractListModel.h,
+	  qt-core/QoreAbstractQAbstractTableModel.h,
+	  qt-core/QoreAbstractQObject.h, qt-core/QoreQtEventDispatcher.h,
+	  qt-core/qore-qt-metacode.h,
+	  qt-core/qore-qt-qabstractitemmodel-methods.h,
+	  qt-core/qt-core-constants.cc, qt-core/qt-core-module.cc,
+	  qt-core/qt-core-util.cc, qt-core/qt-core.h,
+	  qt-core/single-compilation-unit.cc, qt-gui/BrushStyleNode.cc,
+	  qt-gui/BrushStyleNode.h, qt-gui/Makefile.am,
+	  qt-gui/PenStyleNode.cc, qt-gui/PenStyleNode.h,
+	  qt-gui/QC_QAbstractItemView.cc, qt-gui/QC_QAbstractItemView.h,
+	  qt-gui/QC_QDirModel.cc, qt-gui/QC_QDirModel.h,
+	  qt-gui/QC_QDockWidget.cc, qt-gui/QC_QDockWidget.h,
+	  qt-gui/QC_QFileIconProvider.cc, qt-gui/QC_QFileIconProvider.h,
+	  qt-gui/QC_QItemSelection.cc, qt-gui/QC_QItemSelection.h,
+	  qt-gui/QC_QItemSelectionModel.cc,
+	  qt-gui/QC_QItemSelectionModel.h, qt-gui/QC_QMainWindow.cc,
+	  qt-gui/QC_QMainWindow.h, qt-gui/QC_QMenuBar.cc,
+	  qt-gui/QC_QStatusBar.cc, qt-gui/QC_QStatusBar.h,
+	  qt-gui/QC_QStyleOptionDockWidget.cc,
+	  qt-gui/QC_QStyleOptionDockWidget.h, qt-gui/QC_QToolBar.cc,
+	  qt-gui/QC_QToolBar.h, qt-gui/QC_QTreeView.cc,
+	  qt-gui/QC_QTreeView.h, qt-gui/QC_QWidget.cc,
+	  qt-gui/QoreAbstractQDockWidget.h,
+	  qt-gui/QoreAbstractQMainWindow.h, qt-gui/QoreAbstractQTreeView.h,
+	  qt-gui/qore-qt-gui.h,
+	  qt-gui/qore-qt-qabstractitemdelegate-methods.h,
+	  qt-gui/qore-qt-qdialog-methods.h,
+	  qt-gui/qore-qt-qlayoutitem-methods.h, qt-gui/qt-code-gen.q,
+	  qt-gui/qt-gui-module.cc, qt-gui/single-compilation-unit.cc,
+	  qt-opengl/QC_QGLWidget.h, test/modelview,
+	  test/modelview/default.txt, test/modelview/editable-tree-model.q:
+	  bug fixes, moved core classes to core module, new classes
+
+2009-04-21 16:36  david_nichols
+
+	* qt-gui/QoreAbstractQAbstractItemDelegate.h,
+	  qt-gui/qore-qt-qabstractitemdelegate-methods.h,
+	  qt-gui/qt-code-gen.q: removed extraneous unused code from
+	  QAbstractItemDelegate implementation
+
+2009-04-20 06:53  david_nichols
+
+	* qt-core/qt-core-module.cc, qt-gui/qt-gui-module.cc,
+	  qt-opengl/qt-opengl.cc, qt-svg/qt-svg.cc: readded
+	  config_macro_dir
+
+2009-04-17 06:28  david_nichols
+
+	* qt-gui/QC_QItemSelectionRange.cc,
+	  qt-gui/QC_QItemSelectionRange.h: added missing files
+
+2009-04-15 16:21  david_nichols
+
+	* README: updated README
+
+2009-04-15 15:46  david_nichols
+
+	* Makefile.am, qt-core/Makefile.am, qt-gui/Makefile.am,
+	  qt-gui/QC_QPainter.cc, qt-gui/qt-code-gen.q,
+	  qt-gui/qt-gui-module.cc, qt-gui/single-compilation-unit.cc: fixed
+	  linking on Darwin with frameworks in non-standard directories,
+	  added QItemSelectionRange class
+
+2009-03-26 11:12  david_nichols
+
+	* configure.ac: more generic framework detection
+
+2009-01-08 15:13  david_nichols
+
+	* qore-qt.spec: commented-out additional "Source0" line so that
+	  packages will build on Fedora 10 (OBS)
+
+2009-01-08 14:44  david_nichols
+
+	* reconf.sh: updated reconf.sh to look for glibtoolize as well as
+	  libtoolize
+
+2009-01-07 13:10  david_nichols
+
+	* RELEASE-NOTES: updated release notes
+
+2009-01-07 13:09  david_nichols
+
+	* Makefile.am, configure.ac, ltmain.sh, qore-qt.spec, reconf.sh:
+	  updated to version 0.0.3; updated reconf.sh to use libtoolize to
+	  generate ltmain.sh
+
+2008-12-03 16:30  david_nichols
+
+	* qore-qt.spec: spec file fixes
+
+2008-12-03 15:25  david_nichols
+
+	* qt-gui/QC_QDesktopServices.cc: fix to compile with qt 4.3
+
+2008-11-23 15:21  david_nichols
+
+	* qt-gui/BrushStyleNode.cc, qt-gui/PenStyleNode.cc,
+	  qt-gui/QC_QAbstractButton.cc,
+	  qt-gui/QC_QAbstractGraphicsShapeItem.cc,
+	  qt-gui/QC_QAbstractItemDelegate.cc,
+	  qt-gui/QC_QAbstractItemView.cc, qt-gui/QC_QAbstractScrollArea.cc,
+	  qt-gui/QC_QAbstractSlider.cc, qt-gui/QC_QAbstractSpinBox.cc,
+	  qt-gui/QC_QAction.cc, qt-gui/QC_QActionEvent.cc,
+	  qt-gui/QC_QActionGroup.cc, qt-gui/QC_QApplication.cc,
+	  qt-gui/QC_QBitmap.cc, qt-gui/QC_QBoxLayout.cc,
+	  qt-gui/QC_QBrush.cc, qt-gui/QC_QCDEStyle.cc,
+	  qt-gui/QC_QCalendarWidget.cc, qt-gui/QC_QCheckBox.cc,
+	  qt-gui/QC_QCleanlooksStyle.cc, qt-gui/QC_QClipboard.cc,
+	  qt-gui/QC_QCloseEvent.cc, qt-gui/QC_QColor.cc,
+	  qt-gui/QC_QColorDialog.cc, qt-gui/QC_QComboBox.cc,
+	  qt-gui/QC_QContextMenuEvent.cc, qt-gui/QC_QCursor.cc,
+	  qt-gui/QC_QDateEdit.cc, qt-gui/QC_QDateTimeEdit.cc,
+	  qt-gui/QC_QDesktopServices.cc, qt-gui/QC_QDesktopWidget.cc,
+	  qt-gui/QC_QDial.cc, qt-gui/QC_QDialog.cc,
+	  qt-gui/QC_QDialogButtonBox.cc, qt-gui/QC_QDoubleSpinBox.cc,
+	  qt-gui/QC_QDoubleValidator.cc, qt-gui/QC_QDragEnterEvent.cc,
+	  qt-gui/QC_QDragLeaveEvent.cc, qt-gui/QC_QDragMoveEvent.cc,
+	  qt-gui/QC_QDropEvent.cc, qt-gui/QC_QErrorMessage.cc,
+	  qt-gui/QC_QFileDialog.cc, qt-gui/QC_QFocusEvent.cc,
+	  qt-gui/QC_QFont.cc, qt-gui/QC_QFontComboBox.cc,
+	  qt-gui/QC_QFontDatabase.cc, qt-gui/QC_QFontDialog.cc,
+	  qt-gui/QC_QFontInfo.cc, qt-gui/QC_QFontMetrics.cc,
+	  qt-gui/QC_QFrame.cc, qt-gui/QC_QGradient.cc,
+	  qt-gui/QC_QGraphicsEllipseItem.cc, qt-gui/QC_QGraphicsItem.cc,
+	  qt-gui/QC_QGraphicsItemGroup.cc, qt-gui/QC_QGraphicsLineItem.cc,
+	  qt-gui/QC_QGraphicsPathItem.cc, qt-gui/QC_QGraphicsPixmapItem.cc,
+	  qt-gui/QC_QGraphicsPolygonItem.cc,
+	  qt-gui/QC_QGraphicsRectItem.cc,
+	  qt-gui/QC_QGraphicsSceneContextMenuEvent.cc,
+	  qt-gui/QC_QGraphicsSceneDragDropEvent.cc,
+	  qt-gui/QC_QGraphicsSceneEvent.cc,
+	  qt-gui/QC_QGraphicsSceneHelpEvent.cc,
+	  qt-gui/QC_QGraphicsSceneHoverEvent.cc,
+	  qt-gui/QC_QGraphicsSceneMouseEvent.cc,
+	  qt-gui/QC_QGraphicsSceneWheelEvent.cc,
+	  qt-gui/QC_QGraphicsSimpleTextItem.cc, qt-gui/QC_QGridLayout.cc,
+	  qt-gui/QC_QGroupBox.cc, qt-gui/QC_QHBoxLayout.cc,
+	  qt-gui/QC_QHeaderView.cc, qt-gui/QC_QHelpEvent.cc,
+	  qt-gui/QC_QHideEvent.cc, qt-gui/QC_QIcon.cc, qt-gui/QC_QImage.cc,
+	  qt-gui/QC_QImageWriter.cc, qt-gui/QC_QInputDialog.cc,
+	  qt-gui/QC_QInputEvent.cc, qt-gui/QC_QInputMethodEvent.cc,
+	  qt-gui/QC_QIntValidator.cc, qt-gui/QC_QItemDelegate.cc,
+	  qt-gui/QC_QKeyEvent.cc, qt-gui/QC_QKeySequence.cc,
+	  qt-gui/QC_QLCDNumber.cc, qt-gui/QC_QLabel.cc,
+	  qt-gui/QC_QLayout.cc, qt-gui/QC_QLayoutItem.cc,
+	  qt-gui/QC_QLineEdit.cc, qt-gui/QC_QLinearGradient.cc,
+	  qt-gui/QC_QListView.cc, qt-gui/QC_QListWidget.cc,
+	  qt-gui/QC_QListWidgetItem.cc, qt-gui/QC_QMacStyle.cc,
+	  qt-gui/QC_QMainWindow.cc, qt-gui/QC_QMatrix.cc,
+	  qt-gui/QC_QMenu.cc, qt-gui/QC_QMenuBar.cc,
+	  qt-gui/QC_QMessageBox.cc, qt-gui/QC_QMotifStyle.cc,
+	  qt-gui/QC_QMouseEvent.cc, qt-gui/QC_QMoveEvent.cc,
+	  qt-gui/QC_QMovie.cc, qt-gui/QC_QPaintDevice.cc,
+	  qt-gui/QC_QPaintEngine.cc, qt-gui/QC_QPaintEvent.cc,
+	  qt-gui/QC_QPainter.cc, qt-gui/QC_QPainterPath.cc,
+	  qt-gui/QC_QPalette.cc, qt-gui/QC_QPen.cc, qt-gui/QC_QPicture.cc,
+	  qt-gui/QC_QPixmap.cc, qt-gui/QC_QPlastiqueStyle.cc,
+	  qt-gui/QC_QPolygon.cc, qt-gui/QC_QPolygonF.cc,
+	  qt-gui/QC_QPrintDialog.cc, qt-gui/QC_QPrinter.cc,
+	  qt-gui/QC_QProgressBar.cc, qt-gui/QC_QProgressDialog.cc,
+	  qt-gui/QC_QPushButton.cc, qt-gui/QC_QRadioButton.cc,
+	  qt-gui/QC_QRegExpValidator.cc, qt-gui/QC_QRegion.cc,
+	  qt-gui/QC_QResizeEvent.cc, qt-gui/QC_QScrollArea.cc,
+	  qt-gui/QC_QScrollBar.cc, qt-gui/QC_QShortcut.cc,
+	  qt-gui/QC_QShowEvent.cc, qt-gui/QC_QSlider.cc,
+	  qt-gui/QC_QSpinBox.cc, qt-gui/QC_QSplashScreen.cc,
+	  qt-gui/QC_QSplitter.cc, qt-gui/QC_QSplitterHandle.cc,
+	  qt-gui/QC_QStackedLayout.cc, qt-gui/QC_QStackedWidget.cc,
+	  qt-gui/QC_QStyle.cc, qt-gui/QC_QStyleOption.cc,
+	  qt-gui/QC_QStyleOptionButton.cc,
+	  qt-gui/QC_QStyleOptionComboBox.cc,
+	  qt-gui/QC_QStyleOptionComplex.cc,
+	  qt-gui/QC_QStyleOptionGraphicsItem.cc,
+	  qt-gui/QC_QStyleOptionGroupBox.cc,
+	  qt-gui/QC_QStyleOptionMenuItem.cc,
+	  qt-gui/QC_QStyleOptionSizeGrip.cc,
+	  qt-gui/QC_QStyleOptionSlider.cc,
+	  qt-gui/QC_QStyleOptionSpinBox.cc, qt-gui/QC_QStyleOptionTab.cc,
+	  qt-gui/QC_QStyleOptionTabWidgetFrame.cc,
+	  qt-gui/QC_QStyleOptionTitleBar.cc,
+	  qt-gui/QC_QStyleOptionToolButton.cc,
+	  qt-gui/QC_QStyleOptionViewItem.cc,
+	  qt-gui/QC_QStyleOptionViewItemV2.cc,
+	  qt-gui/QC_QSystemTrayIcon.cc, qt-gui/QC_QTabBar.cc,
+	  qt-gui/QC_QTabWidget.cc, qt-gui/QC_QTableView.cc,
+	  qt-gui/QC_QTableWidget.cc, qt-gui/QC_QTableWidgetItem.cc,
+	  qt-gui/QC_QTabletEvent.cc, qt-gui/QC_QTextBlockFormat.cc,
+	  qt-gui/QC_QTextBrowser.cc, qt-gui/QC_QTextCharFormat.cc,
+	  qt-gui/QC_QTextEdit.cc, qt-gui/QC_QTextFormat.cc,
+	  qt-gui/QC_QTextFrameFormat.cc, qt-gui/QC_QTextImageFormat.cc,
+	  qt-gui/QC_QTextLayout.cc, qt-gui/QC_QTextLength.cc,
+	  qt-gui/QC_QTextLine.cc, qt-gui/QC_QTextListFormat.cc,
+	  qt-gui/QC_QTextOption.cc, qt-gui/QC_QTextTableFormat.cc,
+	  qt-gui/QC_QTimeEdit.cc, qt-gui/QC_QToolBar.cc,
+	  qt-gui/QC_QToolButton.cc, qt-gui/QC_QTransform.cc,
+	  qt-gui/QC_QVBoxLayout.cc, qt-gui/QC_QValidator.cc,
+	  qt-gui/QC_QWheelEvent.cc, qt-gui/QC_QWidget.cc,
+	  qt-gui/QC_QWidgetItem.cc, qt-gui/QC_QWindowsStyle.cc,
+	  qt-gui/QC_QWindowsXPStyle.cc, qt-gui/QC_QWizard.cc,
+	  qt-gui/QC_QWizardPage.cc, qt-gui/qore-qt-gui.h,
+	  qt-gui/qt-gui-module.cc, qt-gui/qt-gui-util.cc,
+	  qt-gui/single-compilation-unit.cc: fixed compiling and linking
+	  without single compilation unit
+
+2008-11-03 15:30  david_nichols
+
+	* qore-qt.spec: added release notes to doc rpm
+
+2008-11-03 15:22  david_nichols
+
+	* ChangeLog, configure.ac: fixed configure to set correct libdir
+	  (esp. on x86_64 linux)
+
 2008-11-03 15:06  david_nichols
 
 	* ChangeLog, Makefile.am, RELEASE-NOTES, configure.ac,
