@@ -335,7 +335,7 @@ bool Uic::qorewrite(DomUI *ui)
         writeCopyrightHeader(ui);
 
     pixFunction = ui->elementPixmapFunction();
-    if (pixFunction == QLatin1String("Qt::Pixmap::fromMimeSource"))
+    if (pixFunction == QLatin1String("QPixmap::fromMimeSource"))
         pixFunction = QLatin1String("qPixmapFromMimeSource");
 
     externalPix = ui->elementImages() == 0;
