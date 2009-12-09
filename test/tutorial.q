@@ -483,6 +483,6 @@ class qt_example inherits QApplication
 	$board.setGeometry(100, 100, 500, 355);
 	$board.show();
 
-	$.exec();
+	qt_example::exec();
     }
 }
