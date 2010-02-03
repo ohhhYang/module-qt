@@ -216,14 +216,14 @@ static AbstractQoreNode *QTREEWIDGET_itemAbove(QoreObject *self, QoreQTreeWidget
 static AbstractQoreNode *QTREEWIDGET_itemAt(QoreObject *self, QoreQTreeWidget *qtw, const QoreListNode *params, ExceptionSink *xsink) {
    const AbstractQoreNode *p = get_param(params, 0);
    if (p && p->getType() == NT_OBJECT) {
-      QoreQPoint *p = (QoreQPoint *)reinterpret_cast<const QoreObject *>(p)->getReferencedPrivateData(CID_QPOINT, xsink);
-      if (!p) {
+      QoreQPoint *pt = (QoreQPoint *)reinterpret_cast<const QoreObject *>(p)->getReferencedPrivateData(CID_QPOINT, xsink);
+      if (!pt) {
          if (!xsink->isException())
             xsink->raiseException("QTREEWIDGET-ITEMAT-PARAM-ERROR", "QTreeWidget::itemAt() does not know how to handle arguments of class '%s' as passed as the first argument", reinterpret_cast<const QoreObject *>(p)->getClassName());
          return 0;
       }
-      ReferenceHolder<AbstractPrivateData> pHolder(static_cast<AbstractPrivateData *>(p), xsink);
-      QTreeWidgetItem *qtwi_rv = qtw->qobj->itemAt(*(static_cast<QPoint *>(p)));
+      ReferenceHolder<AbstractPrivateData> pHolder(static_cast<AbstractPrivateData *>(pt), xsink);
+      QTreeWidgetItem *qtwi_rv = qtw->qobj->itemAt(*(static_cast<QPoint *>(pt)));
       return qtwi_rv ? return_object(QC_QTreeWidgetItem, new QoreQtQTreeWidgetItem(qtwi_rv)) : 0;
    }
    int x = p ? p->getAsInt() : 0;

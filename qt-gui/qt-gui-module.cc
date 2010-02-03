@@ -1274,7 +1274,6 @@ static class QoreStringNode *qt_module_init() {
    builtinFunctions.add("qAlpha",                     f_qAlpha, QDOM_GUI);
    builtinFunctions.add("qBlue",                      f_qBlue, QDOM_GUI);
    builtinFunctions.add("qGray",                      f_qGray, QDOM_GUI);
-   builtinFunctions.add("qGray",                      f_qGray, QDOM_GUI);
    builtinFunctions.add("qGreen",                     f_qGreen, QDOM_GUI);
    builtinFunctions.add("qRed",                       f_qRed, QDOM_GUI);
    builtinFunctions.add("qRgb",                       f_qRgb, QDOM_GUI);
