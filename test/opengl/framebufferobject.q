@@ -287,12 +287,12 @@ class framebufferobject inherits QApplication {
 	if (!QGLFormat::hasOpenGL()) {
 	    QMessageBox::information(0, "OpenGL framebuffer objects",
 				     "this system does not support OpenGL");
-	    return -1;
+	    return;
 	}
 	if (!QGLFramebufferObject::hasOpenGLFramebufferObjects()) {
 	    QMessageBox::information(0, "OpenGL framebuffer objects",
 				     "this system does not support framebuffer objects.");
-	    return -1;
+	    return;
 	}
 
 	my $widget = new GLWidget();
