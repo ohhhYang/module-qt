@@ -400,8 +400,7 @@ static AbstractQoreNode *f_qRgb(const QoreListNode *params, ExceptionSink *xsink
 }
 
 //QRgb qRgba ( int r, int g, int b, int a )
-static AbstractQoreNode *f_qRgba(const QoreListNode *params, ExceptionSink *xsink)
-{
+static AbstractQoreNode *f_qRgba(const QoreListNode *params, ExceptionSink *xsink) {
    const AbstractQoreNode *p = get_param(params, 0);
    int r = p ? p->getAsInt() : 0;
    p = get_param(params, 1);
@@ -416,8 +415,7 @@ static AbstractQoreNode *f_qRgba(const QoreListNode *params, ExceptionSink *xsin
 
 static QoreNamespace qt_ns("Qt");
 
-static void init_namespace()
-{
+static void init_namespace() {
     // the order is sensitive here as child classes need the parent IDs
    QoreClass *qwidget, *qlayout,
       *qboxlayout, *qpaintdevice, *qpixmap;
