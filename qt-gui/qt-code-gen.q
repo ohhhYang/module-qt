@@ -225,8 +225,8 @@ sub command_line() {
 	$o.widget = True;
 
     if (!$o.indep && !exists $o.abstract_class)
-	$o.abstract_class = $o.abstract ? $cn : $o.dialog ? "QDialog" : $o.widget ? "QWidget" : "QObject";
-    else if ($o.indep && $o.abstract && !exists $o.abstract_class)
+	$o.abstract_class = $o."abstract" ? $cn : $o.dialog ? "QDialog" : $o.widget ? "QWidget" : "QObject";
+    else if ($o.indep && $o."abstract" && !exists $o.abstract_class)
 	$o.abstract_class = $cn;
 
     if ($o.indep && $o.widget) {
@@ -478,7 +478,7 @@ sub add_new_build_files($fp) {
 		}
 		else if ($found && !regex($lines[$i], $str)) {
 		    $of.printf("\t%s/%s \\\n", "qt-" + $o.module, $hh);
-		    if ($o.abstract) 
+		    if ($o."abstract") 
 			$of.printf("\%s/QoreAbstract%s.h \\\n", "qt-" + $o.module, $cn);
 		    $done = True;
 		}
@@ -584,9 +584,9 @@ sub main() {
     command_line();
 
     my $func_prefix = toupper($cn);
-    my $qore_class = $o.abstract ? "Abstract" + $cn : $cn;
+    my $qore_class = $o."abstract" ? "Abstract" + $cn : $cn;
 
-    my $get_obj = $o.abstract ? sprintf("get%s()", $cn) : "qobj";
+    my $get_obj = $o."abstract" ? sprintf("get%s()", $cn) : "qobj";
 
     my $cl = $cn;
     $cl =~ s/[a-z]//g;
@@ -727,7 +727,7 @@ sub main() {
 	add_new_build_files("QC_" + $cn);
 
 	# add new abstract header
-	if ($o.abstract) {
+	if ($o."abstract") {
 	    $of = get_file("QoreAbstract" + $cn + ".h");
 	    $of.printf(
 "/*
@@ -771,7 +771,7 @@ sub main() {
 #include <%s>
 ", $cn, copyright, $func_prefix, $func_prefix, $cn);
 
-	if (exists $o.abstract) {
+	if (exists $o."abstract") {
 	    $of.printf("#include \"QoreAbstract%s.h\"\n", $cn);
 	    if (!$o.indep && $o.module != "core")
 		$of.printf("#include \"qore-qt-events.h\"\n");
@@ -792,7 +792,7 @@ DLLEXPORT extern QoreClass *QC_%s;
             $of.printf("DLLEXPORT QoreClass *init%sClass(%s);\n\n", $cn, exists $o.parent ? "QoreClass *" : "");
 
 	if ($o.indep) {
-	    if ($o.abstract)
+	    if ($o."abstract")
 		$of.printf("class Qore%s : public QoreAbstract%s, public %s {\n", $cn, $o.abstract_class, $cn);
 	    else
 		$of.printf("class Qore%s : public AbstractPrivateData, public %s {\n", $cn, $cn);
@@ -809,7 +809,7 @@ DLLEXPORT extern QoreClass *QC_%s;
 		    $of.printf("      DLLLOCAL Qore%s(%s) : %s(%s) { }\n", $cn, $i.orig_args, $cn, $arg_names);
 		}
 	    }
-	    if ($o.abstract)
+	    if ($o."abstract")
 		$of.printf("      DLLLOCAL virtual %s *get%s() const {\n      return static_cast<%s *>(this);\n      }\n",
 		$o.abstract_class, $o.abstract_class, $o.abstract_class);
 	    $of.printf("};\n");
@@ -909,7 +909,7 @@ DLLEXPORT extern QoreClass *QC_%s;
             $callstr = $cn + "::" + $p + "(";
         else {
             if (exists $proto.$p.rt)
-                $callstr = $o.indep && !$o.abstract 
+                $callstr = $o.indep && !$o."abstract" 
                            ? sprintf("%s->%s(", $cl, $p) 
                            : sprintf("%s->%s->%s(", $cl, $get_obj, $p);
 	    else { # for constructor calls
