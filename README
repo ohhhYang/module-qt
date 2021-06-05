@@ -33,4 +33,4 @@ BUILD FROM SVN
 reconf.sh
 configure
 make
-sudo make install
+sudo make install 123
